@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MaPeriT.AN v1.2.1 - Manual de Usuario</title>
+<style>
+    @page { size: A4; margin: 2cm; }
+    @media print {
+        .no-print { display: none !important; }
+        nav { display: none !important; }
+        .page-break { page-break-before: always; }
+        body { font-size: 10pt; }
+        pre { font-size: 8pt; }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+        --primary: #1a3a5c;
+        --primary-light: #2c5f8a;
+        --accent: #1d4ed8;
+        --bg: #f7f9fc;
+        --card-bg: #ffffff;
+        --text: #1a1a2e;
+        --text-light: #555;
+        --border: #dde3ea;
+        --code-bg: #0d1117;
+        --code-text: #e6edf3;
+        --success: #16a34a;
+        --warning: #ca8a04;
+        --danger: #dc2626;
+        --info: #2563eb;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        color: var(--text); background: var(--bg);
+        line-height: 1.7; font-size: 15px;
+    }
+
+    /* NAVEGACION LATERAL */
+    nav {
+        position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
+        background: var(--primary); color: #fff; overflow-y: auto;
+        padding: 20px 0; z-index: 100; box-shadow: 3px 0 15px rgba(0,0,0,0.15);
+    }
+    nav .nav-title {
+        padding: 10px 20px 20px; font-size: 18px; font-weight: 700;
+        border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 1px;
+    }
+    nav .nav-subtitle { font-size: 11px; font-weight: 300; opacity: 0.7; display: block; }
+    nav ul { list-style: none; padding: 10px 0; }
+    nav ul li a {
+        display: block; padding: 7px 20px; color: rgba(255,255,255,0.8);
+        text-decoration: none; font-size: 13px; transition: all 0.2s;
+        border-left: 3px solid transparent;
+    }
+    nav ul li a:hover { background: rgba(255,255,255,0.08); color: #fff; border-left-color: var(--accent); }
+    nav ul li.section-title {
+        padding: 15px 20px 5px; font-size: 10px; text-transform: uppercase;
+        letter-spacing: 2px; color: rgba(255,255,255,0.4); font-weight: 600;
+    }
+    nav ul li a.sub { padding-left: 35px; font-size: 12px; opacity: 0.85; }
+
+    /* CONTENIDO PRINCIPAL */
+    main { margin-left: 280px; padding: 30px 50px 60px; max-width: 1100px; }
+
+    /* CABECERA */
+    .page-header {
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #1d4ed8 100%);
+        color: #fff; padding: 50px 40px; margin: -30px -50px 40px;
+    }
+    .page-header h1 { font-size: 36px; font-weight: 300; letter-spacing: 2px; margin-bottom: 8px; }
+    .page-header .version { font-size: 14px; opacity: 0.7; }
+    .page-header .tagline { font-size: 16px; opacity: 0.9; margin-top: 10px; }
+
+    /* SECCIONES */
+    h2 { font-size: 24px; color: var(--primary); margin: 40px 0 15px; padding-bottom: 8px; border-bottom: 2px solid var(--primary); }
+    h3 { font-size: 18px; color: var(--primary-light); margin: 30px 0 10px; }
+    h4 { font-size: 15px; color: var(--text); margin: 20px 0 8px; font-weight: 600; }
+    p { margin: 10px 0; }
+
+    /* TARJETAS */
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 20px 25px; margin: 15px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .card-header { font-weight: 600; font-size: 16px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    /* MODULOS */
+    .module-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin: 15px 0; }
+    .module-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; border-top: 4px solid var(--accent); }
+    .module-card h4 { color: var(--accent); margin-top: 0; }
+    .module-card p { font-size: 13px; color: var(--text-light); margin: 5px 0 0; }
+    .module-num { display: inline-block; background: var(--accent); color: white; width: 26px; height: 26px; border-radius: 50%; text-align: center; line-height: 26px; font-size: 12px; font-weight: 700; margin-right: 8px; }
+
+    /* PARAMETROS */
+    table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+    th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; font-size: 13px; }
+    td { padding: 9px 14px; border: 1px solid var(--border); font-size: 13px; vertical-align: top; }
+    tr:nth-child(even) td { background: #f8fafc; }
+    tr:hover td { background: #eef4fb; }
+    .param-name { font-family: 'Cascadia Code','Fira Code','Courier New',monospace; font-size: 12px; color: var(--accent); font-weight: 600; white-space: nowrap; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    .badge-required { background: #fee2e2; color: #b91c1c; }
+    .badge-optional { background: #dcfce7; color: #15803d; }
+    .badge-default { background: #dbeafe; color: #1d4ed8; font-size: 11px; }
+
+    /* CODIGO */
+    pre { background: var(--code-bg); color: var(--code-text); padding: 16px 20px; border-radius: 8px; overflow-x: auto; margin: 12px 0; font-size: 13px; line-height: 1.6; }
+    code { font-family: 'Cascadia Code','Fira Code','Courier New',monospace; }
+    pre code { color: inherit; }
+    .cmd { color: #79c0ff; }
+    .param { color: #ffab70; }
+    .string { color: #a5d6ff; }
+    .comment { color: #8b949e; font-style: italic; }
+
+    /* ALERTAS */
+    .alert { padding: 14px 18px; border-radius: 6px; margin: 15px 0; font-size: 14px; border-left: 4px solid; }
+    .alert-info { background: #eff6ff; border-color: var(--info); color: #1e40af; }
+    .alert-warning { background: #fefce8; border-color: var(--warning); color: #854d0e; }
+    .alert-danger { background: #fef2f2; border-color: var(--danger); color: #991b1b; }
+    .alert-success { background: #f0fdf4; border-color: var(--success); color: #14532d; }
+
+    /* FLUJO */
+    .flow { display: flex; gap: 0; margin: 20px 0; flex-wrap: wrap; }
+    .flow-step { background: var(--card-bg); border: 1px solid var(--border); padding: 14px 18px; flex: 1; min-width: 130px; position: relative; font-size: 13px; }
+    .flow-step:not(:last-child)::after { content: '▶'; position: absolute; right: -14px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 16px; z-index: 1; }
+    .flow-step strong { display: block; color: var(--accent); font-size: 12px; margin-bottom: 4px; }
+
+    /* ESTRUCTURA DE DIRECTORIOS */
+    .dir-tree { font-family: 'Cascadia Code','Fira Code','Courier New',monospace; font-size: 13px; background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 16px 20px; line-height: 2; white-space: pre; overflow-x: auto; }
+    .folder { color: var(--primary); font-weight: 600; }
+    .file { color: var(--text-light); }
+    .highlight-file { color: var(--accent); font-weight: 600; }
+
+    /* FEATURE LIST */
+    .feature-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin: 15px 0; }
+    .feature-item { display: flex; gap: 12px; align-items: flex-start; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 14px; }
+    .feature-icon { font-size: 22px; flex-shrink: 0; }
+    .feature-text strong { display: block; margin-bottom: 4px; font-size: 14px; }
+    .feature-text { font-size: 13px; color: var(--text-light); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+        nav { display: none; }
+        main { margin-left: 0; padding: 20px; }
+        .page-header { margin: -20px -20px 30px; padding: 30px 20px; }
+        .module-grid { grid-template-columns: 1fr; }
+    }
+</style>
+</head>
+<body>
+
+<!-- NAVEGACION LATERAL -->
+<nav>
+    <div class="nav-title">
+        MaPeriT.AN
+        <span class="nav-subtitle">Manual de Usuario v1.2.1</span>
+    </div>
+    <ul>
+        <li class="section-title">Inicio</li>
+        <li><a href="#intro">Introduccion</a></li>
+        <li><a href="#features">Caracteristicas</a></li>
+        <li><a href="#relation-sw">Relacion con MaPeriT.SW</a></li>
+
+        <li class="section-title">Instalacion</li>
+        <li><a href="#requirements">Requisitos del Sistema</a></li>
+        <li><a href="#install">Instalacion</a></li>
+        <li><a href="#sqlite">Configurar SQLite</a></li>
+        <li><a href="#build">Sistema de Compilacion</a></li>
+
+        <li class="section-title">Uso</li>
+        <li><a href="#params">Parametros</a></li>
+        <li><a href="#examples">Ejemplos de Uso</a></li>
+        <li><a href="#execution-flow">Flujo de Ejecucion</a></li>
+
+        <li class="section-title">Modulos de Analisis</li>
+        <li><a href="#mod-mft" class="sub">Modulo 1: Parser MFT</a></li>
+        <li><a href="#mod-evtx" class="sub">Modulo 2: Analizador EVTX</a></li>
+        <li><a href="#mod-browser" class="sub">Modulo 3: Navegadores SQLite</a></li>
+        <li><a href="#mod-shim" class="sub">Modulo 4: ShimCache/Amcache</a></li>
+        <li><a href="#mod-usn" class="sub">Modulo 5: USN Journal</a></li>
+        <li><a href="#mod-corr" class="sub">Modulo 6: Correlacion</a></li>
+
+        <li class="section-title">Resultados</li>
+        <li><a href="#output-structure">Estructura de Salida</a></li>
+        <li><a href="#report">Informe AN</a></li>
+
+        <li class="section-title">Referencia</li>
+        <li><a href="#architecture">Arquitectura del Codigo</a></li>
+        <li><a href="#timestomping">Deteccion de Timestomping</a></li>
+        <li><a href="#troubleshooting">Resolucion de Problemas</a></li>
+        <li><a href="#changelog">Registro de Cambios</a></li>
+        <li><a href="#legal">Aviso Legal</a></li>
+    </ul>
+</nav>
+
+<!-- CONTENIDO PRINCIPAL -->
+<main>
+
+<!-- CABECERA -->
+<div class="page-header">
+    <h1>MaPeriT.AN</h1>
+    <div class="version">Version 1.2.1 &mdash; Analizador Forense Offline Profundo</div>
+    <div class="tagline">Analisis en profundidad de evidencias recopiladas por MaPeriT.SW o MaPeriT.OF &mdash; MFT, EVTX, SQLite, ShimCache, USN Journal</div>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="intro">1. Introduccion</h2>
+
+<p><strong>MaPeriT.AN</strong> es el modulo de analisis profundo del ecosistema MaPeriT. Trabaja de forma completamente offline sobre las evidencias ya recopiladas por MaPeriT.SW, sin tocar en ningun momento el equipo original analizado.</p>
+
+<p>Mientras MaPeriT.SW se centra en la <em>adquisicion forense con cadena de custodia</em>, MaPeriT.AN se centra en el <em>analisis tecnico profundo</em>: parsea el binario <code>$MFT</code> registro a registro, procesa cientos de miles de eventos EVTX sin limite, extrae historial completo de navegadores desde SQLite, y correlaciona todo en una timeline unificada de alta fidelidad.</p>
+
+<div class="alert alert-success">
+    <strong>Operacion completamente offline:</strong> MaPeriT.AN no modifica ninguna evidencia: solo las lee, y el Amcache.hve se consulta sobre una copia de trabajo temporal. Los resultados se escriben en la carpeta <code>ANALISIS_AN\</code>, que por defecto se crea <strong>dentro</strong> del directorio de evidencias (o en la ruta indicada con <code>-OutputPath</code>). Esa carpeta nueva no afecta a la verificacion de integridad, que solo comprueba los ficheros del manifiesto.
+</div>
+
+<h3 id="features">1.1 Caracteristicas Principales</h3>
+
+<div class="feature-list">
+    <div class="feature-item">
+        <div class="feature-icon">&#128196;</div>
+        <div class="feature-text"><strong>Parser MFT binario</strong>Parsea el $MFT byte a byte en C# embebido. Reconstruye el arbol de directorios completo incluyendo ficheros borrados.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#9201;</div>
+        <div class="feature-text"><strong>Deteccion de Timestomping</strong>Compara timestamps $STANDARD_INFORMATION vs $FILE_NAME para detectar manipulacion antiforensica de marcas de tiempo.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128202;</div>
+        <div class="feature-text"><strong>EVTX sin limite de volumen</strong>Procesa todos los ficheros .evtx copiados, filtrando por XPath los Event IDs relevantes. 300+ archives de Security procesados en minutos.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#127760;</div>
+        <div class="feature-text"><strong>Historial SQLite completo</strong>Extrae historial, descargas y busquedas de Chrome, Edge, Brave y Firefox directamente desde los ficheros SQLite copiados.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128269;</div>
+        <div class="feature-text"><strong>ShimCache y Amcache</strong>Muestra los programas presentes o ejecutados aunque no existan Event IDs 4688. Consulta una copia de trabajo del Amcache.hve (nunca el de la evidencia) para extraer el inventario de ejecutables.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128190;</div>
+        <div class="feature-text"><strong>USN Journal</strong>Analiza el registro NTFS de operaciones de sistema de ficheros: borrados, renombrados, creacion de ejecutables, actividad en Temp/Downloads.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128279;</div>
+        <div class="feature-text"><strong>Correlacion multi-fuente</strong>Cruza MFT + EVTX + USN + ShimCache + datos SW en una unica timeline y genera risk scores por entidad (usuario, proceso).</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128195;</div>
+        <div class="feature-text"><strong>Informe HTML profesional</strong>Mismo diseno que el informe SW, con sidebar de navegacion, tablas con busqueda, y seccion de firmas para juzgado.</div>
+    </div>
+</div>
+
+<h3 id="relation-sw">1.2 Relacion con MaPeriT.SW</h3>
+
+<div class="card">
+    <div class="card-header">Ecosistema MaPeriT: dos herramientas complementarias</div>
+    <table>
+        <tr><th>Aspecto</th><th>MaPeriT.SW</th><th>MaPeriT.AN</th></tr>
+        <tr><td><strong>Funcion</strong></td><td>Adquisicion forense en vivo</td><td>Analisis profundo offline</td></tr>
+        <tr><td><strong>Cuando se ejecuta</strong></td><td>En el equipo objetivo (live)</td><td>En el laboratorio (offline)</td></tr>
+        <tr><td><strong>Requiere admin en objetivo</strong></td><td>Si</td><td>No</td></tr>
+        <tr><td><strong>Modifica el equipo</strong></td><td>Solo VSS temporal</td><td>Nunca</td></tr>
+        <tr><td><strong>$MFT</strong></td><td>Lo extrae (raw disk)</td><td>Lo parsea byte a byte</td></tr>
+        <tr><td><strong>EVTX</strong></td><td>Copia los .evtx</td><td>Procesa todos los eventos de los Event IDs relevantes, sin limite de numero</td></tr>
+        <tr><td><strong>Navegadores</strong></td><td>Copia ficheros SQLite</td><td>Consulta el historial completo</td></tr>
+        <tr><td><strong>Salida</strong></td><td>Directorio de evidencias</td><td>ANALISIS_AN\ dentro del mismo</td></tr>
+        <tr><td><strong>Cadena de custodia</strong></td><td>Si, con SHA-256</td><td>Lee la existente, no genera nueva</td></tr>
+    </table>
+</div>
+
+<div class="alert alert-info">
+    MaPeriT.AN <strong>necesita</strong> que MaPeriT.SW haya ejecutado primero y haya generado el directorio de evidencias. Sin las evidencias previas, no hay nada que analizar.
+</div>
+
+<!-- ================================================================ -->
+<h2 id="requirements">2. Requisitos del Sistema</h2>
+
+<div class="card">
+    <div class="card-header">Requisitos Minimos</div>
+    <table>
+        <tr><td><strong>PowerShell</strong></td><td>5.1 o superior (PowerShell 7+ recomendado para mejor rendimiento)</td></tr>
+        <tr><td><strong>Sistema operativo</strong></td><td>Windows 10/11 o Windows Server 2016+ (equipo del analista, no el objetivo)</td></tr>
+        <tr><td><strong>Permisos</strong></td><td>Administrador local (necesario para montar con reg.exe la copia de trabajo de Amcache.hve)</td></tr>
+        <tr><td><strong>RAM</strong></td><td>Minimo 4 GB. Recomendado 8 GB+ para MFT de sistemas con muchos ficheros</td></tr>
+        <tr><td><strong>Espacio en disco</strong></td><td>El analisis genera aprox. 50-500 MB adicionales en ANALISIS_AN\</td></tr>
+        <tr><td><strong>sqlite3.exe</strong></td><td>Opcional. Necesario para analisis de navegadores. Ver seccion 2.2.</td></tr>
+    </table>
+</div>
+
+<div class="card">
+    <div class="card-header">Rendimiento estimado segun tamano del $MFT</div>
+    <table>
+        <tr><th>Tamano $MFT</th><th>Registros aprox.</th><th>Tiempo Fase 1 (indice)</th><th>Tiempo Fase 2 (parseo)</th></tr>
+        <tr><td>100 MB</td><td>~100.000</td><td>1-2 min</td><td>2-3 min</td></tr>
+        <tr><td>500 MB</td><td>~500.000</td><td>4-6 min</td><td>6-10 min</td></tr>
+        <tr><td>874 MB</td><td>~900.000</td><td>7-9 min</td><td>8-12 min</td></tr>
+        <tr><td>&gt; 1 GB</td><td>&gt; 1.000.000</td><td>10-15 min</td><td>15-25 min</td></tr>
+    </table>
+    <p style="margin-top:10px;font-size:13px">Tiempos en un equipo con SSD NVMe y 16 GB RAM. En HDD mecanico pueden duplicarse.</p>
+</div>
+
+<h3 id="sqlite">2.2 Configurar sqlite3.exe</h3>
+
+<p>Para el analisis de navegadores (historial, descargas, busquedas) se necesita <code>sqlite3.exe</code>. MaPeriT.AN lo busca automaticamente en las siguientes rutas, en este orden:</p>
+
+<ol style="margin:10px 0 10px 25px;font-size:14px;line-height:2">
+    <li><code>MAPERIT_AN\tools\sqlite3.exe</code> &larr; recomendado</li>
+    <li><code>MAPERIT_AN\sqlite3.exe</code></li>
+    <li>Carpeta de evidencias\tools\sqlite3.exe</li>
+    <li>Git para Windows (<code>%LOCALAPPDATA%\Programs\Git\mingw64\bin\</code>)</li>
+    <li>PATH del sistema</li>
+    <li>Chocolatey (<code>%ChocolateyInstall%\bin\</code>)</li>
+</ol>
+
+<div class="card">
+    <div class="card-header">Instalacion recomendada de sqlite3.exe</div>
+    <p>1. Ir a <strong>sqlite.org/download.html</strong></p>
+    <p>2. Descargar <strong>sqlite-tools-win-x64-XXXXXXX.zip</strong> (seccion "Precompiled Binaries for Windows")</p>
+    <p>3. Extraer <code>sqlite3.exe</code> y colocarlo en:</p>
+    <pre><code>&lt;carpeta de MaPeriT.AN&gt;\tools\sqlite3.exe</code></pre>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="install">3. Instalacion</h2>
+
+<p>MaPeriT.AN no requiere instalacion. Es un script PowerShell portable que se puede ejecutar desde cualquier directorio.</p>
+
+<div class="card">
+    <div class="card-header">Estructura de ficheros de MaPeriT.AN</div>
+    <div class="dir-tree">
+<span class="folder">MAPERIT_AN\</span>
+&#9500;&#9472;&#9472; <span class="highlight-file">MaPeriT.AN.ps1</span>          <span class="file">&larr; script compilado (ejecutar este)</span>
+&#9500;&#9472;&#9472; Build.ps1                  <span class="file">&larr; compilador (para desarrolladores)</span>
+&#9500;&#9472;&#9472; <span class="folder">Tools\</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="highlight-file">sqlite3.exe</span>          <span class="file">&larr; incluido (dominio publico); necesario para los navegadores</span>
+&#9500;&#9472;&#9472; manual_maperit_an.html     <span class="file">&larr; este manual</span>
+&#9500;&#9472;&#9472; ficha_maperit_an.html
+&#9492;&#9472;&#9472; <span class="folder">src\</span>                       <span class="file">&larr; codigo fuente modular</span>
+    &#9500;&#9472;&#9472; Main-Params.ps1
+    &#9500;&#9472;&#9472; Config.ps1
+    &#9500;&#9472;&#9472; Main.ps1
+    &#9500;&#9472;&#9472; <span class="folder">Core\</span>
+    &#9474;   &#9500;&#9472;&#9472; Logging.ps1
+    &#9474;   &#9500;&#9472;&#9472; Initialize.ps1
+    &#9474;   &#9500;&#9472;&#9472; MFTParser.ps1
+    &#9474;   &#9500;&#9472;&#9472; EVTXAnalyzer.ps1
+    &#9474;   &#9492;&#9472;&#9472; BrowserSQLite.ps1
+    &#9500;&#9472;&#9472; <span class="folder">Analysis\</span>
+    &#9474;   &#9500;&#9472;&#9472; ShimcacheAmcache.ps1
+    &#9474;   &#9500;&#9472;&#9472; USNJournal.ps1
+    &#9474;   &#9500;&#9472;&#9472; Correlator.ps1
+    &#9474;   &#9500;&#9472;&#9472; TimestompDetector.ps1
+    &#9474;   &#9492;&#9472;&#9472; DeletedFiles.ps1
+    &#9492;&#9472;&#9472; <span class="folder">Report\</span>
+        &#9500;&#9472;&#9472; ReportTemplates.ps1
+        &#9492;&#9472;&#9472; ReportGenerator.ps1
+    </div>
+</div>
+
+<h3 id="build">3.1 Sistema de Compilacion</h3>
+
+<p>Al igual que MaPeriT.SW, MaPeriT.AN tiene un sistema de compilacion que concatena todos los modulos en un unico fichero desplegable:</p>
+
+<pre><code><span class="cmd">.\Build.ps1</span></code></pre>
+
+<p>El compilador genera <code>MaPeriT.AN.ps1</code> con su hash SHA-256. <strong>No edite el compilado directamente</strong>; modifique los ficheros fuente en <code>src\</code> y recompile.</p>
+
+<!-- ================================================================ -->
+<h2 id="params">4. Parametros de Ejecucion</h2>
+
+<table>
+    <tr><th>Parametro</th><th>Tipo</th><th>Req.</th><th>Descripcion</th></tr>
+    <tr>
+        <td><span class="param-name">-EvidencePath</span></td>
+        <td>String</td>
+        <td><span class="badge badge-required">Si</span></td>
+        <td>Ruta al directorio de salida de MaPeriT.SW. Debe contener <code>HashManifest.csv</code> y la estructura de carpetas generada por SW.</td>
+    </tr>
+    <tr>
+        <td><span class="param-name">-OutputPath</span></td>
+        <td>String</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Directorio de salida del analisis AN. <span class="badge badge-default">Por defecto: EvidencePath\ANALISIS_AN</span></td>
+    </tr>
+    <tr>
+        <td><span class="param-name">-ExaminerName</span></td>
+        <td>String</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Nombre del perito para el informe AN. Si se omite, se reutiliza el del informe SW cuando es posible.</td>
+    </tr>
+    <tr>
+        <td><span class="param-name">-SkipMFT</span></td>
+        <td>Switch</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Omite el parseo del $MFT. Util para pruebas rapidas o cuando el MFT ya fue analizado.</td>
+    </tr>
+    <tr>
+        <td><span class="param-name">-SkipBrowsers</span></td>
+        <td>Switch</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Omite el analisis SQLite de navegadores.</td>
+    </tr>
+    <tr>
+        <td><span class="param-name">-SkipEVTX</span></td>
+        <td>Switch</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Omite el analisis profundo de logs de eventos EVTX.</td>
+    </tr>
+    <tr>
+        <td><span class="param-name">-MaxMFTRecords</span></td>
+        <td>Long</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Limite de registros MFT a procesar. <span class="badge badge-default">Por defecto: 0 (todos)</span>. Util para pruebas con muestras.</td>
+    </tr>
+    <tr>
+        <td><span class="param-name">-IOCHashListPath</span></td>
+        <td>String</td>
+        <td><span class="badge badge-optional">No</span> <span class="badge badge-new">v1.2.0</span></td>
+        <td>Ruta a un fichero de texto con hashes SHA1/SHA256/MD5 conocidos (uno por linea; lineas vacias o con # se ignoran), para correlacionar contra los ejecutables de Amcache. <span class="badge badge-default">Por defecto: busca "tools\IOC_Hashes.txt" junto al script</span>. Enteramente offline: el fichero lo aporta el perito, AN nunca se conecta a ningun feed de IOCs en linea. Genera <code>MFT\Amcache_IOCMatches.csv</code> si hay coincidencias.</td>
+    </tr>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="examples">5. Ejemplos de Uso</h2>
+
+<div class="card">
+    <div class="card-header">Analisis completo (recomendado)</div>
+    <pre><code><span class="cmd">.\MaPeriT.AN.ps1</span> <span class="param">-EvidencePath</span> <span class="string">"D:\Forense\MaPeriT_2026-001"</span> <span class="param">-ExaminerName</span> <span class="string">"Juan Perez Garcia"</span></code></pre>
+    <p>Ejecuta todos los modulos y genera el informe AN en <code>D:\Forense\MaPeriT_2026-001\ANALISIS_AN\</code>.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">Salida personalizada</div>
+    <pre><code><span class="cmd">.\MaPeriT.AN.ps1</span> <span class="param">-EvidencePath</span> <span class="string">"E:\Caso\Evidencias"</span> `
+    <span class="param">-OutputPath</span> <span class="string">"E:\Caso\InformeAN"</span> `
+    <span class="param">-ExaminerName</span> <span class="string">"Ana Garcia Lopez"</span></code></pre>
+</div>
+
+<div class="card">
+    <div class="card-header">Solo MFT y EVTX (sin navegadores)</div>
+    <pre><code><span class="cmd">.\MaPeriT.AN.ps1</span> <span class="param">-EvidencePath</span> <span class="string">"D:\Forense\MaPeriT_2026-001"</span> <span class="param">-SkipBrowsers</span></code></pre>
+</div>
+
+<div class="card">
+    <div class="card-header">Prueba rapida con muestra del MFT (100.000 registros)</div>
+    <pre><code><span class="cmd">.\MaPeriT.AN.ps1</span> <span class="param">-EvidencePath</span> <span class="string">"D:\Forense\MaPeriT_2026-001"</span> `
+    <span class="param">-MaxMFTRecords</span> 100000 <span class="param">-SkipBrowsers</span></code></pre>
+</div>
+
+<div class="card">
+    <div class="card-header">Solo navegadores (reanalizando despues de instalar sqlite3)</div>
+    <pre><code><span class="cmd">.\MaPeriT.AN.ps1</span> <span class="param">-EvidencePath</span> <span class="string">"D:\Forense\MaPeriT_2026-001"</span> `
+    <span class="param">-SkipMFT</span> <span class="param">-SkipEVTX</span></code></pre>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="execution-flow">6. Flujo de Ejecucion</h2>
+
+<div class="flow">
+    <div class="flow-step"><strong>Validacion</strong>Verifica EvidencePath y presencia de HashManifest.csv</div>
+    <div class="flow-step"><strong>Modulo 1</strong>Parser MFT binario (2 fases)</div>
+    <div class="flow-step"><strong>Modulo 2</strong>Analizador EVTX (XPath)</div>
+    <div class="flow-step"><strong>Modulo 3</strong>Navegadores SQLite</div>
+    <div class="flow-step"><strong>Modulo 4</strong>ShimCache / Amcache</div>
+    <div class="flow-step"><strong>Modulo 5</strong>USN Journal</div>
+    <div class="flow-step"><strong>Modulo 6</strong>Correlacion y Timeline</div>
+    <div class="flow-step"><strong>Informe</strong>HTML con sidebar y busqueda</div>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="mod-mft">7. Modulo 1 &mdash; Parser MFT Binario</h2>
+
+<p>El <code>$MFT</code> (Master File Table) es el corazon de NTFS. Cada fichero y directorio del volumen tiene una entrada de 1024 bytes en el MFT. MaPeriT.SW lo extrae en raw; MaPeriT.AN lo parsea registro a registro usando un parser C# embebido sin dependencias externas.</p>
+
+<h3>7.1 Estructura de un File Record NTFS</h3>
+
+<div class="card">
+    <div class="card-header">Atributos analizados por el parser</div>
+    <table>
+        <tr><th>Atributo</th><th>Tipo</th><th>Contenido</th><th>Nota forense</th></tr>
+        <tr><td><code>$STANDARD_INFORMATION</code></td><td>0x10</td><td>Created, Modified, MFT Modified, Accessed</td><td>Manipulable por herramientas antiforensicas</td></tr>
+        <tr><td><code>$FILE_NAME</code></td><td>0x30</td><td>Created, Modified, MFT Modified, Accessed + nombre</td><td>Mantenido por NTFS, mas dificil de falsificar</td></tr>
+    </table>
+</div>
+
+<h3>7.2 Dos fases de procesamiento</h3>
+
+<p><strong>Fase 1 &mdash; Construccion del indice de rutas:</strong> lectura rapida para construir el diccionario numero_de_registro &rarr; (nombre, padre). Permite resolver la ruta completa de cada fichero. Incluye tambien los registros de ficheros borrados cuyo registro MFT aun no se ha reutilizado (su ruta lleva el prefijo <code>[BORRADO]</code>).</p>
+
+<p><strong>Fase 2 &mdash; Parseo completo:</strong> lectura byte a byte de todos los registros (incluyendo borrados). Extrae timestamps SI y FN, detecta timestomping, y enriquece cada entrada con su ruta completa usando el indice.</p>
+
+<h3>7.3 Ficheros generados</h3>
+
+<table>
+    <tr><th>Fichero</th><th>Contenido</th></tr>
+    <tr><td><code>MFT\MFT_Completo.csv</code></td><td>Todos los registros MFT validos con timestamps SI y FN</td></tr>
+    <tr><td><code>MFT\MFT_Timestomping.csv</code></td><td>Ficheros con discrepancias SI &lt; FN (sospecha de manipulacion)</td></tr>
+    <tr><td><code>MFT\MFT_Borrados.csv</code></td><td>Registros con flag InUse=0 (ficheros borrados recuperables)</td></tr>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="mod-evtx">8. Modulo 2 &mdash; Analizador EVTX Profundo</h2>
+
+<p>MaPeriT.SW copia todos los .evtx pero extrae solo una muestra limitada de eventos. MaPeriT.AN procesa <strong>todos los eventos</strong> de todos los ficheros, incluyendo los 300+ archives de Security, usando XPath para filtrado a nivel binario.</p>
+
+<h3>8.1 Estrategia de procesamiento</h3>
+
+<ul style="margin:10px 0 10px 25px;line-height:2.2;font-size:14px">
+    <li><strong>Security.evtx principal</strong>: todos los Event IDs de interes</li>
+    <li><strong>Archives de Security (Archive-Security-*.evtx)</strong>: solo los 14 Event IDs criticos (1102, 1104, 4624, 4625, 4648, 4672, 4697, 4698, 4720, 4726, 4728, 4732, 4740, 7045) para equilibrar velocidad y cobertura</li>
+    <li><strong>System.evtx</strong>: arranques, apagados, nuevos servicios</li>
+    <li><strong>PowerShell Operational</strong>: ScriptBlock (Event 4104), module logging</li>
+    <li><strong>WMI Activity</strong>: suscripciones WMI (persistencia)</li>
+    <li><strong>Windows Defender</strong>: detecciones de malware</li>
+    <li><strong>TaskScheduler</strong>: tareas programadas creadas/modificadas</li>
+</ul>
+
+<h3>8.2 Alertas automaticas</h3>
+
+<table>
+    <tr><th>Alerta</th><th>Condicion</th><th>Severidad</th></tr>
+    <tr><td>Log de auditoria borrado</td><td>Event ID 1100 o 1102</td><td style="color:var(--danger)">CRITICA</td></tr>
+    <tr><td>Nuevo servicio instalado</td><td>Event ID 7045 o 4697</td><td style="color:var(--danger)">ALTA</td></tr>
+    <tr><td>Logons fallidos multiples</td><td>Mas de 5 Event ID 4625</td><td style="color:var(--warning)">MEDIA</td></tr>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="mod-browser">9. Modulo 3 &mdash; Navegadores Web (SQLite)</h2>
+
+<p>Los ficheros de historial de navegadores (History, places.sqlite) son bases de datos SQLite. MaPeriT.SW los copia; MaPeriT.AN los consulta directamente para extraer el historial completo sin los limites de filas de las herramientas graficas.</p>
+
+<h3>9.1 Navegadores soportados</h3>
+
+<table>
+    <tr><th>Navegador</th><th>Fichero analizado</th><th>Timestamps</th></tr>
+    <tr><td>Google Chrome</td><td><code>History</code> (SQLite)</td><td>Microsegundos desde 1601-01-01</td></tr>
+    <tr><td>Microsoft Edge</td><td><code>History</code> (SQLite)</td><td>Microsegundos desde 1601-01-01</td></tr>
+    <tr><td>Brave</td><td><code>History</code> (SQLite)</td><td>Microsegundos desde 1601-01-01</td></tr>
+    <tr><td>Mozilla Firefox</td><td><code>places.sqlite</code></td><td>Microsegundos desde 1970-01-01</td></tr>
+</table>
+
+<h3>9.2 Datos extraidos</h3>
+
+<ul style="margin:10px 0 10px 25px;line-height:2.2;font-size:14px">
+    <li><strong>Historial de navegacion</strong>: URL, titulo, numero de visitas, fecha/hora de cada visita</li>
+    <li><strong>Descargas</strong>: ruta de destino, URL de origen, tamano, estado</li>
+    <li><strong>Terminos de busqueda</strong>: extraidos por patron de URL (?q=, query=, etc.)</li>
+</ul>
+
+<!-- ================================================================ -->
+<h2 id="mod-shim">10. Modulo 4 &mdash; ShimCache y Amcache</h2>
+
+<p>Estas dos fuentes registran la presencia de ejecutables en el equipo incluso cuando el log de auditoria esta desactivado o ha sido borrado. Son <strong>indicios</strong>, no prueba concluyente de ejecucion ni de su momento: en Windows 10/11 el ShimCache incluye programas solo examinados y su fecha es la ultima modificacion del fichero; la fecha de Amcache es la de compilacion (LinkDate) o instalacion (InstallDate).</p>
+
+<div class="card">
+    <div class="card-header">ShimCache (AppCompatCache)</div>
+    <p>Registrado en <code>HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatCache</code>. MaPeriT.SW lo extrae como CSV (<code>04_Registry\ExtractedValues\ShimCache.csv</code>); MaPeriT.OF guarda el binario <code>04_Registry\AppCompatCache.bin</code>, que AN interpreta (formato de Windows 10/11; fechas en UTC). AN separa los ejecutables fuera de rutas estandar (mas sospechosos).</p>
+</div>
+
+<div class="card">
+    <div class="card-header">Amcache.hve</div>
+    <p>Hive de registro que contiene inventario detallado de ejecutables y drivers. MaPeriT.SW y MaPeriT.OF copian el binario. MaPeriT.AN copia ese fichero (con sus .LOG1/.LOG2) a una carpeta temporal dentro de su salida, monta la <strong>copia</strong> con <code>reg.exe load</code>, extrae <code>InventoryApplicationFile</code> e <code>InventoryApplication</code>, la desmonta y la borra: el Amcache.hve de la evidencia no se toca. Incluye el hash SHA1 de cada ejecutable. Las columnas <code>FechaReferencia</code> y <code>TipoFecha</code> indican si la fecha es de compilacion o de instalacion.</p>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="mod-usn">11. Modulo 5 &mdash; USN Journal</h2>
+
+<p>El USN Journal (Update Sequence Number Journal) de NTFS registra <strong>cada operacion sobre el sistema de ficheros</strong>: creacion, modificacion, renombrado, borrado, cambio de atributos. Es la fuente mas completa para reconstruir actividad en disco.</p>
+
+<p>MaPeriT.SW extrae el USN Journal con <code>fsutil usn readjournal C: csv</code> (tipicamente 50-100 MB). MaPeriT.AN filtra y clasifica las operaciones:</p>
+
+<table>
+    <tr><th>Fichero generado</th><th>Contenido</th></tr>
+    <tr><td><code>USN_Borrados.csv</code></td><td>Operaciones DELETE en el journal</td></tr>
+    <tr><td><code>USN_Renombrados.csv</code></td><td>Operaciones RENAME (tecnica usada para ocultar actividad)</td></tr>
+    <tr><td><code>USN_Ejecutables.csv</code></td><td>Operaciones sobre .exe, .dll, .ps1, .bat, .vbs, etc.</td></tr>
+    <tr><td><code>USN_RutasSospechosas.csv</code></td><td>Actividad en Temp, Downloads, Roaming\Recent</td></tr>
+    <tr><td><code>USN_Resumen.csv</code></td><td>Estadistica global: totales, rango de fechas</td></tr>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="mod-corr">12. Modulo 6 &mdash; Correlacion Multi-Fuente</h2>
+
+<p>El correlador integra todos los modulos anteriores mas la timeline de MaPeriT.SW en una unica cronologia ordenada, y calcula un <em>risk score</em> por entidad.</p>
+
+<h3>12.1 Fuentes integradas en la correlacion</h3>
+
+<ul style="margin:10px 0 10px 25px;line-height:2.2;font-size:14px">
+    <li>Timeline EVTX (337K+ eventos)</li>
+    <li>Ficheros con timestomping detectado (MFT)</li>
+    <li>Ficheros borrados relevantes (MFT)</li>
+    <li>Timeline previa de MaPeriT.SW (5K+ eventos)</li>
+</ul>
+
+<h3>12.2 Risk Score por entidad</h3>
+
+<table>
+    <tr><th>Evento</th><th>Puntos</th></tr>
+    <tr><td>Log de auditoria borrado (1102)</td><td>90</td></tr>
+    <tr><td>Servicio instalado (4697, 7045)</td><td>80</td></tr>
+    <tr><td>Tarea programada creada (4698)</td><td>70</td></tr>
+    <tr><td>Usuario anadido a Administrators (4732)</td><td>60</td></tr>
+    <tr><td>Cuenta creada (4720)</td><td>50</td></tr>
+    <tr><td>Timestomping detectado</td><td>75</td></tr>
+    <tr><td>Logon fallido (4625)</td><td>20</td></tr>
+    <tr><td>Proceso creado (4688)</td><td>10</td></tr>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="output-structure">13. Estructura de Salida</h2>
+
+<div class="dir-tree">
+<span class="folder">EvidencePath\ANALISIS_AN\</span>
+&#9500;&#9472;&#9472; <span class="folder">MFT\</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="highlight-file">MFT_Completo.csv</span>         <span class="file">&larr; todos los registros</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="highlight-file">MFT_Timestomping.csv</span>     <span class="file">&larr; sospecha de manipulacion de timestamps</span>
+&#9474;   &#9500;&#9472;&#9472; MFT_Borrados.csv             <span class="file">&larr; ficheros borrados recuperados del MFT</span>
+&#9474;   &#9500;&#9472;&#9472; ShimCache_Completo.csv
+&#9474;   &#9500;&#9472;&#9472; ShimCache_Sospechosos.csv    <span class="file">&larr; ejecutables fuera de rutas estandar</span>
+&#9474;   &#9500;&#9472;&#9472; Amcache_Ejecutables.csv
+&#9474;   &#9500;&#9472;&#9472; USN_Borrados.csv
+&#9474;   &#9500;&#9472;&#9472; USN_Renombrados.csv
+&#9474;   &#9500;&#9472;&#9472; USN_Ejecutables.csv
+&#9474;   &#9500;&#9472;&#9472; USN_RutasSospechosas.csv
+&#9474;   &#9492;&#9472;&#9472; USN_Resumen.csv
+&#9500;&#9472;&#9472; <span class="folder">EVTX\</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="highlight-file">EVTX_Timeline.csv</span>        <span class="file">&larr; todos los eventos relevantes ordenados</span>
+&#9474;   &#9500;&#9472;&#9472; EVTX_Logons.csv
+&#9474;   &#9500;&#9472;&#9472; EVTX_FailedLogons.csv
+&#9474;   &#9500;&#9472;&#9472; EVTX_NuevosServicios.csv
+&#9474;   &#9500;&#9472;&#9472; EVTX_PowerShell4104.csv
+&#9474;   &#9500;&#9472;&#9472; EVTX_LogBorrado.csv
+&#9474;   &#9492;&#9472;&#9472; EVTX_Procesos.csv
+&#9500;&#9472;&#9472; <span class="folder">Browsers\</span>
+&#9474;   &#9500;&#9472;&#9472; Browser_Historial.csv
+&#9474;   &#9500;&#9472;&#9472; Browser_Descargas.csv
+&#9474;   &#9492;&#9472;&#9472; Browser_Busquedas.csv
+&#9500;&#9472;&#9472; <span class="highlight-file">Correlacion_Timeline.csv</span>     <span class="file">&larr; timeline unificada (todos los modulos)</span>
+&#9500;&#9472;&#9472; Correlacion_RiskScores.csv      <span class="file">&larr; risk scores por entidad</span>
+&#9500;&#9472;&#9472; <span class="folder">Report\</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="highlight-file">InformeAN.html</span>           <span class="file">&larr; informe final con sidebar de navegacion</span>
+&#9492;&#9472;&#9472; <span class="folder">Logs\</span>
+    &#9492;&#9472;&#9472; MaPeriT_AN_YYYYMMDD_HHMMSS.log
+</div>
+
+<!-- ================================================================ -->
+<h2 id="report">14. Informe AN</h2>
+
+<p>El informe <code>InformeAN.html</code> sigue el mismo diseno profesional que el informe de MaPeriT.SW: sidebar de navegacion fija, tablas con buscador integrado, seccion de firmas para juzgado.</p>
+
+<div class="card">
+    <div class="card-header">Secciones del Informe AN</div>
+    <table>
+        <tr><th>Seccion</th><th>Contenido</th></tr>
+        <tr><td>1. Resumen Ejecutivo AN</td><td>Estadisticas globales: registros MFT, eventos EVTX, URLs, timestomping</td></tr>
+        <tr><td>2. Analisis MFT</td><td>Tabla completa con busqueda, timestamps SI y FN</td></tr>
+        <tr><td>3. Timestomping</td><td>Ficheros fuera de sistema (prioridad alta) vs. rutas de Windows</td></tr>
+        <tr><td>4. Ficheros Borrados</td><td>Ficheros recuperados del MFT con su ultima ruta conocida</td></tr>
+        <tr><td>5. EVTX Profundo</td><td>Log borrado, nuevos servicios, logons fallidos, PowerShell 4104</td></tr>
+        <tr><td>6. Navegadores</td><td>Busquedas, descargas, historial de navegacion completo</td></tr>
+        <tr><td>6b. ShimCache / Amcache</td><td>Programas registrados en el equipo, incluso sin eventos 4688</td></tr>
+        <tr><td>6c. USN Journal</td><td>Borrados, renombrados, operaciones sobre ejecutables</td></tr>
+        <tr><td>7. Timeline Correlacionada</td><td>Cronologia unificada de todos los modulos</td></tr>
+        <tr><td>8. Risk Scores</td><td>Entidades ordenadas por puntuacion de riesgo acumulada</td></tr>
+        <tr><td>9. Conclusiones AN</td><td>Texto pericial con bloque de firmas</td></tr>
+    </table>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="timestomping">15. Deteccion de Timestomping</h2>
+
+<p>El timestomping es la tecnica antiforensica que consiste en modificar artificialmente los timestamps de un fichero para hacer que parezca mas antiguo (o mas nuevo) de lo que realmente es.</p>
+
+<div class="card">
+    <div class="card-header">Por que SI vs FN es el indicador mas fiable</div>
+    <p>El atributo <code>$STANDARD_INFORMATION</code> se puede modificar facilmente desde espacio de usuario (con SetFileTime, timestomp.exe, Meterpreter, etc.). El atributo <code>$FILE_NAME</code> solo se actualiza cuando NTFS realiza operaciones sobre el directorio padre &mdash; es mucho mas dificil de falsificar sin acceso a bajo nivel o controlador de filtro.</p>
+    <p style="margin-top:10px">Por tanto, si <code>SI_Created &lt; FN_Created</code>, significa que el fichero aparentemente fue creado <em>antes</em> de que NTFS lo registrara &mdash; lo cual es imposible sin manipulacion deliberada.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">Indicadores implementados en MaPeriT.AN</div>
+    <table>
+        <tr><th>Indicador</th><th>Descripcion</th><th>Fiabilidad</th></tr>
+        <tr><td><code>SI_Created &lt; FN_Created</code></td><td>Fichero creado antes de que NTFS lo registrara</td><td style="color:var(--danger)">Alta</td></tr>
+        <tr><td><code>SI_Modified &lt; FN_Modified</code></td><td>Fichero modificado antes de existir segun NTFS</td><td style="color:var(--danger)">Alta</td></tr>
+        <tr><td><code>SI_Created &gt; SI_Modified + 60s</code></td><td>Creado despues de modificado (logicamente imposible)</td><td style="color:var(--warning)">Media</td></tr>
+        <tr><td>Precision SI=0 + diferencia &gt;1h con FN</td><td>Herramienta antiforensica suele redondear a segundos exactos</td><td style="color:var(--info)">Baja (indicativo)</td></tr>
+    </table>
+    <p style="margin-top:10px;font-size:13px"><strong>Nota:</strong> Se excluye intencionadamente el check de sub-segundo en ficheros de sistema de Windows, ya que el instalador de Windows establece timestamps redondeados de forma legitima en miles de ficheros, generando falsos positivos masivos.</p>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="architecture">16. Arquitectura del Codigo</h2>
+
+<div class="card">
+    <div class="card-header">Modulos fuente</div>
+    <table>
+        <tr><th>Fichero</th><th>Funcion</th></tr>
+        <tr><td><code>src/Main-Params.ps1</code></td><td>Definicion de parametros del script</td></tr>
+        <tr><td><code>src/Config.ps1</code></td><td>Constantes: rutas SW, Event IDs, configuracion</td></tr>
+        <tr><td><code>src/Core/Logging.ps1</code></td><td>Sistema de log y exportacion de datos</td></tr>
+        <tr><td><code>src/Core/Initialize.ps1</code></td><td>Validacion de EvidencePath, lectura de sesion SW, banner</td></tr>
+        <tr><td><code>src/Core/MFTParser.ps1</code></td><td>Parser C# embebido del $MFT binario (1024 bytes/record)</td></tr>
+        <tr><td><code>src/Core/EVTXAnalyzer.ps1</code></td><td>Procesador EVTX con XPath + fallback sin filtro</td></tr>
+        <tr><td><code>src/Core/BrowserSQLite.ps1</code></td><td>Consultas SQLite a historial de navegadores (3 metodos)</td></tr>
+        <tr><td><code>src/Analysis/ShimcacheAmcache.ps1</code></td><td>Lectura del ShimCache (CSV de SW o AppCompatCache.bin de OF) y consulta de una copia de trabajo de Amcache.hve</td></tr>
+        <tr><td><code>src/Analysis/USNJournal.ps1</code></td><td>Analisis del USN Journal exportado por SW</td></tr>
+        <tr><td><code>src/Analysis/Correlator.ps1</code></td><td>Timeline unificada y risk scores</td></tr>
+        <tr><td><code>src/Report/ReportTemplates.ps1</code></td><td>CSS/JS del informe HTML</td></tr>
+        <tr><td><code>src/Report/ReportGenerator.ps1</code></td><td>Generador del InformeAN.html</td></tr>
+        <tr><td><code>src/Main.ps1</code></td><td>Orquestador: llama a los modulos en orden</td></tr>
+    </table>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="troubleshooting">17. Resolucion de Problemas</h2>
+
+<div class="card">
+    <div class="card-header">Problemas comunes</div>
+    <table>
+        <tr><th>Problema</th><th>Causa probable</th><th>Solucion</th></tr>
+        <tr>
+            <td>"No se encontro HashManifest.csv"</td>
+            <td>EvidencePath incorrecto o SW no termino</td>
+            <td>Verificar que la ruta apunta al directorio de salida de MaPeriT.SW y que contiene <code>Logs\HashManifest.csv</code></td>
+        </tr>
+        <tr>
+            <td>SQLITE_NO_DISPONIBLE</td>
+            <td>sqlite3.exe no encontrado</td>
+            <td>Colocar sqlite3.exe en <code>MAPERIT_AN\tools\</code> (ver seccion 2.2)</td>
+        </tr>
+        <tr>
+            <td>ERROR_LEYENDO Security.evtx</td>
+            <td>Fichero incompleto o corrupto (bloqueado durante copia)</td>
+            <td>Normal si SW no pudo copiarlo. Los 304+ archives compensan la cobertura</td>
+        </tr>
+        <tr>
+            <td>AMCACHE_MOUNT_ERROR</td>
+            <td>Sin permisos de administrador o Amcache.hve danado</td>
+            <td>Ejecutar como Administrador. Si persiste, el hive puede estar corrupto</td>
+        </tr>
+        <tr>
+            <td>MFT tarda mas de 30 minutos</td>
+            <td>MFT muy grande (&gt;1 GB) o disco lento</td>
+            <td>Usar <code>-MaxMFTRecords 500000</code> para una muestra representativa</td>
+        </tr>
+        <tr>
+            <td>Timestomping muy alto (&gt;50.000)</td>
+            <td>Disco con muchos ficheros de sistema instalados</td>
+            <td>Filtrar en el informe por la columna "Prioridad Alta" (fuera de rutas de sistema)</td>
+        </tr>
+    </table>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="changelog">18. Registro de Cambios</h2>
+
+<div class="alert alert-warning">
+    <strong>Revision completa y pruebas reales (v1.2.1, 16/11/2026):</strong>
+    <ul style="margin:8px 0 12px 20px">
+        <li><strong>Fechas de navegadores vacias:</strong> se usaba un metodo de .NET que no existe en PowerShell 5.1; todas las fechas de historial, descargas y busquedas salian vacias. Corregido (comprobado con bases de datos reales de Chrome y Firefox). En Firefox la "ultima visita" era la de cada visita.</li>
+        <li><strong>Amcache:</strong> se montaba directamente el fichero de la evidencia (lo que podia alterarlo y romper su hash). Ahora se monta una copia. La columna <code>FechaEjecucion</code> pasa a <code>FechaReferencia</code> + <code>TipoFecha</code>: era la fecha de compilacion, no la de ejecucion.</li>
+        <li><strong>ShimCache:</strong> no se detectaba ningun sospechoso con el CSV de SW (columna <code>RutaEjecutable</code>) y con evidencias de OF no se analizaba; ahora se interpreta su <code>AppCompatCache.bin</code>.</li>
+        <li><strong>Correlacion:</strong> los eventos de la timeline de SW entraban vacios (nombres de columna equivocados); nueva columna <code>ZonaHoraria</code> (SW = hora local del equipo; EVTX y MFT = UTC).</li>
+        <li><strong>EVTX:</strong> una unica alerta (p.ej. un solo borrado del log de auditoria) no se notificaba; 1100 y 1104 ya no se presentan como "log borrado" (solo 1102) y tienen su descripcion.</li>
+        <li><strong>Un unico registro</strong> en USN Journal, timestomping o tablas del informe se contaba como cero (PowerShell 5.1). Numero de caso correcto con evidencias de OF. <code>Build.ps1</code> aborta si falta una fuente.</li>
+    </ul>
+    <strong>Auditoria de fiabilidad (v1.2.0, 12/07/2026):</strong>
+    revision completa linea a linea de los 15 ficheros fuente (segunda pasada
+    independiente sobre este proyecto, tras los 6 bugs ya corregidos en la
+    primera). Un bug adicional confirmado y corregido, verificado con parseo
+    AST + motor real PowerShell 5.1 y prueba funcional directa contra un
+    informe HTML sintetico.
+</div>
+<div class="card">
+    <div class="card-header">Correcciones acumuladas (v1.2.0)</div>
+    <table>
+        <tr><th>Fix</th><th>Descripcion</th></tr>
+        <tr><td>Ruta de sqlite3.exe truncada</td><td><code>.Split(":")</code> sin limite rompia la ruta al ejecutable cuando esta contenia una letra de unidad (p.ej. <code>I:\...</code>) - los navegadores no se procesaban nunca, sin ningun aviso.</td></tr>
+        <tr><td>Operador <code>??</code> (PowerShell 7+) rompia el arranque completo</td><td>Un unico uso de este operador en <code>ShimcacheAmcache.ps1</code> impedia parsear el script compilado ENTERO bajo PowerShell 5.1 (requisito minimo de la herramienta) - MaPeriT.AN no arrancaba en absoluto.</td></tr>
+        <tr><td>EVTX: limite de 15 EventID silencioso</td><td>Las consultas XPath se limitaban siempre a los primeros 15 EventID de la lista, descartando el resto sin aviso (incluidos IDs usados explicitamente para <code>EVTX_LogBorrado.csv</code>/<code>EVTX_Procesos.csv</code>). Ahora se trocea en lotes.</td></tr>
+        <tr><td>MFT: carpetas borradas sin ruta resuelta</td><td>El indice de rutas excluia los registros MFT no "in-use" (borrados), asi que un fichero dentro de una carpeta borrada nunca podia resolver su ruta completa - justo el escenario de mayor valor forense.</td></tr>
+        <tr><td>USN Journal: truncamiento a 5000 sin avisar</td><td>Cada categoria se limitaba a 5000 filas exportadas y el resumen estadistico se calculaba <em>despues</em> de truncar, perdiendo constancia del volumen real.</td></tr>
+        <tr><td>Amcache "mas recientes" ordenado como texto</td><td><code>Sort-Object FechaEjecucion</code> ordenaba fechas como cadena de texto, no cronologicamente - podia omitir ejecuciones realmente recientes.</td></tr>
+        <tr><td>Perito/hash de la herramienta nunca se extraian de evidencia SW</td><td><code>Get-SWSessionInfo</code> buscaba <code>ForensicLog.csv</code> con acciones que solo existen en el formato de log de MaPeriT.OF (MaPeriT.SW usa "ActionLog.csv" y no registra esas acciones) - y la extraccion del nombre del perito desde el informe HTML leia solo las primeras 50 lineas, insuficientes para superar el bloque <code>&lt;style&gt;</code> embebido (~290 lineas en SW, ~210 en OF). Ambos fallos hacian que "Perito" quedara siempre en blanco y el hash de la herramienta siempre "DESCONOCIDO" para evidencia de SW. Corregido: lectura del HTML completo en vez de un numero de lineas fijo, y extraccion adicional del hash SHA-256 desde el mismo informe.</td></tr>
+    </table>
+</div>
+<div class="card">
+    <div class="card-header">Otras mejoras (v1.2.0)</div>
+    <table>
+        <tr><th>Cambio</th><th>Descripcion</th></tr>
+        <tr><td>Informe AN sin codificar campos de sesion</td><td><code>New-ANReport</code> interpolaba caso, equipo, perito y SO en el HTML sin <code>HtmlEncode</code> en 13 puntos, mismo patron de bug ya corregido en MaPeriT.SW. Corregido de forma consistente.</td></tr>
+        <tr><td>Lectura duplicada de OSInfo.json</td><td><code>Get-SWSessionInfo</code> leia el mismo fichero dos veces seguidas; la segunda lectura (mas completa) siempre sobreescribia la primera. Eliminada la lectura redundante.</td></tr>
+        <tr><td>8 ficheros <code>.bak</code> sueltos en <code>src\</code></td><td>Restos de ediciones anteriores dispersos directamente en las carpetas de codigo fuente. Retirados del codigo fuente.</td></tr>
+        <tr><td>Version hardcodeada en el banner de consola</td><td>El banner de <code>Show-ANBanner</code> tenia "v1.0.0" fijo como texto literal, independiente de <code>Config.ps1</code> - podia desincronizarse en cualquier subida de version futura. Corregido para leer <code>$Script:AN_VERSION</code>.</td></tr>
+        <tr><td><code>-IOCHashListPath</code> (funcionalidad nueva)</td><td>El comentario original del codigo decia "en produccion esto se conectaria con feeds de IOCs" pero nunca se implemento nada. Anadida correlacion contra una lista LOCAL de hashes SHA1/SHA256/MD5 (enteramente offline, la aporta el perito) sobre los ejecutables de Amcache, con exportacion de coincidencias a <code>Amcache_IOCMatches.csv</code>.</td></tr>
+        <tr><td>Lint de sintaxis en <code>Build.ps1</code></td><td>Cada compilacion verifica ahora, automaticamente, que el fichero resultante parsea correctamente bajo PowerShell 5.1 (parser AST + motor real) antes de darse por buena - la misma clase de verificacion manual usada durante toda esta auditoria, ahora integrada en el propio proceso de build.</td></tr>
+    </table>
+</div>
+
+<h2 id="legal">19. Aviso Legal</h2>
+
+<div class="alert alert-warning">
+    <strong>MaPeriT.AN</strong> es una herramienta de analisis forense informatico. Su uso debe estar autorizado por el propietario de los datos analizados o por orden judicial. El uso no autorizado puede constituir un delito conforme a la legislacion vigente.
+</div>
+
+<p>MaPeriT.AN opera en modo de <strong>solo lectura</strong> sobre el directorio de evidencias. No modifica, elimina ni altera ningun fichero de las evidencias originales. La unica escritura se realiza en el directorio de salida <code>ANALISIS_AN\</code>.</p>
+
+<p>Los informes generados son de caracter tecnico y deben ser interpretados por un perito informatico cualificado. MaPeriT.AN no emite juicios de valor ni conclusiones juridicas; esa responsabilidad recae exclusivamente en el perito que firma el informe.</p>
+
+<div class="card" style="margin-top:15px">
+    <h4>Alcance de la Evaluacion Automatica</h4>
+    <p>MaPeriT.AN incluye deteccion automatica de indicadores (timestomping, risk scoring por entidad, alertas EVTX, ejecutables fuera de rutas estandar). Dicha evaluacion es de caracter <strong>orientativo y preliminar</strong>. Los indicadores detectados automaticamente:</p>
+    <ul style="margin:10px 0 10px 25px;line-height:2.2">
+        <li>No constituyen por si solos una conclusion pericial</li>
+        <li>Pueden generar falsos positivos en funcion de la configuracion del sistema analizado</li>
+        <li>Deben ser validados, contextualizados e interpretados por el perito firmante</li>
+        <li>No implican la existencia de actividad ilicita; pueden tener explicacion legitima</li>
+    </ul>
+    <p>La responsabilidad sobre las conclusiones del informe recae exclusivamente en el perito informatico que lo suscribe. MaPeriT.AN es una herramienta de apoyo tecnico, no un sustituto del criterio profesional del perito.</p>
+</div>
+
+<br><br>
+
+<div style="text-align:center;margin-top:40px;padding:30px 0;border-top:2px solid var(--border);color:var(--text-light);font-size:13px">
+    <p><strong>MaPeriT.AN</strong> &mdash; Analizador Forense Offline v1.2.1</p>
+    <p>Parte del ecosistema MaPeriT de Peritacion Informatica Forense</p>
+    <p>Manual actualizado el 12/07/2026</p>
+</div>
+
+</main>
+</body>
+</html>

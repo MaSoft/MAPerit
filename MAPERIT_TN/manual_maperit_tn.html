@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MaPeriT.TN v1.1.2 - Manual de Usuario</title>
+<style>
+    @page { size: A4; margin: 2cm; }
+    @media print {
+        .no-print { display: none !important; }
+        nav { display: none !important; }
+        .page-break { page-break-before: always; }
+        body { font-size: 10pt; }
+        pre { font-size: 8pt; }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+        --primary: #1a3a5c;
+        --primary-light: #2c5f8a;
+        --accent: #2563eb;
+        --bg: #f7f9fc;
+        --card-bg: #ffffff;
+        --text: #1a1a2e;
+        --text-light: #555;
+        --border: #dde3ea;
+        --code-bg: #0d1117;
+        --code-text: #e6edf3;
+        --success: #16a34a;
+        --warning: #ca8a04;
+        --danger: #dc2626;
+        --info: #2563eb;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        color: var(--text); background: var(--bg);
+        line-height: 1.7; font-size: 15px;
+    }
+
+    /* NAVEGACION LATERAL */
+    nav {
+        position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
+        background: var(--primary); color: #fff; overflow-y: auto;
+        padding: 20px 0; z-index: 100; box-shadow: 3px 0 15px rgba(0,0,0,0.15);
+    }
+    nav .nav-title {
+        padding: 10px 20px 20px; font-size: 18px; font-weight: 700;
+        border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 1px;
+    }
+    nav .nav-subtitle { font-size: 11px; font-weight: 300; opacity: 0.7; display: block; }
+    nav ul { list-style: none; padding: 10px 0; }
+    nav ul li a {
+        display: block; padding: 7px 20px; color: rgba(255,255,255,0.8);
+        text-decoration: none; font-size: 13px; transition: all 0.2s;
+        border-left: 3px solid transparent;
+    }
+    nav ul li a:hover { background: rgba(255,255,255,0.08); color: #fff; border-left-color: var(--accent); }
+    nav ul li.section-title {
+        padding: 15px 20px 5px; font-size: 10px; text-transform: uppercase;
+        letter-spacing: 2px; color: rgba(255,255,255,0.4); font-weight: 600;
+    }
+    nav ul li a.sub { padding-left: 35px; font-size: 12px; opacity: 0.85; }
+
+    /* CONTENIDO PRINCIPAL */
+    main { margin-left: 280px; padding: 30px 50px 60px; max-width: 1100px; }
+
+    /* CABECERA */
+    .page-header {
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, #1d4ed8 100%);
+        color: #fff; padding: 50px 40px; margin: -30px -50px 40px;
+    }
+    .page-header h1 { font-size: 36px; font-weight: 300; letter-spacing: 2px; margin-bottom: 8px; }
+    .page-header .version { font-size: 14px; opacity: 0.7; }
+    .page-header .tagline { font-size: 16px; opacity: 0.9; margin-top: 10px; }
+
+    /* SECCIONES */
+    h2 { font-size: 24px; color: var(--primary); margin: 40px 0 15px; padding-bottom: 8px; border-bottom: 2px solid var(--primary); }
+    h3 { font-size: 18px; color: var(--primary-light); margin: 30px 0 10px; }
+    h4 { font-size: 15px; color: var(--text); margin: 20px 0 8px; font-weight: 600; }
+    p { margin: 10px 0; }
+
+    /* TARJETAS */
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 20px 25px; margin: 15px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .card-header { font-weight: 600; font-size: 16px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    /* MODULOS */
+    .module-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin: 15px 0; }
+    .module-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; border-top: 4px solid var(--accent); }
+    .module-card h4 { color: var(--accent); margin-top: 0; }
+    .module-card p { font-size: 13px; color: var(--text-light); margin: 5px 0 0; }
+
+    /* TABLAS */
+    table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+    th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; font-size: 13px; }
+    td { padding: 9px 14px; border: 1px solid var(--border); font-size: 13px; vertical-align: top; }
+    tr:nth-child(even) td { background: #f8fafc; }
+    tr:hover td { background: #eef4fb; }
+    .param-name { font-family: 'Cascadia Code','Fira Code','Courier New',monospace; font-size: 12px; color: var(--accent); font-weight: 600; white-space: nowrap; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    .badge-required { background: #fee2e2; color: #b91c1c; }
+    .badge-optional { background: #dcfce7; color: #15803d; }
+    .badge-default { background: #dbeafe; color: #1d4ed8; }
+
+    /* CODIGO */
+    pre { background: var(--code-bg); color: var(--code-text); padding: 16px 20px; border-radius: 8px; overflow-x: auto; margin: 12px 0; font-size: 13px; line-height: 1.6; }
+    code { font-family: 'Cascadia Code','Fira Code','Courier New',monospace; }
+    pre code { color: inherit; }
+    .cmd { color: #79c0ff; }
+    .param { color: #ffab70; }
+    .string { color: #a5d6ff; }
+    .comment { color: #8b949e; font-style: italic; }
+    .kw { color: #ff7b72; }
+
+    /* ALERTAS */
+    .alert { padding: 14px 18px; border-radius: 6px; margin: 15px 0; font-size: 14px; border-left: 4px solid; }
+    .alert-info { background: #eff6ff; border-color: var(--info); color: #1e40af; }
+    .alert-warning { background: #fefce8; border-color: var(--warning); color: #854d0e; }
+    .alert-danger { background: #fef2f2; border-color: var(--danger); color: #991b1b; }
+    .alert-success { background: #f0fdf4; border-color: var(--success); color: #14532d; }
+
+    /* FLUJO */
+    .flow { display: flex; gap: 0; margin: 20px 0; flex-wrap: wrap; }
+    .flow-step { background: var(--card-bg); border: 1px solid var(--border); padding: 14px 18px; flex: 1; min-width: 130px; position: relative; font-size: 13px; }
+    .flow-step:not(:last-child)::after { content: '▶'; position: absolute; right: -14px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 16px; z-index: 1; }
+    .flow-step strong { display: block; color: var(--accent); font-size: 12px; margin-bottom: 4px; }
+
+    /* ESTRUCTURA DE DIRECTORIOS */
+    .dir-tree { font-family: 'Cascadia Code','Fira Code','Courier New',monospace; font-size: 13px; background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 16px 20px; line-height: 2; white-space: pre; overflow-x: auto; }
+    .folder { color: var(--primary); font-weight: 600; }
+    .file { color: var(--text-light); }
+    .highlight-file { color: var(--accent); font-weight: 600; }
+
+    /* FEATURE LIST */
+    .feature-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin: 15px 0; }
+    .feature-item { display: flex; gap: 12px; align-items: flex-start; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 14px; }
+    .feature-icon { font-size: 22px; flex-shrink: 0; }
+    .feature-text strong { display: block; margin-bottom: 4px; font-size: 14px; }
+    .feature-text { font-size: 13px; color: var(--text-light); }
+
+    /* ATAJOS DE TECLADO */
+    kbd { display: inline-block; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px 8px; font-family: monospace; font-size: 12px; color: #334155; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+
+    /* VIEWER BADGES */
+    .vbadge { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; margin: 2px; }
+    .vb-csv  { background: #dcfce7; color: #15803d; }
+    .vb-evtx { background: #fee2e2; color: #b91c1c; }
+    .vb-json { background: #fef9c3; color: #854d0e; }
+    .vb-mft  { background: #ede9fe; color: #6d28d9; }
+    .vb-text { background: #e0f2fe; color: #0369a1; }
+    .vb-hex  { background: #fce7f3; color: #9d174d; }
+    .vb-html { background: #f0fdf4; color: #166534; }
+
+    /* IOC SEVERITY */
+    .sev-critical { background: #3B1010; color: #fca5a5; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: 600; }
+    .sev-high     { background: #3B2210; color: #fdba74; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: 600; }
+    .sev-info     { background: #0F2840; color: #7dd3fc; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: 600; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+        nav { display: none; }
+        main { margin-left: 0; padding: 20px; }
+        .page-header { margin: -20px -20px 30px; padding: 30px 20px; }
+        .module-grid { grid-template-columns: 1fr; }
+    }
+</style>
+</head>
+<body>
+
+<!-- NAVEGACION LATERAL -->
+<nav>
+    <div class="nav-title">
+        MaPeriT.TN
+        <span class="nav-subtitle">Manual de Usuario v1.1.2</span>
+    </div>
+    <ul>
+        <li class="section-title">Inicio</li>
+        <li><a href="#intro">Introduccion</a></li>
+        <li><a href="#features">Caracteristicas</a></li>
+        <li><a href="#ecosystem">El Ecosistema MaPeriT</a></li>
+
+        <li class="section-title">Instalacion</li>
+        <li><a href="#requirements">Requisitos del Sistema</a></li>
+        <li><a href="#launch">Lanzar la Aplicacion</a></li>
+        <li><a href="#build">Sistema de Compilacion</a></li>
+
+        <li class="section-title">Interfaz</li>
+        <li><a href="#interface">Ventana Principal</a></li>
+        <li><a href="#explorer">Panel Explorador</a></li>
+        <li><a href="#tabs">Sistema de Pestanas</a></li>
+        <li><a href="#toolbar">Barra de Herramientas</a></li>
+
+        <li class="section-title">Abrir Contenido</li>
+        <li><a href="#open-project">Abrir Proyecto MaPeriT</a></li>
+        <li><a href="#open-file">Abrir Archivo Individual</a></li>
+        <li><a href="#dashboard">Dashboard de Proyecto</a></li>
+
+        <li class="section-title">Visores</li>
+        <li><a href="#viewer-csv"  class="sub">Visor CSV</a></li>
+        <li><a href="#viewer-evtx" class="sub">Visor EVTX</a></li>
+        <li><a href="#viewer-mft"  class="sub">Visor MFT</a></li>
+        <li><a href="#viewer-json" class="sub">Visor JSON</a></li>
+        <li><a href="#viewer-text" class="sub">Visor Texto/Log</a></li>
+        <li><a href="#viewer-hex"  class="sub">Visor Hex</a></li>
+
+        <li class="section-title">Analisis</li>
+        <li><a href="#ioc-scan">Escaner IOC</a></li>
+        <li><a href="#timeline">Timeline Consolidada</a></li>
+        <li><a href="#global-search">Busqueda Global</a></li>
+        <li><a href="#bookmarks">Marcadores</a></li>
+        <li><a href="#context-menu">Menus Contextuales</a></li>
+        <li><a href="#row-context-menu" class="sub">Menu de Fila (DataGrid)</a></li>
+        <li><a href="#tab-context-menu" class="sub">Menu de Pestana</a></li>
+
+        <li class="section-title">Referencia</li>
+        <li><a href="#shortcuts">Atajos de Teclado</a></li>
+        <li><a href="#ioc-patterns">Patrones IOC</a></li>
+        <li><a href="#architecture">Arquitectura</a></li>
+        <li><a href="#troubleshooting">Resolucion de Problemas</a></li>
+        <li><a href="#changelog">Registro de Cambios</a></li>
+        <li><a href="#legal">Aviso Legal</a></li>
+    </ul>
+</nav>
+
+<!-- CONTENIDO PRINCIPAL -->
+<main>
+
+<!-- CABECERA -->
+<div class="page-header">
+    <h1>MaPeriT.TN</h1>
+    <div class="version">Version 1.1.2 &mdash; Visor Forense del Ecosistema MaPeriT</div>
+    <div class="tagline">Navegacion y analisis visual de evidencias recopiladas por MaPeriT.SW o MaPeriT.OF &mdash; CSV &middot; EVTX &middot; MFT &middot; JSON &middot; Hex &middot; IOC &middot; Timeline</div>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="intro">1. Introduccion</h2>
+
+<p><strong>MaPeriT.TN</strong> es el visor forense interactivo del ecosistema MaPeriT. Proporciona una interfaz grafica de escritorio para navegar, visualizar y analizar las evidencias recopiladas por MaPeriT.SW y analizadas por MaPeriT.AN, sin necesidad de herramientas externas ni acceso a internet.</p>
+
+<p>La aplicacion esta construida en PowerShell 5.1 sobre Windows Presentation Foundation (WPF) y no requiere instalacion: es un script portable. Se abre directamente sobre el directorio de un proyecto MaPeriT y presenta todos sus artefactos organizados por fase de adquisicion, con visores especializados para cada tipo de fichero.</p>
+
+<div class="alert alert-success">
+    <strong>Operacion completamente offline y no destructiva:</strong> MaPeriT.TN solo lee el directorio de evidencias. La unica escritura que realiza es el fichero <code>TN_Bookmarks.json</code> cuando el perito crea marcadores, y los informes exportados manualmente.
+</div>
+
+<h3 id="features">1.1 Caracteristicas Principales</h3>
+
+<div class="feature-list">
+    <div class="feature-item">
+        <div class="feature-icon">&#128193;</div>
+        <div class="feature-text"><strong>Navegacion de proyectos</strong>Carga proyectos MaPeriT.SW completos con las 10 fases organizadas en un arbol. Detecta y muestra tambien el modulo ANALISIS_AN si esta presente.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128196;</div>
+        <div class="feature-text"><strong>Visores especializados</strong>Visores dedicados para CSV, EVTX, MFT, JSON, texto/log, HTML y binario (Hex). Cada uno con filtrado, ordenacion y exportacion.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128683;</div>
+        <div class="feature-text"><strong>Deteccion IOC automatica</strong>Todas las filas CSV y EVTX se analizan automaticamente al cargar. IPs externas, hashes SHA256, ejecutables sospechosos y rutas anomalas se resaltan con color por severidad.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128269;</div>
+        <div class="feature-text"><strong>Escaner IOC de proyecto</strong>Escanea todos los ficheros del proyecto (CSV, JSON, TXT, LOG) en segundo plano y muestra una vista consolidada de todos los indicadores detectados, exportable a HTML o CSV.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#9201;</div>
+        <div class="feature-text"><strong>Timeline consolidada</strong>Cruza eventos EVTX, timestamps MFT y columnas de fecha de artefactos CSV en una sola vista cronologica ordenada, con hasta 50.000 eventos. Exportable a CSV.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128204;</div>
+        <div class="feature-text"><strong>Sistema de marcadores</strong>Marca ficheros o artefactos como relevantes con severidad, etiqueta y nota libre. Los marcadores se persisten en el proyecto y se pueden exportar como informe HTML o CSV.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128270;</div>
+        <div class="feature-text"><strong>Busqueda global multi-formato</strong>Busca texto en todos los ficheros del proyecto (CSV, JSON, TXT, LOG, XML, INF) en segundo plano. Resultados con doble clic para abrir el fichero directamente.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128202;</div>
+        <div class="feature-text"><strong>Dashboard de proyecto</strong>Vista inicial con estadisticas del proyecto: fases presentes, total de artefactos, anomalias detectadas por SW, tamano total y estado de cada fase de adquisicion.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#9776;</div>
+        <div class="feature-text"><strong>Menus contextuales en filas y pestanas</strong>Clic derecho en cualquier fila de un DataGrid: copiar fila, crear marcador a nivel de linea o lanzar un escaneo IOC. Clic derecho en una pestana: cerrar, cerrar las demas, cerrar todas o copiar su ruta.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128204;</div>
+        <div class="feature-text"><strong>Marcadores a nivel de linea</strong>Los marcadores ya no son solo de fichero: pueden referenciar una linea concreta, columna y valor de celda de cualquier artefacto CSV, EVTX, MFT o timeline. El informe de exportacion incluye todos los campos de contexto.</div>
+    </div>
+</div>
+
+<h3 id="ecosystem">1.2 El Ecosistema MaPeriT</h3>
+
+<div class="card">
+    <div class="card-header">Tres herramientas, un flujo de trabajo forense completo</div>
+    <table>
+        <tr><th>Modulo</th><th>Funcion</th><th>Cuando se usa</th></tr>
+        <tr><td><strong>MaPeriT.SW</strong></td><td>Adquisicion forense en vivo en el equipo objetivo</td><td>En el equipo sospechoso, con admin local</td></tr>
+        <tr><td><strong>MaPeriT.AN</strong></td><td>Analisis profundo offline: MFT, EVTX, SQLite, USN</td><td>En el laboratorio del perito, sobre las evidencias</td></tr>
+        <tr><td><strong>MaPeriT.TN</strong></td><td>Visor grafico interactivo para revision y analisis visual</td><td>En cualquier momento para revisar evidencias</td></tr>
+    </table>
+</div>
+
+<div class="flow">
+    <div class="flow-step"><strong>MaPeriT.SW</strong>Adquisicion forense en equipo objetivo (10 fases)</div>
+    <div class="flow-step"><strong>MaPeriT.AN</strong>Analisis offline profundo (MFT, EVTX, SQLite, correlacion)</div>
+    <div class="flow-step"><strong>MaPeriT.TN</strong>Revision visual, IOC scan, timeline, marcadores</div>
+    <div class="flow-step"><strong>Informe</strong>Exportacion de hallazgos como HTML/CSV para el expediente</div>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="requirements">2. Requisitos del Sistema</h2>
+
+<div class="card">
+    <div class="card-header">Requisitos</div>
+    <table>
+        <tr><td><strong>PowerShell</strong></td><td>5.1 (incluido en Windows 10/11). No requiere PowerShell 7.</td></tr>
+        <tr><td><strong>Sistema operativo</strong></td><td>Windows 10 / Windows 11 / Windows Server 2016+ (64 bits)</td></tr>
+        <tr><td><strong>Permisos</strong></td><td>Usuario normal. No requiere Administrador para el visor. Si requiere admin si se quiere leer ficheros EVTX protegidos.</td></tr>
+        <tr><td><strong>RAM</strong></td><td>Minimo 2 GB. Recomendado 4 GB+ para proyectos grandes (MFT con 500K+ registros).</td></tr>
+        <tr><td><strong>Dependencias externas</strong></td><td>Ninguna. Solo .NET Framework 4.7+ incluido en Windows 10/11.</td></tr>
+        <tr><td><strong>Resolucion</strong></td><td>Minimo 1280x720. Recomendado 1920x1080 o superior.</td></tr>
+    </table>
+</div>
+
+<div class="alert alert-info">
+    MaPeriT.TN no requiere instalacion de Python, pip, ni ninguna libreria externa. Funciona con lo que viene incluido en Windows 10/11.
+</div>
+
+<!-- ================================================================ -->
+<h2 id="launch">3. Lanzar la Aplicacion</h2>
+
+<h3>3.1 Desde PowerShell</h3>
+
+<div class="card">
+    <div class="card-header">Ejecucion directa</div>
+    <pre><code><span class="comment"># Abrir la aplicacion sin argumentos (pantalla de inicio)</span>
+<span class="cmd">powershell.exe</span> <span class="param">-ExecutionPolicy Bypass</span> <span class="param">-File</span> <span class="string">".\MaPeriT.TN.ps1"</span>
+
+<span class="comment"># Abrir directamente un proyecto MaPeriT.SW</span>
+<span class="cmd">powershell.exe</span> <span class="param">-ExecutionPolicy Bypass</span> <span class="param">-File</span> <span class="string">".\MaPeriT.TN.ps1"</span> <span class="param">-ProjectPath</span> <span class="string">"D:\Forense\MaPeriT_2026-001"</span>
+
+<span class="comment"># Abrir directamente un fichero individual</span>
+<span class="cmd">powershell.exe</span> <span class="param">-ExecutionPolicy Bypass</span> <span class="param">-File</span> <span class="string">".\MaPeriT.TN.ps1"</span> <span class="param">-OpenFile</span> <span class="string">"D:\Evidencias\Security.evtx"</span></code></pre>
+</div>
+
+<h3>3.2 Parametros de Inicio</h3>
+
+<table>
+    <tr><th>Parametro</th><th>Tipo</th><th>Req.</th><th>Descripcion</th></tr>
+    <tr>
+        <td><span class="param-name">-ProjectPath</span></td>
+        <td>String</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Ruta al directorio de salida de MaPeriT.SW. TN verifica que sea un proyecto valido (contiene <code>HashManifest.csv</code> o carpetas de fase).</td>
+    </tr>
+    <tr>
+        <td><span class="param-name">-OpenFile</span></td>
+        <td>String</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Ruta a un fichero individual (CSV, EVTX, JSON, etc.). TN lo abre directamente en el visor correspondiente.</td>
+    </tr>
+</table>
+
+<h3 id="build">3.3 Sistema de Compilacion</h3>
+
+<p>MaPeriT.TN sigue la misma arquitectura modular que SW y AN. El fichero <code>MaPeriT.TN.ps1</code> es el resultado de compilar todos los modulos <code>src\</code> con <code>Build.ps1</code>:</p>
+
+<pre><code><span class="cmd">.\Build.ps1</span></code></pre>
+
+<p>El compilador concatena los 19 modulos fuente en orden, imprime la lista de ficheros incluidos y genera el SHA-256 del compilado. <strong>No edite el compilado directamente</strong>; modifique los ficheros en <code>src\</code> y recompile.</p>
+
+<!-- ================================================================ -->
+<h2 id="interface">4. Ventana Principal</h2>
+
+<div class="card">
+    <div class="card-header">Zonas de la interfaz</div>
+    <table>
+        <tr><th>Zona</th><th>Descripcion</th></tr>
+        <tr><td><strong>Barra de menu</strong></td><td>Menus Archivo, Vista, Analisis, Ayuda. Acceso a todas las funciones.</td></tr>
+        <tr><td><strong>Barra de herramientas</strong></td><td>Botones Abrir Proyecto / Abrir Archivo, nombre del proyecto activo y caja de busqueda global.</td></tr>
+        <tr><td><strong>Panel izquierdo (Explorador)</strong></td><td>Arbol de carpetas del proyecto organizado por fase. Filtro de arbol en la parte superior.</td></tr>
+        <tr><td><strong>Separador redimensionable</strong></td><td>Arrastrarlo para ajustar el ancho del explorador.</td></tr>
+        <tr><td><strong>Area de pestanas</strong></td><td>Visores de ficheros, dashboard, resultados de busqueda, IOC scan, timeline y marcadores.</td></tr>
+        <tr><td><strong>Barra de estado</strong></td><td>Informacion contextual: fichero activo, numero de filas, estado de operaciones.</td></tr>
+    </table>
+</div>
+
+<h3 id="explorer">4.1 Panel Explorador</h3>
+
+<p>El explorador muestra el contenido del proyecto organizado segun la estructura de fases de MaPeriT.SW. Las fases se presentan en orden numerico; dentro de cada fase, los ficheros se ordenan alfabeticamente.</p>
+
+<ul style="margin:10px 0 10px 25px;line-height:2.2;font-size:14px">
+    <li><strong>Clic en un fichero</strong>: lo abre en el visor correspondiente (nueva pestana)</li>
+    <li><strong>Clic derecho en un fichero</strong>: muestra el menu contextual con opciones de analisis</li>
+    <li><strong>Filtro de arbol</strong>: escribe para filtrar en tiempo real por nombre de fichero o carpeta</li>
+    <li><strong>Tooltip</strong>: pasa el raton sobre un fichero para ver su tamano y ruta completa</li>
+</ul>
+
+<div class="alert alert-info">
+    Los iconos de color de los ficheros indican su tipo: <strong style="color:#16a34a">&#9646; CSV</strong>, <strong style="color:#ca8a04">&#9646; JSON</strong>, <strong style="color:#dc2626">&#9646; EVTX</strong>, <strong style="color:#2563eb">&#9646; HTML</strong>, gris para el resto.
+</div>
+
+<h3 id="tabs">4.2 Sistema de Pestanas</h3>
+
+<p>Cada fichero que se abre genera una pestana independiente. Las pestanas se pueden cerrar individualmente con el boton &times; o con <kbd>Ctrl</kbd>+<kbd>W</kbd>. Si se abre un fichero ya abierto, la pestana existente toma el foco en lugar de duplicarse.</p>
+
+<h4 id="tab-context-menu">Menu contextual en la cabecera de pestana</h4>
+
+<p>Un <strong>clic derecho sobre la cabecera de cualquier pestana</strong> muestra un menu contextual con las siguientes opciones:</p>
+
+<table>
+    <tr><th>Opcion</th><th>Accion</th></tr>
+    <tr><td>Cerrar</td><td>Cierra esta pestana (equivalente al boton &times;)</td></tr>
+    <tr><td>Cerrar las demas</td><td>Cierra todas las pestanas excepto la que se ha pulsado</td></tr>
+    <tr><td>Cerrar todas</td><td>Cierra todas las pestanas abiertas</td></tr>
+    <tr><td>Copiar ruta</td><td>Copia al portapapeles la clave de la pestana (ruta del fichero en pestanas de fichero; identificador interno en pestanas especiales como Dashboard o Timeline)</td></tr>
+</table>
+
+<h3 id="toolbar">4.3 Menu Analisis</h3>
+
+<p>El menu <strong>Analisis</strong> agrupa todas las funciones avanzadas:</p>
+
+<table>
+    <tr><th>Opcion</th><th>Atajo</th><th>Descripcion</th></tr>
+    <tr><td>Escanear IOCs en proyecto</td><td><kbd>Ctrl</kbd>+<kbd>I</kbd></td><td>Escaneo asíncrono de todos los ficheros del proyecto en busca de IOCs</td></tr>
+    <tr><td>Timeline consolidada</td><td><kbd>Ctrl</kbd>+<kbd>T</kbd></td><td>Construccion asíncrona de la timeline cruzando EVTX, MFT y CSVs con timestamps</td></tr>
+    <tr><td>Marcadores</td><td>&mdash;</td><td>Abre el panel de marcadores del proyecto actual</td></tr>
+    <tr><td>Busqueda global</td><td><kbd>Ctrl</kbd>+<kbd>F</kbd></td><td>Busqueda de texto en todos los formatos del proyecto</td></tr>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="open-project">5. Abrir un Proyecto MaPeriT</h2>
+
+<p>Un <em>proyecto MaPeriT</em> es el directorio de salida generado por MaPeriT.SW. Contiene la estructura de fases de adquisicion y, opcionalmente, el subdirectorio <code>ANALISIS_AN\</code> generado por MaPeriT.AN.</p>
+
+<p>Para abrir un proyecto haga clic en <strong>Abrir Proyecto MaPeriT</strong> en la barra de herramientas o en el menu <strong>Archivo</strong>, y seleccione el directorio raiz del proyecto. TN verifica que sea un proyecto valido antes de cargarlo.</p>
+
+<div class="card">
+    <div class="card-header">Estructura de proyecto que reconoce MaPeriT.TN</div>
+    <div class="dir-tree">
+<span class="folder">MaPeriT_NOMBRE_YYYYMMDD_HHMMSS\</span>      <span class="file">(OF: MaPeriT_OF_NOMBRE_...)</span>
+&#9500;&#9472;&#9472; <span class="folder">01_Volatile\</span>             <span class="file">1 · Datos volatiles (OF: solo una nota)</span>
+&#9500;&#9472;&#9472; <span class="folder">02_SystemInfo\</span>           <span class="file">OSInfo.json: nombre del equipo</span>
+&#9500;&#9472;&#9472; <span class="folder">03_Filesystem\</span>           <span class="file">$MFT raw, Amcache.hve, papelera</span>
+&#9500;&#9472;&#9472; <span class="folder">04_Registry\</span>             <span class="file">Hives de registro y valores extraidos</span>
+&#9500;&#9472;&#9472; <span class="folder">05_EventLogs\</span>            <span class="file">Ficheros .evtx</span>
+&#9500;&#9472;&#9472; <span class="folder">06_Browsers\</span>             <span class="file">SQLite de navegadores</span>
+&#9500;&#9472;&#9472; <span class="folder">07_Communications\</span>
+&#9500;&#9472;&#9472; <span class="folder">08_CloudStorage\</span>
+&#9500;&#9472;&#9472; <span class="folder">09_USB\</span>
+&#9500;&#9472;&#9472; <span class="folder">10_Persistence\</span>
+&#9500;&#9472;&#9472; <span class="folder">Analysis\</span>                <span class="file">Anomalias y timeline de SW</span>
+&#9500;&#9472;&#9472; <span class="folder">Report\</span>                  <span class="file">InformePericial.html: nombre del perito</span>
+&#9500;&#9472;&#9472; <span class="folder">Logs\</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="highlight-file">HashManifest.csv</span>     <span class="file">&larr; SW; TN lo usa para detectar el proyecto</span>
+&#9500;&#9472;&#9472; <span class="highlight-file">HashManifest.csv</span>         <span class="file">&larr; OF (en la raiz)</span>
+&#9500;&#9472;&#9472; <span class="folder">ANALISIS_AN\</span>             <span class="file">Presente si se ejecuto MaPeriT.AN</span>
+&#9492;&#9472;&#9472; <span class="highlight-file">TN_Bookmarks.json</span>        <span class="file">&larr; creado por TN al guardar marcadores</span>
+    </div>
+</div>
+
+<h3 id="dashboard">5.1 Dashboard de Proyecto</h3>
+
+<p>Al abrir un proyecto, TN muestra automaticamente un <strong>Dashboard</strong> con las estadisticas generales:</p>
+
+<ul style="margin:10px 0 10px 25px;line-height:2.2;font-size:14px">
+    <li><strong>Numero de caso</strong> (del nombre de la carpeta), <strong>equipo</strong> (de <code>02_SystemInfo\OSInfo.json</code>) y <strong>perito</strong> (del informe pericial de SW u OF)</li>
+    <li><strong>Fases capturadas</strong>: numero de fases de adquisicion presentes</li>
+    <li><strong>Artefactos CSV/JSON</strong>: total de ficheros analizables en el proyecto</li>
+    <li><strong>Anomalias SW</strong>: entradas en <code>Analysis\Anomalies.csv</code> (0 si SW no detecto ninguna o si el proyecto es de OF). Hasta v1.1.1, sin ese fichero se contaban por error los programas de inicio de <code>AutorunsConsolidated.csv</code></li>
+    <li><strong>Tamano total</strong>: espacio ocupado por los artefactos</li>
+    <li><strong>Mapa de fases</strong>: indicador visual de que fases estan presentes (verde) o ausentes (gris)</li>
+    <li><strong>Badge AN Disponible</strong>: si el directorio <code>ANALISIS_AN\</code> existe</li>
+</ul>
+
+<!-- ================================================================ -->
+<h2 id="open-file">6. Abrir un Archivo Individual</h2>
+
+<p>MaPeriT.TN puede abrir cualquier fichero de forma independiente, sin necesidad de un proyecto. Haga clic en <strong>Abrir Archivo</strong> o use el menu Archivo. Los formatos soportados y sus visores son:</p>
+
+<table>
+    <tr><th>Extension(es)</th><th>Visor asignado</th><th>Notas</th></tr>
+    <tr><td><span class="vbadge vb-csv">.csv</span></td><td>CSV Viewer</td><td>Carga asincrona. Limite 50.000 filas por defecto.</td></tr>
+    <tr><td><span class="vbadge vb-evtx">.evtx</span></td><td>EVTX Viewer</td><td>Limite 10.000 eventos. Coloreado por EventID.</td></tr>
+    <tr><td><span class="vbadge vb-json">.json</span></td><td>JSON Viewer</td><td>Pretty-print automatico.</td></tr>
+    <tr><td><span class="vbadge vb-mft">MFT_*.csv</span></td><td>MFT Viewer</td><td>Detectado por nombre. Banner informativo y filtro de rutas de sistema.</td></tr>
+    <tr><td><span class="vbadge vb-mft">$MFT</span></td><td>MFT Info</td><td>Fichero binario: muestra tamano y guia para usar AN.</td></tr>
+    <tr><td><span class="vbadge vb-text">.log .txt .inf .xml</span></td><td>Text Viewer</td><td>Con numeracion de lineas y busqueda.</td></tr>
+    <tr><td><span class="vbadge vb-html">.html .htm</span></td><td>HTML Viewer</td><td>Boton para abrir en el navegador del sistema.</td></tr>
+    <tr><td><span class="vbadge vb-hex">.bin .raw .hve .dat .pf</span></td><td>Hex Viewer</td><td>Visor hex completo con scroll, busqueda y navegacion por offset.</td></tr>
+    <tr><td>SAM, SYSTEM, SOFTWARE, SECURITY</td><td>Hex Viewer</td><td>Hives de registro en binario.</td></tr>
+    <tr><td>Resto</td><td>Text Viewer</td><td>Fallback generico.</td></tr>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="viewer-csv">7. Visor CSV</h2>
+
+<p>El visor CSV es el mas completo de MaPeriT.TN. Utiliza carga asincrona mediante un Runspace de PowerShell en segundo plano para no bloquear la interfaz con ficheros grandes.</p>
+
+<div class="card">
+    <div class="card-header">Funciones del Visor CSV</div>
+    <table>
+        <tr><th>Funcion</th><th>Como usarla</th></tr>
+        <tr><td>Filtrar filas</td><td>Escribir en la caja de filtro de la barra superior. Busca en todas las columnas simultaneamente.</td></tr>
+        <tr><td>Ordenar por columna</td><td>Clic en la cabecera de cualquier columna.</td></tr>
+        <tr><td>Redimensionar columnas</td><td>Arrastrar los bordes de las cabeceras.</td></tr>
+        <tr><td>Seleccion multiple</td><td><kbd>Shift</kbd>+clic o <kbd>Ctrl</kbd>+clic en filas.</td></tr>
+        <tr><td>Copiar seleccion</td><td>Boton "Copiar sel." o <kbd>Ctrl</kbd>+<kbd>C</kbd>. Copia en formato TSV (pegable en Excel).</td></tr>
+        <tr><td>Exportar CSV filtrado</td><td>Boton "Exportar CSV". Exporta solo las filas visibles tras el filtro.</td></tr>
+        <tr><td>Resaltado IOC</td><td>Automatico al cargar. Las filas con IOCs se colorean por severidad.</td></tr>
+        <tr><td>Limpiar filtro</td><td>Boton "Limpiar" o borrar el texto del filtro.</td></tr>
+    </table>
+</div>
+
+<h3>7.1 Codigo de colores por severidad</h3>
+
+<table>
+    <tr><th>Color</th><th>Severidad</th><th>Disparado por</th></tr>
+    <tr><td><span class="sev-critical">CRITICA</span></td><td>Critical</td><td>Comandos codificados en Base64, campos Severity=Critical, Event IDs criticos (1102, 4698, 7045...)</td></tr>
+    <tr><td><span class="sev-high">ALTA</span></td><td>High</td><td>Rutas anomalas (Temp, AppData\Local\Temp), ejecutables sospechosos (cmd, powershell, mshta, rundll32...), Event IDs altos</td></tr>
+    <tr><td style="background:#3B3210;color:#fef08a;padding:2px 8px;border-radius:3px;font-size:12px;font-weight:600">MEDIA</td><td>Medium</td><td>Event IDs medios (6005, 6006, 4616...)</td></tr>
+    <tr><td><span class="sev-info">INFO</span></td><td>Info</td><td>IPs externas (excluye RFC 1918), hashes SHA256</td></tr>
+    <tr><td style="background:#2A1040;color:#d8b4fe;padding:2px 8px;border-radius:3px;font-size:12px;font-weight:600">TIMESTOMP</td><td>Timestomping</td><td>Solo en Visor MFT: filas con <code>Timestomping = True</code> segun MaPeriT.AN (el motivo esta en <code>RazonTimestomp</code>)</td></tr>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="viewer-evtx">8. Visor EVTX</h2>
+
+<p>El visor EVTX carga ficheros de eventos de Windows (<code>.evtx</code>) usando <code>Get-WinEvent</code>. Muestra hasta 10.000 eventos por fichero con columnas fijas: Fecha/Hora, EventID, Nivel, Proveedor, Mensaje, Usuario y Equipo.</p>
+
+<p>Las filas se colorean automaticamente segun el EventID usando la clasificacion de severidad de MaPeriT (lista configurable en <code>Config.ps1</code>). El filtro de texto busca en EventID, Mensaje y Proveedor.</p>
+
+<div class="alert alert-warning">
+    <strong>Limite de 10.000 eventos por fichero:</strong> Para el analisis profundo sin limite de EVTX utilice MaPeriT.AN, que procesa todos los eventos usando XPath binario.
+</div>
+
+<!-- ================================================================ -->
+<h2 id="viewer-mft">9. Visor MFT</h2>
+
+<p>El visor MFT tiene dos modos segun el tipo de fichero:</p>
+
+<div class="module-grid">
+    <div class="module-card">
+        <h4>MFT_*.csv (resultado de AN)</h4>
+        <p>Visor completo con DataGrid, filtro de texto, filtro "Solo fuera de System32/WinSxS" y exportacion. Colorea en purpura los registros que AN marca con timestomping (columna <code>Timestomping</code>) y en azul los borrados (<code>Estado = BORRADO</code>). El filtro de sistema usa la columna <code>RutaCompleta</code>. Todas las fechas estan en UTC. Banner informativo segun el tipo: Completo, Timestomping o Borrados.</p>
+    </div>
+    <div class="module-card">
+        <h4>$MFT (fichero binario raw)</h4>
+        <p>Muestra el tamano del fichero y una guia sobre como analizarlo con MaPeriT.AN para obtener los CSV parseados (MFT_Completo.csv, MFT_Timestomping.csv, MFT_Borrados.csv).</p>
+    </div>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="viewer-json">10. Visor JSON</h2>
+
+<p>Carga el JSON y aplica <em>pretty-print</em> con indentacion automatica antes de mostrarlo. Boton "Copiar" para copiar todo el contenido al portapapeles.</p>
+
+<!-- ================================================================ -->
+<h2 id="viewer-text">11. Visor Texto / Log</h2>
+
+<p>Muestra el fichero con numeracion de lineas en el panel izquierdo (fondo oscuro) y el contenido a la derecha, con fuente monoespaciada (Cascadia Code o Consolas). Funciones:</p>
+
+<ul style="margin:10px 0 10px 25px;line-height:2.2;font-size:14px">
+    <li><strong>Busqueda</strong>: escribir en la caja de busqueda y pulsar <kbd>Enter</kbd>. Hace scroll hasta la primera ocurrencia. Siguiente ocurrencia: <kbd>Enter</kbd> de nuevo. El fondo de la caja se pone verde si encuentra, rojo si no.</li>
+    <li><strong>Copiar todo</strong>: boton "Copiar todo" o clic derecho en el area de texto &rarr; <em>Copiar todo</em>.</li>
+    <li><strong>Anadir marcador del archivo</strong>: clic derecho en el area de texto &rarr; <em>Anadir marcador del archivo...</em> abre el dialogo de marcadores para ese fichero.</li>
+</ul>
+
+<!-- ================================================================ -->
+<h2 id="viewer-hex">12. Visor Hex</h2>
+
+<p>Visor hexadecimal real para ficheros binarios. Muestra hasta 64 KB con el formato clasico: offset | hex | ASCII. Funciones:</p>
+
+<table>
+    <tr><th>Control</th><th>Funcion</th></tr>
+    <tr><td>Caja "Ir a offset (hex)"</td><td>Escribir un offset hexadecimal (ej: <code>1A00</code> o <code>0x1A00</code>) y pulsar <kbd>Enter</kbd>. Hace scroll a esa posicion.</td></tr>
+    <tr><td>Caja "Buscar texto"</td><td>Busca texto ASCII en el volcado hex. <kbd>Enter</kbd> va a la primera ocurrencia.</td></tr>
+    <tr><td>Boton "Copiar vista"</td><td>Copia todo el volcado hex visible al portapapeles.</td></tr>
+    <tr><td>Scroll</td><td>Scroll vertical y horizontal completo. El visor muestra el fichero completo (hasta 64 KB).</td></tr>
+</table>
+
+<div class="alert alert-info">
+    Para ficheros mayores de 64 KB se muestran los primeros 64 KB con nota del tamano total. Para analisis forense de binarios completos (volcados de memoria, hives grandes) use herramientas especializadas como HxD o 010 Editor.
+</div>
+
+<!-- ================================================================ -->
+<h2 id="ioc-scan">13. Escaner IOC de Proyecto</h2>
+
+<p>El Escaner IOC (<strong>Analisis &rarr; Escanear IOCs en proyecto</strong> o <kbd>Ctrl</kbd>+<kbd>I</kbd>) analiza todos los ficheros del proyecto de forma asincrona y presenta una vista consolidada de todos los indicadores detectados.</p>
+
+<h3 id="ioc-patterns">13.1 Patrones IOC implementados</h3>
+
+<table>
+    <tr><th>Tipo</th><th>Severidad</th><th>Que detecta</th></tr>
+    <tr>
+        <td>Comando codificado</td>
+        <td><span class="sev-critical">CRITICA</span></td>
+        <td><code>EncodedCommand</code>, <code>DownloadString</code>, <code>Invoke-Expression</code>, <code>IEX</code>, <code>FromBase64</code></td>
+    </tr>
+    <tr>
+        <td>Ruta anomala</td>
+        <td><span class="sev-high">ALTA</span></td>
+        <td>Actividad en <code>\Temp\</code>, <code>\AppData\Local\Temp\</code>, <code>\Downloads\</code>, <code>\Public\</code>, <code>\ProgramData\</code> (excluye Microsoft)</td>
+    </tr>
+    <tr>
+        <td>Ejecutable sospechoso</td>
+        <td><span class="sev-high">ALTA</span></td>
+        <td><code>cmd</code>, <code>powershell</code>, <code>wscript</code>, <code>cscript</code>, <code>mshta</code>, <code>rundll32</code>, <code>regsvr32</code>, <code>schtasks</code>, <code>bitsadmin</code>, <code>certutil</code>, <code>msiexec</code>, <code>wmic</code>, <code>psexec</code></td>
+    </tr>
+    <tr>
+        <td>IP externa</td>
+        <td><span class="sev-info">INFO</span></td>
+        <td>IPs publicas (excluye RFC 1918: 10.x, 172.16-31.x, 192.168.x, 127.x, 0.0.0.0)</td>
+    </tr>
+    <tr>
+        <td>Hash SHA-256</td>
+        <td><span class="sev-info">INFO</span></td>
+        <td>Secuencias hexadecimales de exactamente 64 caracteres</td>
+    </tr>
+</table>
+
+<h3>13.2 Uso del escaner</h3>
+
+<ul style="margin:10px 0 10px 25px;line-height:2.2;font-size:14px">
+    <li>El escaneo se ejecuta <strong>en segundo plano</strong> (Runspace separado). La UI no se bloquea.</li>
+    <li>Ficheros analizados: <code>.csv</code>, <code>.json</code>, <code>.txt</code>, <code>.log</code> menores de 30 MB.</li>
+    <li>Los resultados se ordenan: Critical primero, High, Info al final.</li>
+    <li>El <strong>filtro</strong> de la toolbar filtra por tipo IOC, fichero o coincidencia.</li>
+    <li><strong>Doble clic</strong> en un resultado abre el fichero origen en su visor.</li>
+    <li>Exportar a <strong>CSV</strong> o <strong>HTML</strong> con los botones de la toolbar.</li>
+    <li>Para escanear un <strong>fichero individual</strong>: clic derecho &rarr; "Escanear IOCs en fichero".</li>
+</ul>
+
+<!-- ================================================================ -->
+<h2 id="timeline">14. Timeline Consolidada</h2>
+
+<p>La Timeline (<strong>Analisis &rarr; Timeline consolidada</strong> o <kbd>Ctrl</kbd>+<kbd>T</kbd>) construye una cronologia unificada cruzando tres fuentes de datos del proyecto de forma asincrona.</p>
+
+<div class="card">
+    <div class="card-header">Fuentes integradas en la Timeline</div>
+    <table>
+        <tr><th>Fuente</th><th>Color en TN</th><th>Que aporta</th></tr>
+        <tr><td>EVTX</td><td>Rojo / Naranja (segun severidad)</td><td>Todos los eventos de los .evtx del proyecto (hasta 10.000 por fichero)</td></tr>
+        <tr><td>MFT CSV</td><td>Purpura</td><td>Fecha <code>SI_Modificado_UTC</code> (o, si falta, <code>SI_Creado_UTC</code> / <code>FN_Creado_UTC</code>) de los primeros 3.000 registros por CSV, sin repetir registros; solo se colorean los que AN marca con timestomping</td></tr>
+        <tr><td>CSV con timestamps</td><td>Sin color especial</td><td>Columnas con nombre que contenga Time, Date, Created, Modified, Timestamp... (500 filas por CSV)</td></tr>
+    </table>
+</div>
+
+<p>La timeline muestra hasta <strong>50.000 eventos</strong> ordenados del mas reciente al mas antiguo. El filtro de texto busca en Fuente, Tipo, Descripcion y Artefacto. Exportable a CSV con el boton de la toolbar.</p>
+
+<!-- ================================================================ -->
+<h2 id="global-search">15. Busqueda Global Multi-Formato</h2>
+
+<p>La busqueda global (<kbd>Ctrl</kbd>+<kbd>F</kbd> enfoca la caja en la toolbar; pulsa <kbd>Enter</kbd> o el boton lupa para lanzarla) busca el texto introducido en todos los ficheros del proyecto de forma asincrona.</p>
+
+<div class="card">
+    <div class="card-header">Formatos incluidos en la busqueda</div>
+    <p>La busqueda recorre todos los ficheros <code>.csv</code>, <code>.json</code>, <code>.txt</code>, <code>.log</code>, <code>.xml</code> e <code>.inf</code> del proyecto menores de 20 MB. La busqueda es insensible a mayusculas.</p>
+</div>
+
+<p>Los resultados aparecen en una nueva pestana con columnas Tipo, Fichero, Linea y Contenido. <strong>Doble clic</strong> en cualquier resultado abre el fichero directamente.</p>
+
+<!-- ================================================================ -->
+<h2 id="bookmarks">16. Sistema de Marcadores</h2>
+
+<p>Los marcadores permiten al perito anotar ficheros o artefactos relevantes durante la revision. Se accede mediante <strong>Analisis &rarr; Marcadores</strong> o mediante el menu contextual del explorador.</p>
+
+<h3>16.1 Tipos de marcador</h3>
+
+<p>MaPeriT.TN soporta dos niveles de granularidad para los marcadores:</p>
+
+<div class="module-grid">
+    <div class="module-card">
+        <h4>Marcador de fichero</h4>
+        <p>Referencia a un fichero completo. Se crea desde el menu contextual del explorador (arbol de proyecto) o desde el menu contextual del Visor de Texto. Campos: Fichero, Etiqueta, Severidad, Nota.</p>
+    </div>
+    <div class="module-card">
+        <h4>Marcador de linea</h4>
+        <p>Referencia a una fila concreta de un artefacto. Se crea desde el menu contextual de cualquier DataGrid (CSV, EVTX, MFT, IOC Scan, Timeline, Busqueda). Incluye ademas: numero de linea, nombre de columna y valor de celda.</p>
+    </div>
+</div>
+
+<h3>16.2 Crear un marcador</h3>
+
+<p><strong>Desde el explorador (marcador de fichero):</strong></p>
+<ol style="margin:10px 0 10px 25px;line-height:2.2;font-size:14px">
+    <li>Clic derecho sobre cualquier fichero en el arbol del explorador &rarr; <strong>Anadir marcador...</strong></li>
+    <li>En el dialogo, rellenar: <strong>Etiqueta</strong>, <strong>Severidad</strong> y <strong>Nota</strong>.</li>
+    <li>Clic en <strong>Guardar</strong>. El marcador se persiste en <code>TN_Bookmarks.json</code>.</li>
+</ol>
+
+<p><strong>Desde un DataGrid (marcador de linea):</strong></p>
+<ol style="margin:10px 0 10px 25px;line-height:2.2;font-size:14px">
+    <li>Clic derecho sobre cualquier fila en un visor CSV, EVTX, MFT, IOC Scan, Timeline o Busqueda Global &rarr; <strong>Anadir marcador en fila...</strong></li>
+    <li>El dialogo muestra el contexto de la fila: numero de linea, columna y valor de celda (solo lectura).</li>
+    <li>La etiqueta se pre-rellena automaticamente con el nombre del fichero, la linea y la columna.</li>
+    <li>Rellenar <strong>Severidad</strong> y <strong>Nota</strong>, y clic en <strong>Guardar</strong>.</li>
+</ol>
+
+<div class="alert alert-info">
+    Si un marcador identico (mismo fichero + linea + columna) ya existe, el dialogo abre con los valores actuales y los actualiza al guardar. Esto permite editar la nota o cambiar la severidad de un marcador existente.
+</div>
+
+<h3>16.3 Gestionar marcadores</h3>
+
+<p>La pestana de Marcadores (<strong>Analisis &rarr; Marcadores</strong>) muestra todos los marcadores del proyecto en una tabla con las columnas: Severidad, Etiqueta, Archivo, Linea, Columna, Valor, Nota y Fecha.</p>
+
+<ul style="margin:10px 0 10px 25px;line-height:2.2;font-size:14px">
+    <li><strong>Doble clic</strong> en un marcador: abre el fichero asociado en su visor</li>
+    <li>Boton <strong>Eliminar sel.</strong>: elimina los marcadores seleccionados (seleccion multiple con <kbd>Ctrl</kbd>/<kbd>Shift</kbd>)</li>
+    <li>Boton <strong>Exportar HTML</strong>: abre el dialogo de guardado, donde se elige el formato: informe HTML con todos los campos (para el expediente) o CSV con todos los marcadores (para post-procesado)</li>
+</ul>
+
+<div class="alert alert-info">
+    Los marcadores son especificos de cada proyecto. Cada proyecto tiene su propio <code>TN_Bookmarks.json</code>. El formato es compatible hacia atras: los marcadores creados con versiones anteriores (solo fichero) se cargan correctamente sin Linea ni Columna.
+</div>
+
+<!-- ================================================================ -->
+<h2 id="context-menu">17. Menus Contextuales</h2>
+
+<p>MaPeriT.TN dispone de tres menus contextuales independientes, accesibles con clic derecho segun el elemento sobre el que se pulse.</p>
+
+<h3>17.1 Menu contextual del Explorador (arbol de proyecto)</h3>
+
+<p>Clic derecho sobre cualquier fichero en el arbol del explorador:</p>
+
+<table>
+    <tr><th>Opcion</th><th>Accion</th></tr>
+    <tr><td>Abrir en pestana</td><td>Abre el fichero en su visor (equivalente a clic simple)</td></tr>
+    <tr><td>Anadir marcador...</td><td>Abre el dialogo de marcador de fichero completo</td></tr>
+    <tr><td>Escanear IOCs en fichero</td><td>Escanea solo ese fichero y muestra resultados en nueva pestana</td></tr>
+    <tr><td>Copiar ruta</td><td>Copia la ruta completa del fichero al portapapeles</td></tr>
+    <tr><td>Abrir ubicacion</td><td>Abre el Explorador de Windows con el fichero seleccionado</td></tr>
+</table>
+
+<h3 id="row-context-menu">17.2 Menu contextual de fila (DataGrid)</h3>
+
+<p>Clic derecho sobre cualquier fila de un visor con tabla (CSV, EVTX, MFT, IOC Scan, Timeline, Busqueda Global) selecciona automaticamente la fila bajo el cursor y muestra:</p>
+
+<table>
+    <tr><th>Opcion</th><th>Accion</th></tr>
+    <tr><td>Copiar fila</td><td>Copia todos los campos de la fila seleccionada al portapapeles en formato TSV (pegable en Excel)</td></tr>
+    <tr><td>Anadir marcador en fila...</td><td>Abre el dialogo de marcador pre-rellenado con el contexto de la fila: numero de linea, columna y valor de celda. Extrae automaticamente la ruta del fichero origen si el visor la proporciona (columna Ruta en IOC Scan y Busqueda Global).</td></tr>
+    <tr><td>Escanear IOCs en fila</td><td>Lanza el escaneo IOC de fichero individual usando la ruta del fichero origen de la fila (si disponible). Util en IOC Scan y Busqueda Global para ir directamente al fichero con hallazgos.</td></tr>
+</table>
+
+<div class="alert alert-info">
+    En visores con columna <strong>Ruta</strong> (IOC Scan, Busqueda Global), "Anadir marcador en fila" y "Escanear IOCs en fila" operan sobre el <em>fichero origen</em> de esa fila, no sobre el proyecto completo.
+</div>
+
+<h3>17.3 Menu contextual de la cabecera de pestana</h3>
+
+<p>Clic derecho sobre la cabecera de cualquier pestana abierta. Documentado en la <a href="#tab-context-menu">seccion 4.2</a>.</p>
+
+<!-- ================================================================ -->
+<h2 id="shortcuts">18. Atajos de Teclado</h2>
+
+<table>
+    <tr><th>Atajo</th><th>Accion</th></tr>
+    <tr><td><kbd>Ctrl</kbd>+<kbd>W</kbd></td><td>Cerrar la pestana activa</td></tr>
+    <tr><td><kbd>Ctrl</kbd>+<kbd>F</kbd></td><td>Enfocar la caja de busqueda global en la toolbar</td></tr>
+    <tr><td><kbd>Ctrl</kbd>+<kbd>I</kbd></td><td>Abrir / ir al Escaner IOC de proyecto</td></tr>
+    <tr><td><kbd>Ctrl</kbd>+<kbd>T</kbd></td><td>Abrir / ir a la Timeline consolidada</td></tr>
+    <tr><td><kbd>Enter</kbd> (en busqueda de texto/log)</td><td>Ir a la siguiente ocurrencia del termino buscado</td></tr>
+    <tr><td><kbd>Enter</kbd> (en offset hex)</td><td>Scroll al offset indicado en el visor Hex</td></tr>
+    <tr><td><kbd>Ctrl</kbd>+<kbd>C</kbd> (en DataGrid CSV/EVTX)</td><td>Copiar filas seleccionadas en formato TSV</td></tr>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="architecture">19. Arquitectura del Codigo</h2>
+
+<div class="card">
+    <div class="card-header">Modulos fuente (orden de compilacion)</div>
+    <div class="dir-tree">
+<span class="folder">MAPERIT_TN\</span>
+&#9500;&#9472;&#9472; <span class="highlight-file">MaPeriT.TN.ps1</span>            <span class="file">&larr; compilado (ejecutar este)</span>
+&#9500;&#9472;&#9472; Build.ps1                    <span class="file">&larr; compilador</span>
+&#9500;&#9472;&#9472; manual.html                  <span class="file">&larr; este manual</span>
+&#9492;&#9472;&#9472; <span class="folder">src\</span>
+    &#9500;&#9472;&#9472; Main-Params.ps1            <span class="file">Parametros -ProjectPath / -OpenFile</span>
+    &#9500;&#9472;&#9472; Config.ps1                 <span class="file">Colores, IOC patterns, Event IDs, ViewerMap</span>
+    &#9500;&#9472;&#9472; <span class="folder">Core\</span>
+    &#9474;   &#9500;&#9472;&#9472; Initialize.ps1         <span class="file">Assemblies WPF, DPI, dark title bar</span>
+    &#9474;   &#9500;&#9472;&#9472; Logging.ps1            <span class="file">Utilidades de log</span>
+    &#9474;   &#9500;&#9472;&#9472; ProjectLoader.ps1      <span class="file">Carga de proyecto, metadatos, arbol</span>
+    &#9474;   &#9500;&#9472;&#9472; AsyncLoader.ps1        <span class="file">Carga asincrona CSV via Runspace</span>
+    &#9474;   &#9492;&#9472;&#9472; <span class="highlight-file">Bookmarks.ps1</span>          <span class="file">Sistema de marcadores y anotaciones</span>
+    &#9500;&#9472;&#9472; <span class="folder">Analysis\</span>
+    &#9474;   &#9500;&#9472;&#9472; IOCHighlighter.ps1     <span class="file">Coloracion por severidad en filas/celdas</span>
+    &#9474;   &#9500;&#9472;&#9472; <span class="highlight-file">IOCScanner.ps1</span>         <span class="file">Escaner IOC asincrono de proyecto completo</span>
+    &#9474;   &#9492;&#9472;&#9472; <span class="highlight-file">TimelineBuilder.ps1</span>    <span class="file">Timeline consolidada EVTX+MFT+CSV</span>
+    &#9500;&#9472;&#9472; <span class="folder">Viewers\</span>
+    &#9474;   &#9500;&#9472;&#9472; TextViewer.ps1         <span class="file">Visor texto con numeracion y busqueda</span>
+    &#9474;   &#9500;&#9472;&#9472; JSONViewer.ps1         <span class="file">Pretty-print JSON</span>
+    &#9474;   &#9500;&#9472;&#9472; CSVViewer.ps1          <span class="file">DataGrid con filtro, IOC, exportacion</span>
+    &#9474;   &#9500;&#9472;&#9472; MFTViewer.ps1          <span class="file">Visor MFT CSV con timestomping</span>
+    &#9474;   &#9492;&#9472;&#9472; EVTXViewer.ps1         <span class="file">Visor eventos Windows</span>
+    &#9492;&#9472;&#9472; <span class="folder">UI\</span>
+        &#9500;&#9472;&#9472; XAML.ps1               <span class="file">Definicion de la ventana y estilos WPF</span>
+        &#9500;&#9472;&#9472; Dashboard.ps1          <span class="file">Vista resumen del proyecto</span>
+        &#9500;&#9472;&#9472; MainWindow.ps1         <span class="file">Logica de ventana, tabs, busqueda, IOC, hex</span>
+        &#9492;&#9472;&#9472; Main.ps1               <span class="file">Punto de entrada: init WPF, cargar XAML</span>
+    </div>
+</div>
+
+<h3>19.1 Principio de diseno: sin closures</h3>
+
+<p>Todos los handlers de eventos en MaPeriT.TN usan el patron <code>param($sender, $e)</code> con el estado almacenado en la propiedad <code>.Tag</code> del control emisor. Esto evita los problemas de closures de PowerShell en contextos WPF donde las variables capturadas no se actualizan correctamente.</p>
+
+<h3>19.2 Carga asincrona</h3>
+
+<p>Los ficheros grandes (CSV, IOC Scan, Timeline) se cargan en Runspaces de PowerShell separados. Un <code>DispatcherTimer</code> en el hilo UI verifica cada 150-500 ms si el Runspace ha terminado y actualiza la interfaz. Esto garantiza que la UI nunca se bloquea independientemente del tamano del fichero.</p>
+
+<!-- ================================================================ -->
+<h2 id="troubleshooting">20. Resolucion de Problemas</h2>
+
+<div class="card">
+    <div class="card-header">Problemas comunes</div>
+    <table>
+        <tr><th>Problema</th><th>Causa probable</th><th>Solucion</th></tr>
+        <tr>
+            <td>La aplicacion no arranca</td>
+            <td>PowerShell menor que 5.1 o politica de ejecucion restrictiva</td>
+            <td>Comprobar <code>$PSVersionTable.PSVersion</code>. Lanzar con <code>-ExecutionPolicy Bypass</code>.</td>
+        </tr>
+        <tr>
+            <td>"El directorio seleccionado no parece un proyecto de MaPeriT.SW ni de MaPeriT.OF"</td>
+            <td>El directorio no contiene <code>HashManifest.csv</code> ni carpetas de fase reconocidas</td>
+            <td>Verificar que se ha seleccionado el directorio raiz del proyecto SW, no una subcarpeta.</td>
+        </tr>
+        <tr>
+            <td>CSV no carga o carga vacio</td>
+            <td>Fichero con codificacion distinta a UTF-8, delimitador diferente a coma, o error de permisos</td>
+            <td>Intentar abrirlo con el Visor de Texto para ver el contenido raw. MaPeriT.TN usa <code>Import-Csv</code> con UTF-8.</td>
+        </tr>
+        <tr>
+            <td>EVTX muestra "Error al leer"</td>
+            <td>Sin permisos para leer el .evtx, o fichero corrupto</td>
+            <td>Ejecutar TN como Administrador si el .evtx esta en una ubicacion protegida. Si el fichero esta corrupto, usarlo desde MaPeriT.AN.</td>
+        </tr>
+        <tr>
+            <td>IOC Scan no encuentra resultados</td>
+            <td>El proyecto no contiene CSV/TXT/LOG, o los ficheros superan 30 MB</td>
+            <td>Normal en proyectos con solo datos binarios. Verificar la fase 5 (EVTX) y las fases de persistencia.</td>
+        </tr>
+        <tr>
+            <td>Timeline tarda mucho</td>
+            <td>Proyecto con muchos EVTX grandes o MFT CSV con muchos registros</td>
+            <td>Normal en proyectos grandes. La barra de estado indica "Construyendo timeline..." mientras trabaja. No cerrar la ventana.</td>
+        </tr>
+        <tr>
+            <td>Marcadores no se guardan</td>
+            <td>Sin permisos de escritura en el directorio del proyecto, o directorio en red de solo lectura</td>
+            <td>Copiar el proyecto a un directorio local con permisos de escritura antes de abrir TN.</td>
+        </tr>
+        <tr>
+            <td>La busqueda global no devuelve resultados esperados</td>
+            <td>Los .evtx no se buscan en la busqueda global (solo ficheros de texto)</td>
+            <td>Para buscar en eventos EVTX usar el filtro del Visor EVTX directamente, o el Escaner IOC de proyecto.</td>
+        </tr>
+    </table>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="changelog">21. Registro de Cambios</h2>
+
+<div class="alert alert-danger">
+    <strong>Revision completa y pruebas reales (v1.1.2, 16/11/2026):</strong>
+    <ul style="margin:8px 0 12px 20px">
+        <li><strong>Timeline consolidada:</strong> el MFT no entraba nunca (se buscaban nombres de columna en ingles que AN no genera); ahora usa las columnas reales, no repite registros y solo colorea los de timestomping. Nueva columna <strong>Zona horaria</strong>: EVTX y MFT en UTC; la de cada CSV segun su origen.</li>
+        <li><strong>Visor MFT:</strong> no coloreaba timestomping ni borrados y el filtro "Solo fuera de System32/WinSxS" no hacia nada; ahora usa las columnas de AN.</li>
+        <li><strong>Dashboard:</strong> sin <code>Anomalies.csv</code> contaba como anomalias los programas de inicio; el perito no se mostraba nunca (ahora se lee del informe pericial) y con proyectos de OF el caso aparecia como "OF_&lt;caso&gt;".</li>
+        <li>Barra de titulo clara en el tema claro; textos que omitian MaPeriT.OF; boton "Exportar CSV" en espanol; <code>Build.ps1</code> aborta si falta una fuente.</li>
+    </ul>
+    <strong>Bug critico: 0 fases detectadas en cualquier proyecto real (v1.1.1, 12/07/2026):</strong>
+    tras completar la auditoria de las 5 herramientas del ecosistema, se ejecuto una
+    verificacion end-to-end real (adquisicion sintetica con <code>MaPeriT.OF</code>,
+    analisis con <code>MaPeriT.AN</code>, y carga del resultado en <code>MaPeriT.TN</code>)
+    que revelo el fallo mas grave encontrado en toda la auditoria: el diccionario
+    <code>$Script:SW_PhaseNames</code> (Config.ps1) usaba claves como
+    <code>"Phase1_Volatile"</code>, <code>"Phase2_SystemInfo"</code>, etc., que
+    <strong>nunca coincidian</strong> con los nombres de carpeta reales que generan
+    MaPeriT.SW y MaPeriT.OF (<code>$Script:OutputDirs</code> en sus respectivos
+    <code>Config.ps1</code> usa el prefijo numerico real: <code>01_Volatile</code>,
+    <code>02_SystemInfo</code>, ... <code>10_Persistence</code>). Consecuencia:
+    el arbol de fases y el contador del Dashboard mostraban <strong>siempre 0 de
+    10 fases reconocidas</strong> en cualquier proyecto real jamas cargado con
+    TN desde su version inicial -- los ficheros seguian siendo accesibles por la
+    rama generica de "carpetas no reconocidas", pero sin iconos, nombres ni
+    conteo de fase. Se elimino ademas la clave fantasma <code>"MemoryDump"</code>
+    (no es una carpeta de nivel superior real, esta anidada dentro de
+    <code>01_Volatile</code>). El mismo patron de ruta incorrecta
+    (<code>"Phase10_Persistence\..."</code>) se encontro y corrigio en dos
+    sitios mas: <code>Core\ProjectLoader.ps1</code> y la copia realmente
+    ejecutada en tiempo de ejecucion dentro de <code>UI\MainWindow.ps1</code>.
+    Verificado con prueba real antes/despues contra una adquisicion generada
+    por MaPeriT.OF: <code>PhaseCount</code> paso de 1 (roto) a 13 (las 13
+    carpetas reales correctamente detectadas).
+</div>
+
+<div class="alert alert-warning">
+    <strong>Auditoria de fiabilidad (v1.1.0, 12/07/2026):</strong>
+    revision completa linea a linea de los 19 ficheros fuente (segunda pasada
+    independiente sobre este proyecto). Un bug corregido y una limpieza de
+    codigo muerto, verificados con parseo AST + motor real PowerShell 5.1 y
+    prueba funcional directa de la logica corregida.
+</div>
+<div class="card">
+    <div class="card-header">Correccion (v1.1.0)</div>
+    <table>
+        <tr><th>Fix</th><th>Descripcion</th></tr>
+        <tr><td>Nombre de equipo siempre vacio en el Dashboard</td><td>El Dashboard intentaba leer <code>Logs\session.json</code> para <em>Equipo</em>, <em>Perito</em> y <em>Fecha de adquisicion</em> -- un fichero que <strong>ni MaPeriT.SW ni MaPeriT.OF generan nunca</strong>, asi que "Equipo" quedaba en blanco en todos los proyectos reales pese a que el dato si existe en <code>02_SystemInfo\OSInfo.json</code>. Corregido con un fallback que lee ese fichero (columna <code>NombreEquipo</code> en SW, <code>CSName</code> en OF). "Perito" y "Fecha de adquisicion" siguen sin mostrarse: ninguna de las dos herramientas de adquisicion persiste ese dato en un fichero legible por separado hoy (queda documentado como limitacion conocida, no oculto).</td></tr>
+    </table>
+</div>
+<div class="card">
+    <div class="card-header">Limpieza de codigo (v1.1.0)</div>
+    <table>
+        <tr><th>Cambio</th><th>Descripcion</th></tr>
+        <tr><td>Logica de metadatos duplicada</td><td><code>Get-ProjectMetadata</code> (Core\ProjectLoader.ps1) nunca se llamaba desde ningun sitio -- la logica realmente usada en tiempo de ejecucion era una copia casi identica dentro de <code>Load-ProjectTree</code> (UI\MainWindow.ps1). Se corrigieron ambas copias de forma consistente.</td></tr>
+        <tr><td>16 ficheros <code>.bak</code> sueltos en <code>src\</code></td><td>Restos de ediciones anteriores dispersos directamente en las carpetas de codigo fuente (no interferian con la compilacion, pero incumplian la norma de mantener los backups en una unica carpeta). Retirados del codigo fuente.</td></tr>
+    </table>
+</div>
+
+<h2 id="legal">22. Aviso Legal</h2>
+
+<div class="alert alert-warning">
+    <strong>MaPeriT.TN</strong> es una herramienta de visualizacion forense informatica. Su uso debe estar autorizado por el propietario de los datos o por orden judicial. El uso no autorizado puede constituir un delito conforme a la legislacion vigente.
+</div>
+
+<p>MaPeriT.TN opera en <strong>modo de solo lectura</strong> sobre el directorio de evidencias. La unica excepcion es el fichero <code>TN_Bookmarks.json</code>, que se crea o actualiza cuando el perito guarda marcadores, y los informes que el perito genera y guarda explicitamente mediante los botones de exportacion.</p>
+
+<p>Los informes de marcadores e IOCs generados por MaPeriT.TN son de caracter <strong>tecnico y orientativo</strong>. Los hallazgos detectados automaticamente (IOCs, severidad de eventos, timestomping) deben ser validados, contextualizados e interpretados por un perito informatico cualificado antes de ser utilizados en un informe pericial o procedimiento judicial.</p>
+
+<div class="card" style="margin-top:15px">
+    <h4>Limitaciones de la deteccion automatica</h4>
+    <ul style="margin:10px 0 10px 25px;line-height:2.2">
+        <li>Los patrones IOC pueden generar falsos positivos en entornos con software de administracion legitimo que use los mismos ejecutables o rutas</li>
+        <li>La coloracion de severidad es orientativa y no equivale a una conclusion pericial</li>
+        <li>La timeline consolida fuentes heterogeneas que pueden tener desfases horarios si el equipo tenia la zona horaria mal configurada</li>
+        <li>El timestomping detectado en el Visor MFT requiere validacion manual antes de ser afirmado en un informe</li>
+    </ul>
+</div>
+
+<br><br>
+
+<div style="text-align:center;margin-top:40px;padding:30px 0;border-top:2px solid var(--border);color:var(--text-light);font-size:13px">
+    <p><strong>MaPeriT.TN</strong> &mdash; Visor Forense del Ecosistema MaPeriT v1.1.2</p>
+    <p>Parte del ecosistema MaPeriT de Peritacion Informatica Forense</p>
+    <p>Manual actualizado el 16/11/2026 &mdash; v1.1.2 (timeline y visor MFT con las columnas reales de AN, zona horaria, recuento de anomalias)</p>
+</div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MaPeriT.SC v1.0.1 - Manual de Usuario</title>
+<style>
+    @page { size: A4; margin: 2cm; }
+    @media print {
+        .no-print { display: none !important; }
+        nav { display: none !important; }
+        .page-break { page-break-before: always; }
+        body { font-size: 10pt; }
+        pre { font-size: 8pt; }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+        --primary: #1a3a5c;
+        --primary-light: #2c5f8a;
+        --accent: #1d4ed8;
+        --bg: #f7f9fc;
+        --card-bg: #ffffff;
+        --text: #1a1a2e;
+        --text-light: #555;
+        --border: #dde3ea;
+        --code-bg: #0d1117;
+        --code-text: #e6edf3;
+        --success: #16a34a;
+        --warning: #ca8a04;
+        --danger: #dc2626;
+        --info: #2563eb;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        color: var(--text); background: var(--bg);
+        line-height: 1.7; font-size: 15px;
+    }
+
+    /* NAVEGACION LATERAL */
+    nav {
+        position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
+        background: var(--primary); color: #fff; overflow-y: auto;
+        padding: 20px 0; z-index: 100; box-shadow: 3px 0 15px rgba(0,0,0,0.15);
+    }
+    nav .nav-title {
+        padding: 10px 20px 20px; font-size: 18px; font-weight: 700;
+        border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 1px;
+    }
+    nav .nav-subtitle { font-size: 11px; font-weight: 300; opacity: 0.7; display: block; }
+    nav ul { list-style: none; padding: 10px 0; }
+    nav ul li a {
+        display: block; padding: 7px 20px; color: rgba(255,255,255,0.8);
+        text-decoration: none; font-size: 13px; transition: all 0.2s;
+        border-left: 3px solid transparent;
+    }
+    nav ul li a:hover { background: rgba(255,255,255,0.08); color: #fff; border-left-color: var(--accent); }
+    nav ul li.section-title {
+        padding: 15px 20px 5px; font-size: 10px; text-transform: uppercase;
+        letter-spacing: 2px; color: rgba(255,255,255,0.4); font-weight: 600;
+    }
+    nav ul li a.sub { padding-left: 35px; font-size: 12px; opacity: 0.85; }
+
+    /* CONTENIDO PRINCIPAL */
+    main { margin-left: 280px; padding: 30px 50px 60px; max-width: 1100px; }
+
+    /* CABECERA */
+    .page-header {
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #1d4ed8 100%);
+        color: #fff; padding: 50px 40px; margin: -30px -50px 40px;
+    }
+    .page-header h1 { font-size: 36px; font-weight: 300; letter-spacing: 2px; margin-bottom: 8px; }
+    .page-header .version { font-size: 14px; opacity: 0.7; }
+    .page-header .tagline { font-size: 16px; opacity: 0.9; margin-top: 10px; }
+
+    /* SECCIONES */
+    h2 { font-size: 24px; color: var(--primary); margin: 40px 0 15px; padding-bottom: 8px; border-bottom: 2px solid var(--primary); }
+    h3 { font-size: 18px; color: var(--primary-light); margin: 30px 0 10px; }
+    h4 { font-size: 15px; color: var(--text); margin: 20px 0 8px; font-weight: 600; }
+    p { margin: 10px 0; }
+
+    /* TARJETAS */
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 20px 25px; margin: 15px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .card-header { font-weight: 600; font-size: 16px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    /* MODULOS */
+    .module-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin: 15px 0; }
+    .module-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; border-top: 4px solid var(--accent); }
+    .module-card h4 { color: var(--accent); margin-top: 0; }
+    .module-card p { font-size: 13px; color: var(--text-light); margin: 5px 0 0; }
+    .module-num { display: inline-block; background: var(--accent); color: white; width: 26px; height: 26px; border-radius: 50%; text-align: center; line-height: 26px; font-size: 12px; font-weight: 700; margin-right: 8px; }
+
+    /* PARAMETROS */
+    table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+    th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; font-size: 13px; }
+    td { padding: 9px 14px; border: 1px solid var(--border); font-size: 13px; vertical-align: top; }
+    tr:nth-child(even) td { background: #f8fafc; }
+    tr:hover td { background: #eef4fb; }
+    .param-name { font-family: 'Cascadia Code','Fira Code','Courier New',monospace; font-size: 12px; color: var(--accent); font-weight: 600; white-space: nowrap; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    .badge-required { background: #fee2e2; color: #b91c1c; }
+    .badge-optional { background: #dcfce7; color: #15803d; }
+    .badge-default { background: #dbeafe; color: #1d4ed8; font-size: 11px; }
+
+    /* CODIGO */
+    pre { background: var(--code-bg); color: var(--code-text); padding: 16px 20px; border-radius: 8px; overflow-x: auto; margin: 12px 0; font-size: 13px; line-height: 1.6; }
+    code { font-family: 'Cascadia Code','Fira Code','Courier New',monospace; }
+    pre code { color: inherit; }
+    .cmd { color: #79c0ff; }
+    .param { color: #ffab70; }
+    .string { color: #a5d6ff; }
+    .comment { color: #8b949e; font-style: italic; }
+
+    /* ALERTAS */
+    .alert { padding: 14px 18px; border-radius: 6px; margin: 15px 0; font-size: 14px; border-left: 4px solid; }
+    .alert-info { background: #eff6ff; border-color: var(--info); color: #1e40af; }
+    .alert-warning { background: #fefce8; border-color: var(--warning); color: #854d0e; }
+    .alert-danger { background: #fef2f2; border-color: var(--danger); color: #991b1b; }
+    .alert-success { background: #f0fdf4; border-color: var(--success); color: #14532d; }
+
+    /* FLUJO */
+    .flow { display: flex; gap: 0; margin: 20px 0; flex-wrap: wrap; }
+    .flow-step { background: var(--card-bg); border: 1px solid var(--border); padding: 14px 18px; flex: 1; min-width: 130px; position: relative; font-size: 13px; }
+    .flow-step:not(:last-child)::after { content: '▶'; position: absolute; right: -14px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 16px; z-index: 1; }
+    .flow-step strong { display: block; color: var(--accent); font-size: 12px; margin-bottom: 4px; }
+
+    /* ESTRUCTURA DE DIRECTORIOS */
+    .dir-tree { font-family: 'Cascadia Code','Fira Code','Courier New',monospace; font-size: 13px; background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 16px 20px; line-height: 2; white-space: pre; overflow-x: auto; }
+    .folder { color: var(--primary); font-weight: 600; }
+    .file { color: var(--text-light); }
+    .highlight-file { color: var(--accent); font-weight: 600; }
+
+    /* FEATURE LIST */
+    .feature-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin: 15px 0; }
+    .feature-item { display: flex; gap: 12px; align-items: flex-start; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 14px; }
+    .feature-icon { font-size: 22px; flex-shrink: 0; }
+    .feature-text strong { display: block; margin-bottom: 4px; font-size: 14px; }
+    .feature-text { font-size: 13px; color: var(--text-light); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+        nav { display: none; }
+        main { margin-left: 0; padding: 20px; }
+        .page-header { margin: -20px -20px 30px; padding: 30px 20px; }
+        .module-grid { grid-template-columns: 1fr; }
+    }
+</style>
+</head>
+<body>
+
+<!-- NAVEGACION LATERAL -->
+<nav>
+    <div class="nav-title">
+        MaPeriT.SC
+        <span class="nav-subtitle">Manual de Usuario v1.0.1</span>
+    </div>
+    <ul>
+        <li class="section-title">Inicio</li>
+        <li><a href="#intro">Introduccion</a></li>
+        <li><a href="#features">Caracteristicas</a></li>
+        <li><a href="#relation">Relacion con el Ecosistema MaPeriT</a></li>
+
+        <li class="section-title">Instalacion</li>
+        <li><a href="#requirements">Requisitos del Sistema</a></li>
+        <li><a href="#install">Instalacion</a></li>
+        <li><a href="#build">Sistema de Compilacion</a></li>
+
+        <li class="section-title">Uso</li>
+        <li><a href="#params">Parametros</a></li>
+        <li><a href="#examples">Ejemplos de Uso</a></li>
+        <li><a href="#wizard-flow">Flujo del Asistente</a></li>
+
+        <li class="section-title">El Asistente Paso a Paso</li>
+        <li><a href="#step-project" class="sub">1. Proyecto</a></li>
+        <li><a href="#step-users" class="sub">2. Ambito de usuario</a></li>
+        <li><a href="#step-categories" class="sub">3. Categorias</a></li>
+        <li><a href="#step-datetime" class="sub">4. Ventana temporal</a></li>
+        <li><a href="#step-keyword" class="sub">5. Palabra clave</a></li>
+        <li><a href="#step-summary" class="sub">6. Resumen</a></li>
+        <li><a href="#step-results" class="sub">7. Resultados</a></li>
+        <li><a href="#step-reports" class="sub">8. Informes</a></li>
+
+        <li class="section-title">Referencia Tecnica</li>
+        <li><a href="#categories-ref">Categorias de Consulta</a></li>
+        <li><a href="#user-confidence">Confianza del Usuario</a></li>
+        <li><a href="#output-structure">Estructura de Salida</a></li>
+        <li><a href="#reports">Los Dos Informes</a></li>
+        <li><a href="#architecture">Arquitectura del Codigo</a></li>
+        <li><a href="#troubleshooting">Resolucion de Problemas</a></li>
+        <li><a href="#legal">Aviso Legal</a></li>
+    </ul>
+</nav>
+
+<!-- CONTENIDO PRINCIPAL -->
+<main>
+
+<!-- CABECERA -->
+<div class="page-header">
+    <h1>MaPeriT.SC</h1>
+    <div class="version">Version 1.0.1 &mdash; Consulta Guiada de Evidencias</div>
+    <div class="tagline">Asistente visual para buscar, por patrones, dentro de las evidencias ya analizadas por MaPeriT.AN &mdash; sin conocimientos tecnicos</div>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="intro">1. Introduccion</h2>
+
+<p><strong>MaPeriT.SC</strong> es la herramienta de consulta guiada del ecosistema MaPeriT. A diferencia del resto de modulos (pensados para el perito), MaPeriT.SC esta dirigida a un <strong>usuario sin conocimientos tecnicos</strong> (cliente, parte interesada) que necesita responder preguntas concretas sobre lo ya analizado: "&iquest;cuando inicio sesion este usuario?", "&iquest;que programas se ejecutaron entre estas fechas?", "&iquest;hubo actividad de madrugada?".</p>
+
+<p>MaPeriT.SC no analiza nada por si mismo: <strong>lee los resultados que ya genero MaPeriT.AN</strong> y permite filtrarlos mediante un asistente por pasos con variables predefinidas (usuario, categoria, fechas, franja horaria, palabra clave), evitando que el usuario tenga que escribir consultas o interpretar CSV tecnicos directamente.</p>
+
+<div class="alert alert-success">
+    <strong>Operacion de solo lectura:</strong> MaPeriT.SC no modifica ningun fichero del proyecto MaPeriT ni de MaPeriT.AN. Toda su salida (los dos informes y <code>Resultados_SC.csv</code>) se escribe en una carpeta nueva que por defecto es <code>CONSULTAS_SC\Consulta_&lt;fecha&gt;</code> dentro del proyecto (se puede elegir otra en el ultimo paso). Las plantillas de busqueda se guardan en <code>%APPDATA%\MaPeriT.SC\Plantillas</code>.
+</div>
+
+<h3 id="features">1.1 Caracteristicas Principales</h3>
+
+<div class="feature-list">
+    <div class="feature-item">
+        <div class="feature-icon">&#129513;</div>
+        <div class="feature-text"><strong>Asistente por pasos</strong>Sin consultas tecnicas: variables predefinidas (usuario, categoria, fechas, franja horaria) para que ninguna fuente se quede fuera por error, mas una palabra clave opcional para incluir o descartar hallazgos por su descripcion.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128100;</div>
+        <div class="feature-text"><strong>Deteccion automatica de usuarios</strong>Explora sesiones y navegadores del proyecto para ofrecer una lista real de usuarios detectados, no un campo de texto libre.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128337;</div>
+        <div class="feature-text"><strong>Franja horaria recurrente</strong>Permite acotar, por ejemplo, "de 23:00 a 06:00 en cualquier dia del rango" ademas del rango de fechas.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128269;</div>
+        <div class="feature-text"><strong>Trazabilidad de cada hallazgo</strong>Cada resultado indica la fuente exacta y la ruta del fichero de MaPeriT.AN donde se encontro, y si el usuario es confirmado o inferido.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#9889;</div>
+        <div class="feature-text"><strong>Sin bloqueos con datos grandes</strong>La carga de los CSV de MaPeriT.AN se hace en segundo plano (Runspace + DispatcherTimer); la ventana nunca se congela, sin limite de filas que pueda ocultar un hallazgo.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128196;</div>
+        <div class="feature-text"><strong>Dos informes, un mismo hecho</strong>Un informe pericial formal y un resumen en lenguaje llano, generados a partir de exactamente los mismos hallazgos confirmados.</div>
+    </div>
+</div>
+
+<h3 id="relation">1.2 Relacion con el Ecosistema MaPeriT</h3>
+
+<div class="card">
+    <div class="card-header">MaPeriT.SC no sustituye a MaPeriT.TN</div>
+    <table>
+        <tr><th>Aspecto</th><th>MaPeriT.TN</th><th>MaPeriT.SC</th></tr>
+        <tr><td><strong>Publico</strong></td><td>Perito profesional</td><td>Usuario sin conocimientos tecnicos</td></tr>
+        <tr><td><strong>Funcion</strong></td><td>Explorador completo de evidencias</td><td>Consulta guiada por patrones concretos</td></tr>
+        <tr><td><strong>Interaccion</strong></td><td>Arbol de proyecto, visores por tipo de fichero</td><td>Asistente lineal por pasos</td></tr>
+        <tr><td><strong>Requiere el otro</strong></td><td>No</td><td>No &mdash; son independientes, ninguno necesita el otro instalado</td></tr>
+        <tr><td><strong>Entrada</strong></td><td>Cualquier fichero del proyecto</td><td>Solo resultados ya generados por MaPeriT.AN</td></tr>
+        <tr><td><strong>Salida</strong></td><td>Visualizacion en pantalla</td><td>Dos informes HTML (pericial + lenguaje llano)</td></tr>
+    </table>
+</div>
+
+<div class="alert alert-info">
+    MaPeriT.SC <strong>necesita</strong> que MaPeriT.AN haya ejecutado previamente sobre el proyecto (debe existir la carpeta <code>ANALISIS_AN\</code>). Sin ese analisis previo, no hay nada sobre lo que consultar.
+</div>
+
+<!-- ================================================================ -->
+<h2 id="requirements">2. Requisitos del Sistema</h2>
+
+<div class="card">
+    <div class="card-header">Requisitos Minimos</div>
+    <table>
+        <tr><td><strong>PowerShell</strong></td><td>5.1 o superior</td></tr>
+        <tr><td><strong>Sistema operativo</strong></td><td>Windows 10/11 o Windows Server 2016+</td></tr>
+        <tr><td><strong>Permisos</strong></td><td>Usuario estandar. No requiere permisos de administrador (solo lee ficheros ya generados)</td></tr>
+        <tr><td><strong>RAM</strong></td><td>Minimo 4 GB. El indexado carga en memoria las fuentes seleccionadas sin truncar filas</td></tr>
+        <tr><td><strong>Entrada requerida</strong></td><td>Un proyecto MaPeriT con la carpeta <code>ANALISIS_AN\</code> generada por MaPeriT.AN</td></tr>
+        <tr><td><strong>Conexion a internet</strong></td><td>No necesaria. Operacion completamente offline</td></tr>
+    </table>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="install">3. Instalacion</h2>
+
+<p>MaPeriT.SC no requiere instalacion. Es un script PowerShell portable que se puede ejecutar desde cualquier directorio.</p>
+
+<div class="card">
+    <div class="card-header">Estructura de ficheros de MaPeriT.SC</div>
+    <div class="dir-tree">
+<span class="folder">MAPERIT_SC\</span>
+&#9500;&#9472;&#9472; <span class="highlight-file">MaPeriT.SC.ps1</span>          <span class="file">&larr; script compilado (ejecutar este)</span>
+&#9500;&#9472;&#9472; Build.ps1                  <span class="file">&larr; compilador (para desarrolladores)</span>
+&#9500;&#9472;&#9472; manual_maperit_sc.html     <span class="file">&larr; este manual</span>
+&#9500;&#9472;&#9472; ficha_maperit_sc.html      <span class="file">&larr; ficha de producto</span>
+&#9492;&#9472;&#9472; <span class="folder">src\</span>                       <span class="file">&larr; codigo fuente modular</span>
+    &#9500;&#9472;&#9472; Main-Params.ps1
+    &#9500;&#9472;&#9472; Config.ps1
+    &#9500;&#9472;&#9472; <span class="folder">Core\</span>
+    &#9474;   &#9500;&#9472;&#9472; Initialize.ps1
+    &#9474;   &#9500;&#9472;&#9472; Logging.ps1
+    &#9474;   &#9500;&#9472;&#9472; ProjectLoader.ps1
+    &#9474;   &#9492;&#9472;&#9472; AsyncLoader.ps1
+    &#9500;&#9472;&#9472; <span class="folder">Query\</span>
+    &#9474;   &#9500;&#9472;&#9472; SourceSchema.ps1
+    &#9474;   &#9500;&#9472;&#9472; UserInference.ps1
+    &#9474;   &#9492;&#9472;&#9472; QueryEngine.ps1
+    &#9500;&#9472;&#9472; <span class="folder">Report\</span>
+    &#9474;   &#9500;&#9472;&#9472; ReportTemplates.ps1
+    &#9474;   &#9500;&#9472;&#9472; ReportPericial.ps1
+    &#9474;   &#9492;&#9472;&#9472; ReportLlano.ps1
+    &#9500;&#9472;&#9472; <span class="folder">UI\</span>
+    &#9474;   &#9500;&#9472;&#9472; XAML.ps1
+    &#9474;   &#9492;&#9472;&#9472; Wizard.ps1
+    &#9492;&#9472;&#9472; Main.ps1
+    </div>
+</div>
+
+<h3 id="build">3.1 Sistema de Compilacion</h3>
+
+<p>Igual que el resto del ecosistema, MaPeriT.SC tiene un sistema de compilacion que concatena todos los modulos en un unico fichero desplegable:</p>
+
+<pre><code><span class="cmd">.\Build.ps1</span></code></pre>
+
+<p>El compilador lee la version desde <code>src\Config.ps1</code> (fuente unica de verdad) y genera <code>MaPeriT.SC.ps1</code> con su hash SHA-256. <strong>No edite el compilado directamente</strong>; modifique los ficheros fuente en <code>src\</code> y recompile.</p>
+
+<!-- ================================================================ -->
+<h2 id="params">4. Parametros de Ejecucion</h2>
+
+<table>
+    <tr><th>Parametro</th><th>Tipo</th><th>Req.</th><th>Descripcion</th></tr>
+    <tr>
+        <td><span class="param-name">-ProjectPath</span></td>
+        <td>String</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Abre directamente una carpeta de evidencias con <code>ANALISIS_AN</code> ya generado, sin pasar por el dialogo de seleccion del paso 1. <span class="badge badge-default">Por defecto: se pide en el asistente</span></td>
+    </tr>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="examples">5. Ejemplos de Uso</h2>
+
+<div class="card">
+    <div class="card-header">Arranque normal (se pide la carpeta en el asistente)</div>
+    <pre><code><span class="cmd">.\MaPeriT.SC.ps1</span></code></pre>
+</div>
+
+<div class="card">
+    <div class="card-header">Abrir un proyecto directamente</div>
+    <pre><code><span class="cmd">.\MaPeriT.SC.ps1</span> <span class="param">-ProjectPath</span> <span class="string">"D:\Forense\MaPeriT_2026-001"</span></code></pre>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="wizard-flow">6. Flujo del Asistente</h2>
+
+<div class="flow">
+    <div class="flow-step"><strong>1. Proyecto</strong>Carpeta con ANALISIS_AN</div>
+    <div class="flow-step"><strong>2. Usuario</strong>Todos o seleccion concreta</div>
+    <div class="flow-step"><strong>3. Categorias</strong>Que tipo de actividad</div>
+    <div class="flow-step"><strong>4. Fechas</strong>Rango y franja horaria</div>
+    <div class="flow-step"><strong>5. Palabra clave</strong>Opcional</div>
+    <div class="flow-step"><strong>6. Resumen</strong>Confirmacion de criterios</div>
+    <div class="flow-step"><strong>7. Resultados</strong>Revision e inclusion</div>
+    <div class="flow-step"><strong>8. Informes</strong>Generacion de los dos HTML</div>
+</div>
+
+<h3 id="step-project">6.1 Paso 1 &mdash; Proyecto</h3>
+<p>Se selecciona la carpeta de evidencias (generada por MaPeriT.SW u OF) que contenga <code>ANALISIS_AN\</code>. MaPeriT.SC valida la carpeta antes de continuar; si no encuentra un analisis AN valido, no permite avanzar.</p>
+
+<h3 id="step-users">6.2 Paso 2 &mdash; Ambito de usuario</h3>
+<p>Tras validar el proyecto, MaPeriT.SC carga en segundo plano los inicios de sesion (EVTX) y el historial de navegadores para construir una <strong>lista real de usuarios detectados</strong> en ese proyecto. El usuario del asistente elige "Todos los usuarios" o marca uno o varios de la lista.</p>
+
+<h3 id="step-categories">6.3 Paso 3 &mdash; Categorias</h3>
+<p>Se marcan una o varias categorias de interes (ver seccion 8 para el detalle de que fuentes de MaPeriT.AN cubre cada una).</p>
+
+<h3 id="step-datetime">6.4 Paso 4 &mdash; Ventana temporal</h3>
+<p>Rango de fechas opcional (desde/hasta) y, adicionalmente, una franja horaria recurrente opcional (por ejemplo, de 23:00 a 06:00, aplicada todos los dias del rango &mdash; util para preguntas del tipo "&iquest;hubo actividad de madrugada?").</p>
+<div class="alert alert-warning"><strong>Zona horaria:</strong> las horas se comparan tal como las guarda cada fuente. Las de MaPeriT.AN estan en <strong>UTC</strong> (en Espana, una hora menos que la oficial en invierno y dos en verano), salvo las del USN Journal, que estan en la hora local del equipo analizado. Cada fecha de los resultados y de los informes indica su zona. Amcache no guarda fecha de ejecucion: con un rango de fechas activo esa fuente no aporta resultados.</div>
+
+<h3 id="step-keyword">6.5 Paso 5 &mdash; Palabra clave</h3>
+<p>Opcional. Una palabra clave de inclusion (solo se conservan los hallazgos cuya descripcion la contiene) y, de forma independiente, una de exclusion (se descartan los que la contienen; util para quitar ruido conocido).</p>
+
+<h3 id="step-summary">6.6 Paso 6 &mdash; Resumen</h3>
+<p>Muestra los criterios elegidos y que fuentes de MaPeriT.AN se van a consultar y cuales no existen en ese proyecto. Desde aqui se pueden guardar los criterios como plantilla (en <code>%APPDATA%\MaPeriT.SC\Plantillas</code>) para reutilizarlos en otro caso.</p>
+
+<h3 id="step-results">6.7 Paso 7 &mdash; Resultados</h3>
+<p>Antes de generar los informes, se muestra la tabla completa de hallazgos con una casilla "Incluir" por fila. El usuario puede desmarcar los que no considere relevantes; solo los marcados pasan a los informes finales.</p>
+
+<h3 id="step-reports">6.8 Paso 8 &mdash; Informes</h3>
+<p>Se elige la carpeta de destino (por defecto <code>CONSULTAS_SC\Consulta_&lt;fecha&gt;</code> dentro del proyecto) y se generan los dos informes HTML y <code>Resultados_SC.csv</code>.</p>
+
+<!-- ================================================================ -->
+<h2 id="categories-ref">7. Categorias de Consulta</h2>
+
+<p>Cada categoria del paso 3 corresponde a uno o varios ficheros CSV generados por MaPeriT.AN. Si alguno de esos ficheros no existe en el proyecto (por ejemplo, porque AN se ejecuto con algun modulo omitido), MaPeriT.SC lo indica en el resumen del paso 6 y continua con el resto.</p>
+
+<table>
+    <tr><th>Categoria</th><th>Fuentes de MaPeriT.AN consultadas</th></tr>
+    <tr><td>Inicios y cierres de sesion</td><td><code>EVTX_Logons.csv</code>, <code>EVTX_FailedLogons.csv</code></td></tr>
+    <tr><td>Programas ejecutados o registrados</td><td><code>EVTX_Procesos.csv</code>, <code>Amcache_Ejecutables.csv</code>, <code>ShimCache_Completo.csv</code>, <code>USN_Ejecutables.csv</code>. Amcache y ShimCache son indicios de presencia, no prueba de ejecucion ni de su fecha; los informes lo indican en cada hallazgo.</td></tr>
+    <tr><td>Navegacion web</td><td><code>Browser_Historial.csv</code>, <code>Browser_Descargas.csv</code>, <code>Browser_Busquedas.csv</code></td></tr>
+    <tr><td>Ficheros creados, borrados o renombrados</td><td><code>MFT_Completo.csv</code>, <code>MFT_Borrados.csv</code>, <code>USN_Borrados.csv</code>, <code>USN_Renombrados.csv</code></td></tr>
+    <tr><td>Servicios nuevos y persistencia</td><td><code>EVTX_NuevosServicios.csv</code></td></tr>
+    <tr><td>Indicios de manipulacion</td><td><code>MFT_Timestomping.csv</code>, <code>EVTX_LogBorrado.csv</code></td></tr>
+    <tr><td>Scripts de PowerShell ejecutados</td><td><code>EVTX_PowerShell4104.csv</code></td></tr>
+    <tr><td>Actividad en rutas sospechosas</td><td><code>USN_RutasSospechosas.csv</code></td></tr>
+</table>
+
+<div class="alert alert-info">
+    <strong>ShimCache_*.csv y USN_*.csv tienen columnas variables</strong> porque provienen de herramientas externas (fsutil y el extractor de ShimCache de MaPeriT.SW), no de MaPeriT.AN. MaPeriT.SC detecta en tiempo real que columna es la fecha y cual es la ruta; si no logra identificarlas, la fuente se marca como "sin columna de fecha" y se excluye de los filtros temporales (nunca se descarta en silencio).
+</div>
+
+<!-- ================================================================ -->
+<h2 id="user-confidence">8. Confianza del Usuario: Confirmado vs Inferido</h2>
+
+<p>No todas las fuentes de MaPeriT.AN registran el usuario de forma nativa. MaPeriT.SC distingue siempre entre:</p>
+
+<div class="card">
+    <table>
+        <tr><th>Confianza</th><th>Significado</th><th>Fuentes donde aplica</th></tr>
+        <tr><td><span class="badge badge-optional">Confirmado</span></td><td>El usuario proviene directamente de un campo de la fuente original</td><td>EVTX (TargetUser/SubjectUser), navegadores (Usuario)</td></tr>
+        <tr><td><span class="badge badge-default">Inferido</span></td><td>Se ha deducido de la ruta del fichero, patron <code>\Users\&lt;usuario&gt;\</code></td><td>MFT, Amcache, ShimCache, USN Journal (no registran usuario propio)</td></tr>
+        <tr><td><span class="badge badge-required">No disponible</span></td><td>No se ha podido determinar ningun usuario para ese hallazgo</td><td>Cualquier fuente cuando la ruta no sigue el patron de perfil de usuario</td></tr>
+    </table>
+</div>
+
+<p>Esta distincion aparece en la columna "Confianza" de la tabla de resultados y en ambos informes finales, porque condiciona el peso probatorio de cada hallazgo.</p>
+
+<!-- ================================================================ -->
+<h2 id="output-structure">9. Estructura de Salida</h2>
+
+<div class="alert alert-info"><strong>Novedades v1.0.1 (16/11/2026):</strong> el equipo y el perito de los informes ya no salen vacios (se leen de <code>OSInfo.json</code> y del informe pericial de SW u OF) y se codifican correctamente en el HTML; cada fecha indica su zona horaria; Amcache deja de presentarse como fecha de ejecucion; las cuentas llamadas "Usuario", "Invitado" o "Guest" ya aparecen en la lista del paso 2; corregidas las comillas del resumen facil y un fallo latente en las frases.</div>
+
+<div class="dir-tree">
+<span class="folder">ProjectPath\CONSULTAS_SC\Consulta_YYYYMMDD_HHMMSS\</span>
+&#9500;&#9472;&#9472; <span class="highlight-file">Informe_Pericial_SC.html</span>       <span class="file">&larr; informe formal, mismo diseno que SW/AN</span>
+&#9500;&#9472;&#9472; <span class="highlight-file">Informe_Resumen_Facil_SC.html</span>  <span class="file">&larr; mismo contenido, lenguaje llano</span>
+&#9492;&#9472;&#9472; <span class="file">Resultados_SC.csv</span>              <span class="file">&larr; los hallazgos incluidos, para Excel</span>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="reports">10. Los Dos Informes</h2>
+
+<p>Ambos informes se generan a partir de <strong>exactamente los mismos hallazgos confirmados</strong> en el paso 7 del asistente. No se recalculan por separado: solo cambia la redaccion y el nivel de detalle tecnico expuesto.</p>
+
+<div class="card">
+    <div class="card-header">Informe_Pericial_SC.html</div>
+    <table>
+        <tr><th>Seccion</th><th>Contenido</th></tr>
+        <tr><td>1. Resumen Ejecutivo</td><td>Numero de hallazgos incluidos</td></tr>
+        <tr><td>2. Metodologia de la Consulta</td><td>Criterios exactos aplicados, fuentes consultadas y no disponibles, filas evaluadas, filas con fecha no interpretable, filas sin usuario asociado</td></tr>
+        <tr><td>3. Hallazgos por Categoria</td><td>Tabla completa por categoria: fecha, fuente, usuario, confianza, descripcion y ruta de origen exacta</td></tr>
+        <tr><td>4. Conclusiones</td><td>Texto pericial con bloque de firmas</td></tr>
+    </table>
+</div>
+
+<div class="card">
+    <div class="card-header">Informe_Resumen_Facil_SC.html</div>
+    <table>
+        <tr><th>Seccion</th><th>Contenido</th></tr>
+        <tr><td>Que se ha buscado</td><td>Explicacion en una frase de los criterios aplicados</td></tr>
+        <tr><td>Lo que se ha encontrado</td><td>Cada hallazgo en una frase sencilla, agrupado por categoria; las repeticiones del mismo patron se resumen en una linea y se destacan los programas vistos por varias fuentes</td></tr>
+        <tr><td>Detalle, para quien quiera comprobarlo</td><td>La misma tabla tecnica que el informe pericial, para mantener la trazabilidad</td></tr>
+    </table>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="architecture">11. Arquitectura del Codigo</h2>
+
+<div class="card">
+    <div class="card-header">Modulos fuente</div>
+    <table>
+        <tr><th>Fichero</th><th>Funcion</th></tr>
+        <tr><td><code>src/Config.ps1</code></td><td>Version (fuente unica de verdad), paleta de color, rutas de AN</td></tr>
+        <tr><td><code>src/Core/ProjectLoader.ps1</code></td><td>Validacion del proyecto y metadatos del caso</td></tr>
+        <tr><td><code>src/Core/AsyncLoader.ps1</code></td><td>Carga de CSV en Runspace + DispatcherTimer, sin bloquear la UI</td></tr>
+        <tr><td><code>src/Query/SourceSchema.ps1</code></td><td>Catalogo declarativo: categoria &rarr; ficheros &rarr; columnas</td></tr>
+        <tr><td><code>src/Query/UserInference.ps1</code></td><td>Normalizacion e inferencia de usuario por fuente</td></tr>
+        <tr><td><code>src/Query/QueryEngine.ps1</code></td><td>Filtrado por usuario, categoria, fecha, franja horaria y palabra clave</td></tr>
+        <tr><td><code>src/Report/ReportTemplates.ps1</code></td><td>CSS/JS y tabla de hallazgos comun a ambos informes</td></tr>
+        <tr><td><code>src/Report/ReportPericial.ps1</code></td><td>Generador del informe pericial formal</td></tr>
+        <tr><td><code>src/Report/ReportLlano.ps1</code></td><td>Generador del resumen en lenguaje llano</td></tr>
+        <tr><td><code>src/UI/XAML.ps1</code></td><td>Ventana principal (shell fijo del asistente)</td></tr>
+        <tr><td><code>src/UI/Wizard.ps1</code></td><td>Logica de los 8 pasos y transiciones asincronas</td></tr>
+        <tr><td><code>src/Main.ps1</code></td><td>Punto de entrada</td></tr>
+    </table>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="troubleshooting">12. Resolucion de Problemas</h2>
+
+<div class="card">
+    <div class="card-header">Problemas comunes</div>
+    <table>
+        <tr><th>Problema</th><th>Causa probable</th><th>Solucion</th></tr>
+        <tr>
+            <td>"La carpeta indicada no contiene un analisis MaPeriT.AN valido"</td>
+            <td>No existe la subcarpeta <code>ANALISIS_AN</code> en la ruta indicada</td>
+            <td>Ejecutar primero MaPeriT.AN sobre las evidencias, o seleccionar la carpeta raiz correcta del proyecto</td>
+        </tr>
+        <tr>
+            <td>No aparece ningun usuario en el paso 2</td>
+            <td>El proyecto no tiene sesiones EVTX ni historial de navegadores analizados</td>
+            <td>Se puede continuar con "Todos los usuarios"; los hallazgos sin usuario quedaran marcados como tal</td>
+        </tr>
+        <tr>
+            <td>Una fuente aparece como "no disponible" en el resumen</td>
+            <td>MaPeriT.AN se ejecuto omitiendo ese modulo, o el fichero no se genero</td>
+            <td>Es informativo, no un error: la consulta continua con el resto de fuentes disponibles</td>
+        </tr>
+        <tr>
+            <td>Una fuente aparece como "sin columna de fecha"</td>
+            <td>Fuente de columnas dinamicas (ShimCache/USN) cuya cabecera no contiene un nombre de columna reconocible como fecha</td>
+            <td>Sus filas se incluyen igualmente cuando no hay filtro de fecha activo; con filtro de fecha activo quedan excluidas y contabilizadas en el resumen</td>
+        </tr>
+        <tr>
+            <td>La carga de fuentes tarda varios segundos</td>
+            <td>CSV de gran tamano (por ejemplo, MFT_Completo.csv en discos con muchos ficheros)</td>
+            <td>Es normal: la carga ocurre en segundo plano y no bloquea la ventana. MaPeriT.SC no trunca filas para no ocultar hallazgos</td>
+        </tr>
+    </table>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="legal">13. Aviso Legal</h2>
+
+<div class="alert alert-warning">
+    <strong>MaPeriT.SC</strong> es una herramienta de consulta sobre resultados de un analisis forense informatico previo. Su uso debe estar autorizado por el propietario de los datos analizados o por orden judicial. El uso no autorizado puede constituir un delito conforme a la legislacion vigente.
+</div>
+
+<p>MaPeriT.SC opera en modo de <strong>solo lectura</strong> sobre el proyecto y sobre <code>ANALISIS_AN\</code>. No modifica, elimina ni altera ningun fichero de las evidencias ni del analisis previo. La unica escritura se realiza en la carpeta de salida que el propio usuario del asistente elige (por defecto <code>CONSULTAS_SC\</code> dentro del proyecto) y en las plantillas que guarde en <code>%APPDATA%\MaPeriT.SC\Plantillas</code>.</p>
+
+<p>Los informes generados por MaPeriT.SC son documentos de consulta derivados del informe pericial completo de MaPeriT.AN. Su valor probatorio depende de su presentacion conjunta con dicho informe por un perito informatico habilitado.</p>
+
+<div class="card" style="margin-top:15px">
+    <h4>Alcance de la Consulta</h4>
+    <p>MaPeriT.SC filtra y presenta hallazgos ya detectados por MaPeriT.AN; no realiza ningun analisis forense adicional ni emite juicios de valor. La ausencia de un hallazgo en un informe de MaPeriT.SC:</p>
+    <ul style="margin:10px 0 10px 25px;line-height:2.2">
+        <li>No implica ausencia de actividad</li>
+        <li>Unicamente indica que no se encontraron registros que cumplan los criterios de busqueda seleccionados, dentro de las fuentes disponibles y consultadas</li>
+        <li>Debe interpretarse conjuntamente con el informe completo de MaPeriT.AN</li>
+    </ul>
+    <p>La responsabilidad sobre las conclusiones periciales recae exclusivamente en el perito informatico que suscribe el informe completo del caso. MaPeriT.SC es una herramienta de apoyo a la consulta, no un sustituto del criterio profesional del perito.</p>
+</div>
+
+<br><br>
+
+<div style="text-align:center;margin-top:40px;padding:30px 0;border-top:2px solid var(--border);color:var(--text-light);font-size:13px">
+    <p><strong>MaPeriT.SC</strong> &mdash; Consulta Guiada de Evidencias v1.0.1</p>
+    <p>Parte del ecosistema MaPeriT de Peritacion Informatica Forense</p>
+    <p>Manual actualizado el 11/07/2026</p>
+</div>
+
+</main>
+</body>
+</html>

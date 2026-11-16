@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MaPeriT.SW v1.7.5 - Manual de Usuario</title>
+<style>
+    @page { size: A4; margin: 2cm; }
+    @media print {
+        .no-print { display: none !important; }
+        nav { display: none !important; }
+        .page-break { page-break-before: always; }
+        body { font-size: 10pt; }
+        pre { font-size: 8pt; }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+        --primary: #1a3a5c;
+        --primary-light: #2c5f8a;
+        --accent: #e74c3c;
+        --bg: #f7f9fc;
+        --card-bg: #ffffff;
+        --text: #1a1a2e;
+        --text-light: #555;
+        --border: #dde3ea;
+        --code-bg: #0d1117;
+        --code-text: #e6edf3;
+        --success: #27ae60;
+        --warning: #f39c12;
+        --danger: #e74c3c;
+        --info: #3498db;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        color: var(--text); background: var(--bg);
+        line-height: 1.7; font-size: 15px;
+    }
+
+    /* NAVEGACION LATERAL */
+    nav {
+        position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
+        background: var(--primary); color: #fff; overflow-y: auto;
+        padding: 20px 0; z-index: 100; box-shadow: 3px 0 15px rgba(0,0,0,0.15);
+    }
+    nav .nav-title {
+        padding: 10px 20px 20px; font-size: 18px; font-weight: 700;
+        border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 1px;
+    }
+    nav .nav-subtitle { font-size: 11px; font-weight: 300; opacity: 0.7; display: block; }
+    nav ul { list-style: none; padding: 10px 0; }
+    nav ul li a {
+        display: block; padding: 7px 20px; color: rgba(255,255,255,0.8);
+        text-decoration: none; font-size: 13px; transition: all 0.2s;
+        border-left: 3px solid transparent;
+    }
+    nav ul li a:hover { background: rgba(255,255,255,0.08); color: #fff; border-left-color: var(--accent); }
+    nav ul li.section-title {
+        padding: 15px 20px 5px; font-size: 10px; text-transform: uppercase;
+        letter-spacing: 2px; color: rgba(255,255,255,0.4); font-weight: 600;
+    }
+    nav ul li a.sub { padding-left: 35px; font-size: 12px; opacity: 0.85; }
+
+    /* CONTENIDO PRINCIPAL */
+    main {
+        margin-left: 280px; padding: 30px 50px 60px; max-width: 1100px;
+    }
+
+    /* CABECERA DE PAGINA */
+    .page-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        color: #fff; padding: 50px 40px; margin: -30px -50px 40px; border-radius: 0 0 0 0;
+    }
+    .page-header h1 { font-size: 36px; font-weight: 300; letter-spacing: 2px; margin-bottom: 8px; }
+    .page-header .version { font-size: 14px; opacity: 0.7; }
+    .page-header .tagline { font-size: 16px; opacity: 0.9; margin-top: 10px; }
+
+    /* SECCIONES */
+    h2 {
+        font-size: 24px; color: var(--primary); margin: 40px 0 15px;
+        padding-bottom: 8px; border-bottom: 2px solid var(--primary);
+    }
+    h3 { font-size: 18px; color: var(--primary-light); margin: 30px 0 10px; }
+    h4 { font-size: 15px; color: var(--text); margin: 20px 0 8px; font-weight: 600; }
+    p { margin: 10px 0; }
+
+    /* TARJETAS */
+    .card {
+        background: var(--card-bg); border: 1px solid var(--border);
+        border-radius: 8px; padding: 20px 25px; margin: 15px 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .card-header {
+        font-weight: 600; font-size: 16px; margin-bottom: 10px;
+        padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
+
+    /* GRID DE FASES */
+    .phase-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin: 15px 0; }
+    .phase-card {
+        background: var(--card-bg); border: 1px solid var(--border);
+        border-radius: 8px; padding: 18px; border-left: 4px solid var(--primary);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .phase-card:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+    .phase-card .phase-num {
+        display: inline-block; background: var(--primary); color: #fff;
+        width: 28px; height: 28px; border-radius: 50%; text-align: center;
+        line-height: 28px; font-size: 13px; font-weight: 700; margin-right: 8px;
+    }
+    .phase-card .phase-title { font-weight: 600; font-size: 15px; color: var(--primary); }
+    .phase-card .phase-desc { font-size: 13px; color: var(--text-light); margin-top: 8px; line-height: 1.5; }
+    .phase-card ul { margin: 8px 0 0 18px; font-size: 12px; color: var(--text-light); }
+    .phase-card ul li { margin: 3px 0; }
+
+    /* CODIGO */
+    pre {
+        background: var(--code-bg); color: var(--code-text);
+        border-radius: 8px; padding: 18px 22px; margin: 12px 0;
+        overflow-x: auto; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+        font-size: 13px; line-height: 1.6; border: 1px solid #30363d;
+    }
+    code {
+        background: #e8edf2; color: #c7254e; padding: 2px 6px;
+        border-radius: 4px; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+        font-size: 13px;
+    }
+    pre code { background: none; color: inherit; padding: 0; }
+    .cmd { color: #79c0ff; }
+    .param { color: #ffa657; }
+    .string { color: #a5d6ff; }
+    .comment { color: #8b949e; }
+
+    /* TABLAS */
+    table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+    th {
+        background: var(--primary); color: #fff; padding: 10px 14px;
+        text-align: left; font-size: 13px; font-weight: 600;
+    }
+    td { padding: 9px 14px; border-bottom: 1px solid var(--border); }
+    tr:nth-child(even) { background: #f8fafc; }
+    tr:hover { background: #edf2f7; }
+
+    /* BADGES / ETIQUETAS */
+    .badge {
+        display: inline-block; padding: 3px 10px; border-radius: 4px;
+        font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+    }
+    .badge-required { background: #fce4e4; color: var(--danger); }
+    .badge-optional { background: #e8f5e9; color: var(--success); }
+    .badge-default { background: #e3f2fd; color: var(--info); }
+    .badge-warning { background: #fff8e1; color: #e65100; }
+    .badge-phase { background: var(--primary); color: #fff; }
+
+    /* ALERTAS */
+    .alert {
+        padding: 14px 18px; border-radius: 6px; margin: 15px 0;
+        font-size: 14px; border-left: 4px solid;
+    }
+    .alert-warning { background: #fef9e7; border-left-color: var(--warning); color: #7d6608; }
+    .alert-danger { background: #fdedec; border-left-color: var(--danger); color: #922b21; }
+    .alert-info { background: #ebf5fb; border-left-color: var(--info); color: #1a5276; }
+    .alert-success { background: #eafaf1; border-left-color: var(--success); color: #1e8449; }
+    .alert strong { font-weight: 700; }
+
+    /* ESTRUCTURA DE DIRECTORIOS */
+    .dir-tree {
+        font-family: 'Cascadia Code', 'Consolas', monospace; font-size: 13px;
+        background: #f0f4f8; padding: 18px; border-radius: 8px; border: 1px solid var(--border);
+        line-height: 1.8; white-space: pre; overflow-x: auto;
+    }
+    .dir-tree .folder { color: var(--primary); font-weight: 600; }
+    .dir-tree .file { color: var(--text-light); }
+
+    /* DIAGRAMA DE FLUJO */
+    .flow-steps {
+        display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+        margin: 15px 0; padding: 15px; background: #f0f4f8; border-radius: 8px;
+    }
+    .flow-step {
+        background: var(--primary); color: #fff; padding: 8px 16px;
+        border-radius: 6px; font-size: 13px; font-weight: 500;
+    }
+    .flow-arrow { color: var(--primary); font-size: 20px; font-weight: 700; }
+
+    /* FEATURE LIST */
+    .feature-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; margin: 15px 0; }
+    .feature-item {
+        display: flex; align-items: flex-start; gap: 10px; padding: 10px;
+        background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px;
+    }
+    .feature-icon { font-size: 20px; flex-shrink: 0; width: 30px; text-align: center; }
+    .feature-text { font-size: 13px; }
+    .feature-text strong { display: block; margin-bottom: 2px; }
+
+    /* LISTA DE ANOMALIAS */
+    .anomaly-type { margin: 10px 0; padding: 12px 15px; border-radius: 6px; }
+    .anomaly-critical { background: #fdedec; border-left: 4px solid var(--danger); }
+    .anomaly-high { background: #fef5e7; border-left: 4px solid #e67e22; }
+    .anomaly-medium { background: #fef9e7; border-left: 4px solid var(--warning); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+        nav { display: none; }
+        main { margin-left: 0; padding: 20px; }
+        .page-header { margin: -20px -20px 30px; padding: 30px 20px; }
+        .phase-grid { grid-template-columns: 1fr; }
+    }
+</style>
+</head>
+<body>
+
+<!-- NAVEGACION LATERAL -->
+<nav>
+    <div class="nav-title">
+        MaPeriT.SW
+        <span class="nav-subtitle">Manual de Usuario v1.7.5</span>
+    </div>
+    <ul>
+        <li class="section-title">Inicio</li>
+        <li><a href="#intro">Introduccion</a></li>
+        <li><a href="#changelog">Registro de Cambios</a></li>
+        <li><a href="#features">Caracteristicas</a></li>
+        <li><a href="#standards">Normativa y Estandares</a></li>
+
+        <li class="section-title">Instalacion</li>
+        <li><a href="#requirements">Requisitos del Sistema</a></li>
+        <li><a href="#install">Instalacion</a></li>
+        <li><a href="#build">Sistema de Compilacion</a></li>
+
+        <li class="section-title">Uso</li>
+        <li><a href="#params">Parametros de Ejecucion</a></li>
+        <li><a href="#examples">Ejemplos de Uso</a></li>
+        <li><a href="#execution-flow">Flujo de Ejecucion</a></li>
+
+        <li class="section-title">Fases de Adquisicion</li>
+        <li><a href="#phase1" class="sub">Fase 1: Datos Volatiles</a></li>
+        <li><a href="#phase2" class="sub">Fase 2: Info del Sistema</a></li>
+        <li><a href="#phase3" class="sub">Fase 3: Sist. de Ficheros</a></li>
+        <li><a href="#phase4" class="sub">Fase 4: Registro Windows</a></li>
+        <li><a href="#phase5" class="sub">Fase 5: Logs de Eventos</a></li>
+        <li><a href="#phase6" class="sub">Fase 6: Navegadores Web</a></li>
+        <li><a href="#phase7" class="sub">Fase 7: Comunicaciones</a></li>
+        <li><a href="#phase8" class="sub">Fase 8: Almacen. Nube</a></li>
+        <li><a href="#phase9" class="sub">Fase 9: USB/Externos</a></li>
+        <li><a href="#phase10" class="sub">Fase 10: Persistencia</a></li>
+
+        <li class="section-title">Analisis</li>
+        <li><a href="#timeline">Linea Temporal</a></li>
+        <li><a href="#iocs">Extraccion de IOCs</a></li>
+        <li><a href="#anomalies">Deteccion de Anomalias</a></li>
+
+        <li class="section-title">Resultados</li>
+        <li><a href="#output-structure">Estructura de Salida</a></li>
+        <li><a href="#reports">Informes Generados</a></li>
+        <li><a href="#integrity">Integridad y Custodia</a></li>
+
+        <li class="section-title">Referencia</li>
+        <li><a href="#architecture">Arquitectura del Codigo</a></li>
+        <li><a href="#event-ids">Event IDs Monitorizados</a></li>
+        <li><a href="#registry-keys">Claves de Registro</a></li>
+        <li><a href="#troubleshooting">Resolucion de Problemas</a></li>
+        <li><a href="#legal">Aviso Legal</a></li>
+    </ul>
+</nav>
+
+<!-- CONTENIDO PRINCIPAL -->
+<main>
+
+<!-- CABECERA -->
+<div class="page-header">
+    <h1>MaPeriT.SW</h1>
+    <div class="version">Version 1.7.5 &mdash; Herramienta de Peritacion Informatica Forense Profesional</div>
+    <div class="tagline">Analisis forense digital completo para sistemas Windows conforme a RFC 3227 y NIST SP 800-86</div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 1. INTRODUCCION -->
+<!-- ================================================================ -->
+<h2 id="intro">1. Introduccion</h2>
+
+<p><strong>MaPeriT.SW</strong> es una herramienta de peritacion informatica forense profesional desarrollada integramente en PowerShell. Realiza una adquisicion forense completa de un equipo Windows, generando un informe HTML profesional en espanol apto para presentacion en juzgado.</p>
+
+<p>La herramienta ejecuta <strong>10 fases de adquisicion</strong> siguiendo el orden de volatilidad establecido en la RFC 3227, recopila centenares de artefactos forenses, construye una linea temporal unificada, detecta anomalias automaticamente y genera un informe pericial con cadena de custodia documentada.</p>
+
+<div class="alert alert-info">
+    <strong>Sin alterar las evidencias:</strong> MaPeriT.SW no modifica ni borra ninguno de los ficheros que recoge; las evidencias se escriben solo en el directorio de salida especificado. Los hives de registro de usuarios sin sesion se consultan sobre una copia de trabajo, nunca sobre el original. Aun asi, como toda adquisicion en vivo, ejecutar la herramienta deja trazas propias e inevitables en el equipo (registros de eventos, Prefetch de PowerShell y una instantanea VSS temporal que se elimina al finalizar).
+</div>
+
+<!-- CARACTERISTICAS -->
+<h3 id="features">1.1 Caracteristicas Principales</h3>
+
+<div class="feature-list">
+    <div class="feature-item">
+        <div class="feature-icon">&#128274;</div>
+        <div class="feature-text"><strong>Integridad SHA-256</strong>Cada evidencia se hashea en el momento de adquisicion. Manifiesto completo y HMAC opcional.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128196;</div>
+        <div class="feature-text"><strong>Cadena de Custodia</strong>Documentacion automatica de cada pieza de evidencia con formato apto para juzgado.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128202;</div>
+        <div class="feature-text"><strong>Informe Pericial HTML</strong>Informe profesional completo con portada, indice, hallazgos, anomalias y conclusiones.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128337;</div>
+        <div class="feature-text"><strong>Timeline Unificada</strong>Correlacion de eventos de 12+ fuentes ordenados cronologicamente.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#9888;</div>
+        <div class="feature-text"><strong>Deteccion de Anomalias</strong>Motor automatico que identifica 11 categorias de comportamiento sospechoso.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128190;</div>
+        <div class="feature-text"><strong>Extraccion MFT Raw</strong>Acceso directo al disco via P/Invoke para extraer la Master File Table.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#128247;</div>
+        <div class="feature-text"><strong>VSS Snapshots</strong>Copia de ficheros bloqueados mediante Volume Shadow Copy Service.</div>
+    </div>
+    <div class="feature-item">
+        <div class="feature-icon">&#127760;</div>
+        <div class="feature-text"><strong>Sin conexion a red</strong>La herramienta no realiza ninguna conexion de red. Funcionamiento 100% local.</div>
+    </div>
+</div>
+
+<!-- NORMATIVA -->
+<h3 id="standards">1.2 Normativa y Estandares</h3>
+
+<div class="card">
+    <div class="card-header">Estandares de Cumplimiento</div>
+    <table>
+        <tr><th>Estandar</th><th>Descripcion</th><th>Aplicacion en MaPeriT.SW</th></tr>
+        <tr>
+            <td><strong>RFC 3227 (IETF)</strong></td>
+            <td>Guidelines for Evidence Collection and Archiving</td>
+            <td>Orden de volatilidad en las fases de adquisicion (volatil primero), cadena de custodia, integridad de evidencias</td>
+        </tr>
+        <tr>
+            <td><strong>NIST SP 800-86</strong></td>
+            <td>Guide to Integrating Forensic Techniques into Incident Response</td>
+            <td>Metodologia de adquisicion, verificacion de integridad SHA-256, documentacion de procedimientos</td>
+        </tr>
+        <tr>
+            <td><strong>FIPS 180-4</strong></td>
+            <td>Secure Hash Standard</td>
+            <td>Algoritmo SHA-256 para hashing de todas las evidencias</td>
+        </tr>
+    </table>
+</div>
+
+<!-- ================================================================ -->
+<!-- NOVEDADES v1.5 -->
+<!-- ================================================================ -->
+<h2 id="changelog">Registro de Cambios</h2>
+
+<div class="alert alert-warning">
+    <strong>Revision completa y pruebas reales (v1.7.5, 16/11/2026):</strong>
+    <ul style="margin:8px 0 0 20px">
+        <li><strong>Hives de usuarios sin sesion:</strong> se monta una copia de trabajo de <code>NTUSER.DAT</code>, nunca el original (antes <code>reg load</code> abria el fichero original en lectura-escritura).</li>
+        <li><strong>ShimCache:</strong> el interprete leia la longitud de la ruta en una posicion equivocada y solo recorria los primeros 4 KB; ahora lee el formato de Windows 10/11 completo (comprobado con datos reales: 1.024 entradas legibles).</li>
+        <li><strong>Verificacion con <code>-VerifyPath</code>:</strong> daba siempre "integridad comprometida" porque el manifiesto incluia el registro de ejecucion, que se sigue escribiendo; ademas devolvia siempre codigo 0. Con una ruta de salida relativa o abreviada (8.3) el manifiesto quedaba con rutas vacias.</li>
+        <li><strong>Un unico elemento se perdia:</strong> en PowerShell 5.1 una sola anomalia (WMI, ADS, apagado inesperado, amenaza de Defender, certificado, COM), un solo evento de timeline o una sola fila de custodia se contaban como cero; el informe decia "sin anomalias".</li>
+        <li><strong><code>-SkipPhases</code></strong> pasa a ser texto ("8,9"): la forma <code>@(8,9)</code> fallaba al invocar el script con <code>-File</code>.</li>
+        <li><strong>Otros:</strong> perfiles Wi-Fi en Windows en espanol; hive DEFAULT exportado desde <code>HKU\.DEFAULT</code>; eventos de tareas actualizadas (140); cookies de Chrome/Edge 96+ (<code>Network\Cookies</code>); configuracion de OneDrive leida del perfil correspondiente y no del perito; enlace activo del indice del informe resaltado.</li>
+    </ul>
+</div>
+
+<div class="alert alert-warning">
+    <strong>Verificacion end-to-end real y refuerzo de fiabilidad (v1.7.4, 12/07/2026):</strong>
+    tras completar la auditoria de las 5 herramientas, se ejecuto una adquisicion
+    OF -&gt; AN -&gt; TN real (disco sintetico montado con <code>subst</code>) para
+    validar el ecosistema completo, no solo cada herramienta por separado. Se
+    encontro y corrigio un fallo real de fiabilidad, mas tres mejoras de proceso:
+    <ul style="margin:8px 0 0 20px">
+        <li><strong>HtmlEncode podia fallar en silencio:</strong> <code>Add-Type -AssemblyName System.Web -ErrorAction SilentlyContinue</code> puede no cargar el tipo incluso bajo PowerShell 5.1 (confirmado empiricamente en esta verificacion, no es exclusivo de PowerShell 7) - cuando falla, TODO el informe pericial se rompe con "No se encuentra el tipo". Ahora <code>Common\HtmlEncoding.ps1</code> garantiza que el tipo <code>System.Web.HttpUtility</code> siempre este disponible, con un reemplazo minimo si el ensamblado real no carga.</li>
+        <li><strong>Libreria compartida <code>Common\</code>:</strong> <code>Get-RelativeEvidencePath</code> (usada por SW y OF) ya no se mantiene como dos copias independientes que podian divergir o repetir el mismo bug por separado.</li>
+        <li><strong>Conteo vacio con un solo fichero de evidencia:</strong> <code>Test-HashManifest</code> con un manifiesto de una sola fila mostraba "Total en manifiesto" vacio (mismo patron de aplanado de array de PowerShell ya documentado en el ecosistema). Corregido con <code>@()</code> en la captura de <code>Import-Csv</code>.</li>
+        <li><strong>Lint de sintaxis en <code>Build.ps1</code>:</strong> cada compilacion verifica ahora automaticamente que el fichero resultante parsea bajo PowerShell 5.1 antes de darse por buena.</li>
+    </ul>
+</div>
+
+<div class="alert alert-warning">
+    <strong>Mejoras de la segunda pasada (v1.7.3, 12/07/2026):</strong>
+    tres mejoras identificadas durante la segunda auditoria, implementadas y verificadas
+    (recompilado, parseo AST + motor real PowerShell 5.1, y prueba funcional real de
+    <code>-VerifyPath</code> con un manifiesto sintetico: 1 fichero OK, 1 modificado y
+    1 faltante detectados correctamente):
+    <ul style="margin:8px 0 0 20px">
+        <li><code>Copy-ForensicDirectory</code> comprueba ahora <code>-ExcludePaths</code> antes de crear la estructura de carpetas destino, en vez de despues: ya no quedan carpetas vacias residuales para rutas que el propio parametro pedia minimizar.</li>
+        <li>Fase 9 (SetupAPI logs): lectura de <code>setupapi.dev.log</code> en streaming linea a linea en vez de cargar el fichero completo en memoria de una vez &mdash; relevante en equipos con muchos años de uso donde este log puede crecer a cientos de MB.</li>
+        <li><code>Test-HashManifest</code> (antes definida pero nunca usada) es ahora la unica implementacion de la verificacion de integridad: el modo <code>-VerifyPath</code> la reutiliza en vez de duplicar la misma logica de comparacion de hashes en dos sitios distintos del codigo.</li>
+    </ul>
+</div>
+
+<div class="alert alert-warning">
+    <strong>Segunda pasada de auditoria (v1.7.2, 12/07/2026):</strong>
+    revision completa, linea a linea, de los 24 ficheros fuente por segunda vez de forma
+    independiente. Unico hallazgo: los campos de cabecera de los informes HTML
+    (<code>CaseNumber</code>, <code>ExaminerName</code>, <code>EvidenceDescription</code>,
+    <code>ComputerName</code>, <code>OSVersion</code>/<code>OSBuild</code>,
+    <code>ScriptPath</code>) se interpolaban sin <code>HtmlEncode</code> en el titulo,
+    barra lateral, portada, resumen ejecutivo, metodologia, conclusiones, firma y pie de
+    <code>InformePericial.html</code> y <code>CadenaCustodia.html</code> &mdash; inconsistente
+    con el resto del documento (tablas de evidencias y anomalias), que ya escapaba
+    correctamente. Corregido en ambos generadores de informe. El resto de la auditoria
+    (adquisicion, hashing, cadena de custodia, montaje/desmontaje de hives, las 6 opciones
+    nuevas de v1.7.1) se revisó de nuevo sin encontrar defectos adicionales.
+</div>
+
+<div class="alert alert-warning">
+    <strong>Auditoria de seguridad y fiabilidad forense (v1.7.1, 12/07/2026):</strong>
+    revision linea a linea de todos los modulos de <code>src\</code> centrada en tres
+    riesgos: (1) que la herramienta pudiera escribir/modificar el equipo analizado pese a
+    anunciarse como "solo lectura", (2) que un fallo en el calculo o registro de un hash
+    SHA-256 comprometiera la cadena de custodia, y (3) que una fase reportase "OK" sin
+    haber capturado realmente la evidencia. Se encontraron y corrigieron varios defectos
+    reales en estas tres categorias; ver detalle abajo.
+</div>
+
+<div class="card">
+    <div class="card-header">Correcciones Criticas (v1.7.1)</div>
+    <table>
+        <tr><th>Fix</th><th>Descripcion</th></tr>
+        <tr><td>Hive de usuario sin desmontar</td><td><code>Dismount-OfflineUserHives</code> (Fase 4) comprobaba el resultado del primer intento de <code>reg unload</code> pero no del reintento: si ambos fallaban, la clave <code>HKEY_USERS\MAPE_&lt;usuario&gt;</code> podia quedar montada de forma <strong>permanente en el registro del equipo analizado</strong> sin ningun ERROR que lo señalase &mdash; una modificacion real del sistema objetivo, en contra de la promesa de solo lectura. Ahora se hacen 3 intentos con esperas crecientes y, si el ultimo falla, se muestra un aviso critico en consola con la clave exacta a desmontar manualmente antes de devolver el equipo.</td></tr>
+        <tr><td>Montaje de hive fallido en silencio</td><td><code>Mount-OfflineUserHives</code>: cuando <code>reg load</code> fallaba (codigo de salida distinto de 0), no se registraba ningun log &mdash; el usuario simplemente desaparecia de UserAssist/MRU/RDP History/COM Hijacking sin aviso. Ahora se registra ERROR explicito y se detectan montajes residuales de una ejecucion anterior interrumpida.</td></tr>
+        <tr><td>Hash invalido en cadena de custodia</td><td><code>Copy-ForensicFile</code> devolvia <em>exito</em> incluso cuando el hash posterior a la copia no se pudo calcular (p. ej. un antivirus elimina la muestra justo despues de copiarla), y el texto de error podia quedar escrito en la columna SHA-256 del acta como si fuese un hash real. Ahora <code>Add-ChainOfCustodyEntry</code> valida el formato (64 hex) de todo hash antes de registrarlo, lo marca con el prefijo <code>INVALIDO:</code> si no es valido, y la copia ya no se cuenta como evidencia correctamente adquirida.</td></tr>
+        <tr><td>Fases que contaban copias fallidas como exito</td><td>8 puntos de las Fases 3, 4 y 9 (SRUM, Amcache, ActivitiesCache, historial PowerShell, fichero hosts, NTUSER.DAT, UsrClass.dat, setupapi.dev.log) incrementaban el contador de elementos recopilados sin comprobar si <code>Copy-ForensicFile</code> habia tenido exito realmente. Corregido en los 8 puntos.</td></tr>
+        <tr><td>SSID de WiFi truncado</td><td>Fase 2 (perfiles WiFi): <code>-split ":"</code> sin limite partia por <strong>todas</strong> las apariciones de <code>:</code> en la linea de <code>netsh wlan show profiles</code>; un SSID que contuviese <code>:</code> (p. ej. "Oficina:Invitados") quedaba truncado, y la consulta de detalle posterior fallaba o devolvia datos de otra red. Mismo patron que el bug ya corregido en MaPeriT.AN (split sin limite sobre un separador presente en el propio valor).</td></tr>
+        <tr><td>Rutas de servicio sin comillas</td><td>Fases 2 y 10: la resolucion del ejecutable de un servicio (<code>PathName</code>) fallaba con rutas sin comillas que contenian espacios y argumentos posicionales (el clasico patron "unquoted service path"), marcando el servicio como <code>PathNotFound</code> y excluyendolo en silencio de la verificacion de firma y de la deteccion de servicios sospechosos &mdash; justo el tipo de configuracion que la Fase 10 deberia señalar. Nueva funcion <code>Resolve-ServiceExecutablePath</code> con resolucion por candidatos progresivos.</td></tr>
+        <tr><td>Ruta relativa del manifiesto de hashes</td><td><code>New-HashManifest</code> usaba <code>.Replace($EvidenceRootPath,"")</code> (sensible a mayusculas, sustituye cualquier aparicion, no solo el prefijo) en vez de un recorte anclado por prefijo como el resto del codigo. Podia corromper la ruta relativa en <code>HashManifest.csv</code> y producir falsos "FILE_MISSING" al verificar con <code>-VerifyPath</code>. Nueva funcion centralizada <code>Get-RelativeEvidencePath</code>.</td></tr>
+        <tr><td>Acta de cadena de custodia sin blindar por fila</td><td>Una unica entrada con <code>FileSize</code> no numerico en <code>ChainOfCustody.csv</code> podia abortar la generacion de <strong>todo</strong> el acta HTML (documento legal). Ahora cada fila se procesa en su propio bloque protegido; una fila con error se marca y se continua con el resto.</td></tr>
+        <tr><td>Posible truncamiento de eventos sin avisar</td><td>Las consultas <code>Get-WinEvent -MaxEvents</code> (Security, Sysmon, PowerShell, TaskScheduler, Defender, RDP, USB, etc.) no indicaban en ningun sitio si el resultado se habia truncado por alcanzar el limite configurado. Ahora se registra un WARNING explicito "EVENTOS_POSIBLEMENTE_TRUNCADOS" cuando el numero de eventos devueltos iguala el limite consultado.</td></tr>
+    </table>
+</div>
+
+<div class="card">
+    <div class="card-header">Nuevas Funcionalidades (v1.7.1)</div>
+    <table>
+        <tr><th>Parametro</th><th>Descripcion</th></tr>
+        <tr><td><code>-DryRun</code></td><td>Preflight de solo lectura: verifica que el entorno esta listo (privilegios, winpmem, perfiles de usuario, rutas de artefactos clave) sin crear VSS, sin montar hives y sin copiar ningun fichero. Probado end-to-end contra un equipo real durante la propia auditoria.</td></tr>
+        <tr><td><code>-SelfTest</code></td><td>Prueba de humo de la cadena hash + copia + registro de custodia contra un fichero sintetico propio de la herramienta, antes de ir al equipo objetivo. Codigo de salida 0/1.</td></tr>
+        <tr><td><code>-ExcludePaths</code></td><td>Minimizacion de datos: excluye rutas que coincidan con los patrones indicados en los dos puntos centrales de copia (cubre Fases 3, 4, 6, 7 y 8). Las exclusiones se registran siempre como SKIP.</td></tr>
+        <tr><td><code>-NetworkIsolationCheck</code></td><td>Documenta en <code>01_Volatile\NetworkIsolationCheck.json</code> el estado de red del equipo (adaptadores activos, conexiones TCP establecidas) en el momento mas temprano posible de la adquisicion, antes incluso del VSS.</td></tr>
+        <tr><td><code>-ChainOfCustodyStrictMode</code></td><td>Senalizacion agresiva (no aborto) de fallos de integridad: chequeo final marcado FALLIDO, alerta critica en el informe HTML y codigo de salida 2 para automatizacion.</td></tr>
+        <tr><td><code>-MaxEventsPerQuery</code></td><td>Permite ampliar el limite de eventos por consulta desde la linea de comandos en sistemas con mucha actividad, sin tener que editar <code>Config.ps1</code>.</td></tr>
+    </table>
+</div>
+
+<div class="card">
+    <div class="card-header">Correcciones de Errores (v1.7.0)</div>
+    <table>
+        <tr><th>Fix</th><th>Descripcion</th></tr>
+        <tr><td>VSS CIM</td><td>Sustituido <code>Get-WmiObject</code> (incompatible con PS7+) por <code>Invoke-CimMethod</code> / <code>Get-CimInstance</code> para crear y eliminar snapshots VSS</td></tr>
+        <tr><td>VSS delete GUID</td><td>El comando <code>vssadmin delete shadows</code> ahora usa <code>/shadow={GUID}</code> correcto. El GUID se parsea de la salida de creacion; antes se pasaba la ruta del dispositivo (incorrecto), dejando el snapshot sin eliminar</td></tr>
+        <tr><td>Numeracion Fase 1</td><td>Corregido step header faltante para el paso 1.6 Endpoints UDP, que provocaba que todos los pasos siguientes se mostraran con un numero de menos en consola</td></tr>
+        <tr><td><code>$anomalyCount</code></td><td>Inicializada a 0 antes del bloque try de anomalias para evitar error de variable indefinida en el resumen final cuando el analisis falla</td></tr>
+        <tr><td><code>Test-HashManifest</code></td><td>Reemplazado parseo manual de CSV con <code>Import-Csv</code>; el split por coma fallaba silenciosamente con rutas que contenian comas</td></tr>
+        <tr><td>Buffer copia raw</td><td><code>Copy-WithRawStream</code>: buffer aumentado de 4 KB a 1 MB, reduciendo drasticamente el tiempo de copia de ficheros grandes (hives, OST, logs)</td></tr>
+        <tr><td>Clave HKU montaje offline</td><td>Prefijo de clave temporal cambiado de <code>FOPE_</code> a <code>MAPE_</code> para coincidir con el nuevo nombre de la herramienta</td></tr>
+    </table>
+</div>
+
+<div class="card">
+    <div class="card-header">Mejoras (v1.7.0)</div>
+    <table>
+        <tr><th>Mejora</th><th>Descripcion</th></tr>
+        <tr><td>Timeout de fases</td><td>El valor <code>PhaseTimeoutMinutes</code> ahora se aplica: si una fase supera el limite, se registra un WARNING en el log con la duracion real. Permite detectar fases que se cuelgan sin interrumpir la adquisicion.</td></tr>
+        <tr><td>Renombrado a MaPeriT.SW</td><td>La herramienta pasa a llamarse MaPeriT.SW v1.7.0. El binario compilado es <code>MaPeriT.SW.ps1</code> y los directorios de salida usan el prefijo <code>MaPeriT_</code></td></tr>
+        <tr><td>Namespace C#</td><td>El namespace embebido pasa de <code>ForensicPE</code> a <code>MaPeriT</code> para consistencia con el nuevo nombre</td></tr>
+        <tr><td>Codigo muerto eliminado</td><td>Eliminada <code>Get-ForensicHashStream</code> que existia en <code>Hashing.ps1</code> sin ser llamada desde ningun lugar</td></tr>
+    </table>
+</div>
+
+<div class="card">
+    <div class="card-header">Correcciones de Errores</div>
+    <table>
+        <tr><th>Fix</th><th>Descripcion</th></tr>
+        <tr><td><code>-SkipRAM</code></td><td>El parametro ahora se comprueba correctamente antes de intentar el volcado de RAM</td></tr>
+        <tr><td><code>-CopyLargeFiles</code></td><td>El parametro ahora permite forzar la copia de PST/OST mayores de 500 MB</td></tr>
+        <tr><td>Hives offline</td><td>Se montan automaticamente los NTUSER.DAT de usuarios sin sesion activa, ampliando la cobertura de UserAssist, MRU, RDP y MountPoints2</td></tr>
+        <tr><td>ADS recursivo</td><td>El escaneo de Alternate Data Streams ahora explora subdirectorios (antes solo el nivel superior)</td></tr>
+        <tr><td>HashManifest</td><td>Se usa <code>Export-Csv</code> en vez de concatenacion manual, evitando corrupcion con rutas que contienen comas o comillas</td></tr>
+        <tr><td>Regiones</td><td>Corregidas las etiquetas <code>#region</code> duplicadas en todos los ficheros fuente</td></tr>
+        <tr><td>Contadores</td><td>El resumen final distingue entre artefactos recopilados y piezas en cadena de custodia</td></tr>
+        <tr><td>Rendimiento</td><td>Los eventos de seguridad (4624, 4625, etc.) se parsean via <code>Properties[]</code> en vez de XML, mejorando la velocidad</td></tr>
+    </table>
+</div>
+
+<div class="card">
+    <div class="card-header">Nuevas Funcionalidades</div>
+    <table>
+        <tr><th>Funcion</th><th>Descripcion</th></tr>
+        <tr><td><span class="badge badge-warning">NUEVO</span> Modo <code>-VerifyPath</code></td><td>Verifica la integridad de una adquisicion previa contra su manifiesto SHA-256. No requiere parametros de caso.</td></tr>
+        <tr><td><span class="badge badge-warning">NUEVO</span> Extraccion de IOCs</td><td>Consolida IPs, dominios, hashes, hosts y URLs de todas las fuentes en <code>Analysis/IOCs.csv</code></td></tr>
+        <tr><td><span class="badge badge-warning">NUEVO</span> Named Pipes</td><td>Captura named pipes activos en Fase 1 (indicadores de C2 como Cobalt Strike, Metasploit)</td></tr>
+        <tr><td><span class="badge badge-warning">NUEVO</span> Certificados raiz</td><td>Detecta certificados raiz no estandar que puedan indicar MITM o adware (Fase 10)</td></tr>
+        <tr><td><span class="badge badge-warning">NUEVO</span> COM Hijacking</td><td>Detecta objetos CLSID registrados en HKCU que apuntan a ubicaciones de usuario (Fase 10)</td></tr>
+        <tr><td><span class="badge badge-warning">NUEVO</span> PS Module Logging</td><td>Recopila Event ID 4103 ademas del 4104 existente (Fase 5)</td></tr>
+        <tr><td><span class="badge badge-warning">NUEVO</span> Tareas XML</td><td>Exporta cada tarea programada como XML crudo ademas del CSV resumen (Fase 2)</td></tr>
+    </table>
+</div>
+
+<!-- ================================================================ -->
+<!-- 2. REQUISITOS E INSTALACION -->
+<!-- ================================================================ -->
+<h2 id="requirements">2. Requisitos del Sistema</h2>
+
+<table>
+    <tr><th>Requisito</th><th>Detalle</th></tr>
+    <tr><td>Sistema Operativo</td><td>Windows 10/11 o Windows Server 2016+</td></tr>
+    <tr><td>PowerShell</td><td>Version 5.1 o superior (incluido en Windows 10+)</td></tr>
+    <tr><td>Privilegios</td><td><span class="badge badge-required">Administrador requerido</span> &mdash; El script incluye <code>#Requires -RunAsAdministrator</code></td></tr>
+    <tr><td>Espacio en disco</td><td>Variable segun el sistema (recomendado: >10 GB libres en destino)</td></tr>
+    <tr><td>RAM Dump (opcional)</td><td><code>winpmem_mini_x64.exe</code> en la carpeta <code>tools\</code> para volcado de memoria</td></tr>
+</table>
+
+<h3 id="install">2.1 Instalacion</h3>
+
+<p>MaPeriT.SW no requiere instalacion. Es un script PowerShell portable que se puede ejecutar directamente desde una unidad USB o cualquier directorio.</p>
+
+<div class="card">
+    <div class="card-header">Opcion A: Usar el script compilado (recomendado)</div>
+    <p>El fichero <code>MaPeriT.SW.ps1</code> contiene todos los modulos compilados en un unico fichero. Copie este fichero al equipo objetivo o ejecutelo desde una unidad externa.</p>
+    <pre><code><span class="comment"># Copiar a unidad USB</span>
+<span class="cmd">Copy-Item</span> <span class="param">-Path</span> <span class="string">".\MaPeriT.SW.ps1"</span> <span class="param">-Destination</span> <span class="string">"E:\"</span></code></pre>
+</div>
+
+<div class="card">
+    <div class="card-header">Opcion B: Volcado de RAM (opcional)</div>
+    <p>Para capturar un volcado de memoria RAM, descargue <code>winpmem_mini_x64.exe</code> y coloquelo en uno de estos directorios:</p>
+    <pre><code>tools\winpmem_mini_x64.exe          <span class="comment"># Junto al script, en subcarpeta tools\</span>
+.\winpmem_mini_x64.exe               <span class="comment"># Mismo directorio que el script</span>
+C:\Tools\winpmem_mini_x64.exe        <span class="comment"># Ruta fija del sistema</span></code></pre>
+</div>
+
+<h3 id="build">2.2 Sistema de Compilacion</h3>
+
+<p>Si ha modificado los ficheros fuente en <code>src\</code>, recompile el script unificado con:</p>
+
+<pre><code><span class="cmd">.\Build.ps1</span></code></pre>
+
+<p>El sistema de compilacion concatena los 26 modulos fuente (24 propios y 2 compartidos de <code>Common\</code>) en orden correcto, anade las cabeceras <code>#Requires</code> y genera <code>MaPeriT.SW.ps1</code> con su hash SHA-256.</p>
+
+<div class="alert alert-warning">
+    <strong>Importante:</strong> No edite <code>MaPeriT.SW.ps1</code> directamente. Modifique los ficheros fuente en <code>src\</code> y recompile con <code>Build.ps1</code>.
+</div>
+
+<!-- ================================================================ -->
+<!-- 3. PARAMETROS DE EJECUCION -->
+<!-- ================================================================ -->
+<h2 id="params">3. Parametros de Ejecucion</h2>
+
+<table>
+    <tr>
+        <th>Parametro</th>
+        <th>Tipo</th>
+        <th>Obligatorio</th>
+        <th>Descripcion</th>
+    </tr>
+    <tr>
+        <td><code>-CaseNumber</code></td>
+        <td>String</td>
+        <td><span class="badge badge-required">Si</span></td>
+        <td>Numero de caso o expediente. Se usa en el nombre del directorio de salida y en todos los informes.</td>
+    </tr>
+    <tr>
+        <td><code>-ExaminerName</code></td>
+        <td>String</td>
+        <td><span class="badge badge-required">Si</span></td>
+        <td>Nombre completo del perito informatico. Aparece en la cadena de custodia y en el informe pericial.</td>
+    </tr>
+    <tr>
+        <td><code>-OutputPath</code></td>
+        <td>String</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Directorio de salida para evidencias. <span class="badge badge-default">Por defecto: <code>.\MaPeriT_&lt;CaseNumber&gt;_&lt;timestamp&gt;</code></span></td>
+    </tr>
+    <tr>
+        <td><code>-EvidenceDescription</code></td>
+        <td>String</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Descripcion del encargo pericial. Se incluye en el informe y la cadena de custodia.</td>
+    </tr>
+    <tr>
+        <td><code>-SkipPhases</code></td>
+        <td>String</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Numeros de fase (1-10) a omitir, separados por comas o espacios. Ejemplo: <code>"8,9"</code> omite Cloud Storage y USB. Desde v1.7.5 es texto: la forma <code>@(8,9)</code> fallaba al ejecutar el script con <code>powershell -File</code>.</td>
+    </tr>
+    <tr>
+        <td><code>-SkipRAM</code></td>
+        <td>Switch</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Omitir el volcado de memoria RAM (util si no se dispone de winpmem o por tiempo).</td>
+    </tr>
+    <tr>
+        <td><code>-CopyLargeFiles</code></td>
+        <td>Switch</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Copiar ficheros grandes (>500 MB) como PST/OST de Outlook. Por defecto solo se registran metadatos.</td>
+    </tr>
+    <tr>
+        <td><code>-HMACKey</code></td>
+        <td>String</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Clave para firmar el manifiesto de evidencias con HMAC-SHA256. Proporciona autenticacion adicional de integridad.</td>
+    </tr>
+    <tr>
+        <td><code>-VerifyPath</code></td>
+        <td>String</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Modo verificacion: comprueba la integridad de una adquisicion previa contra su manifiesto. No requiere <code>-CaseNumber</code> ni <code>-ExaminerName</code>.</td>
+    </tr>
+    <tr>
+        <td><code>-DryRun</code> <span class="badge-phase">v1.7.1</span></td>
+        <td>Switch</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Preflight de SOLO LECTURA: comprueba prerrequisitos, localiza winpmem, enumera perfiles de usuario y verifica rutas de artefactos clave. No crea VSS, no monta hives, no copia nada. No requiere <code>-CaseNumber</code> ni <code>-ExaminerName</code>.</td>
+    </tr>
+    <tr>
+        <td><code>-SelfTest</code> <span class="badge-phase">v1.7.1</span></td>
+        <td>Switch</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Prueba de humo de la cadena hash+copia+cadena de custodia contra un fichero sintetico propio de la herramienta. No toca el equipo objetivo. Codigo de salida 0/1. No requiere <code>-CaseNumber</code> ni <code>-ExaminerName</code>.</td>
+    </tr>
+    <tr>
+        <td><code>-ExcludePaths</code> <span class="badge-phase">v1.7.1</span></td>
+        <td>String[]</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Fragmentos de ruta a excluir de la copia (subcadena, sin distinguir mayusculas/minusculas). Minimizacion de datos cuando la autorizacion delimita el alcance. Las exclusiones quedan registradas como SKIP, nunca en silencio.</td>
+    </tr>
+    <tr>
+        <td><code>-NetworkIsolationCheck</code> <span class="badge-phase">v1.7.1</span></td>
+        <td>Switch</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Comprobacion de LECTURA que documenta en <code>01_Volatile\NetworkIsolationCheck.json</code> si el equipo tenia adaptadores activos o conexiones TCP establecidas en el momento de la adquisicion. No aisla ni desconecta nada.</td>
+    </tr>
+    <tr>
+        <td><code>-ChainOfCustodyStrictMode</code> <span class="badge-phase">v1.7.1</span></td>
+        <td>Switch</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Si alguna evidencia queda con hash invalido, marca el chequeo final de integridad como FALLIDO (consola, informe HTML y codigo de salida 2). <strong>No aborta</strong> la adquisicion en curso: interrumpirla perderia datos volatiles irrecuperables de fases posteriores.</td>
+    </tr>
+    <tr>
+        <td><code>-MaxEventsPerQuery</code> <span class="badge-phase">v1.7.1</span></td>
+        <td>Int</td>
+        <td><span class="badge badge-optional">No</span></td>
+        <td>Sobrescribe en tiempo de ejecucion el limite por defecto (50.000) de eventos por consulta a los logs de Windows, sin editar <code>Config.ps1</code>.</td>
+    </tr>
+</table>
+
+<!-- EJEMPLOS -->
+<h3 id="examples">3.1 Ejemplos de Uso</h3>
+
+<div class="card">
+    <div class="card-header">Ejecucion basica</div>
+    <pre><code><span class="cmd">.\MaPeriT.SW.ps1</span> <span class="param">-CaseNumber</span> <span class="string">"2026-001"</span> <span class="param">-ExaminerName</span> <span class="string">"Juan Perez Garcia"</span></code></pre>
+    <p>Ejecuta todas las fases y guarda las evidencias en un directorio con el formato <code>MaPeriT_2026-001_YYYYMMDD_HHMMSS</code>.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">Salida a unidad externa con descripcion</div>
+    <pre><code><span class="cmd">.\MaPeriT.SW.ps1</span> <span class="param">-CaseNumber</span> <span class="string">"CASO-2026-0457"</span> `
+    <span class="param">-ExaminerName</span> <span class="string">"Ana Garcia Lopez"</span> `
+    <span class="param">-OutputPath</span> <span class="string">"E:\Evidencias\CASO-0457"</span> `
+    <span class="param">-EvidenceDescription</span> <span class="string">"Analisis del portatil HP del empleado para investigacion interna"</span></code></pre>
+</div>
+
+<div class="card">
+    <div class="card-header">Omitir fases y firmar con HMAC</div>
+    <pre><code><span class="cmd">.\MaPeriT.SW.ps1</span> <span class="param">-CaseNumber</span> <span class="string">"INC-789"</span> `
+    <span class="param">-ExaminerName</span> <span class="string">"Carlos Martinez"</span> `
+    <span class="param">-SkipPhases</span> <span class="string">"8,9"</span> `
+    <span class="param">-SkipRAM</span> `
+    <span class="param">-HMACKey</span> <span class="string">"clave-secreta-peritaje-2026"</span></code></pre>
+    <p>Omite las fases 8 (Cloud Storage) y 9 (USB), no hace volcado de RAM, y firma el manifiesto con HMAC-SHA256.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">Verificar integridad de una adquisicion previa</div>
+    <pre><code><span class="cmd">.\MaPeriT.SW.ps1</span> <span class="param">-VerifyPath</span> <span class="string">"E:\Evidencias\MaPeriT_CASO-001_20260602"</span></code></pre>
+    <p>Comprueba todos los hashes SHA-256 del manifiesto contra los ficheros actuales. No modifica nada. Util para demostrar en juicio que las evidencias no han sido alteradas.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">Adquisicion completa incluyendo ficheros grandes</div>
+    <pre><code><span class="cmd">.\MaPeriT.SW.ps1</span> <span class="param">-CaseNumber</span> <span class="string">"JUD-2026-112"</span> `
+    <span class="param">-ExaminerName</span> <span class="string">"Maria Fernandez Ruiz"</span> `
+    <span class="param">-OutputPath</span> <span class="string">"F:\Peritajes\JUD-112"</span> `
+    <span class="param">-CopyLargeFiles</span> `
+    <span class="param">-HMACKey</span> <span class="string">"hmac-judicial-2026"</span></code></pre>
+</div>
+
+<!-- FLUJO DE EJECUCION -->
+<h3 id="execution-flow">3.2 Flujo de Ejecucion</h3>
+
+<div class="flow-steps">
+    <div class="flow-step">Verificar Prerequisitos</div>
+    <div class="flow-arrow">&#10132;</div>
+    <div class="flow-step">Cargar Helpers C#</div>
+    <div class="flow-arrow">&#10132;</div>
+    <div class="flow-step">Crear Directorios</div>
+    <div class="flow-arrow">&#10132;</div>
+    <div class="flow-step">Iniciar Logging</div>
+    <div class="flow-arrow">&#10132;</div>
+    <div class="flow-step">Crear VSS Snapshot</div>
+    <div class="flow-arrow">&#10132;</div>
+    <div class="flow-step">Fases 1-10</div>
+    <div class="flow-arrow">&#10132;</div>
+    <div class="flow-step">Timeline</div>
+    <div class="flow-arrow">&#10132;</div>
+    <div class="flow-step">Anomalias</div>
+    <div class="flow-arrow">&#10132;</div>
+    <div class="flow-step">Hash Manifest</div>
+    <div class="flow-arrow">&#10132;</div>
+    <div class="flow-step">Informes</div>
+    <div class="flow-arrow">&#10132;</div>
+    <div class="flow-step">Limpieza VSS</div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 4. FASES DE ADQUISICION -->
+<!-- ================================================================ -->
+<h2 id="phases">4. Fases de Adquisicion</h2>
+
+<p>MaPeriT.SW ejecuta 10 fases de adquisicion en orden de volatilidad (RFC 3227). Los datos mas volatiles se recogen primero para minimizar la perdida de evidencias.</p>
+
+<!-- FASE 1 -->
+<h3 id="phase1">Fase 1: Datos Volatiles</h3>
+<div class="card">
+    <div class="card-header"><span class="badge badge-phase">1</span> Datos Volatiles &mdash; RFC 3227: Prioridad Maxima</div>
+    <p>Captura informacion que se pierde al apagar o reiniciar el equipo. Es la fase mas critica y se ejecuta primero.</p>
+    <table>
+        <tr><th>Paso</th><th>Artefacto</th><th>Fichero de Salida</th></tr>
+        <tr><td>1.1</td><td>Fecha, hora y zona horaria del sistema, uptime, servidor NTP</td><td><code>SystemTime.json</code></td></tr>
+        <tr><td>1.2</td><td>Volcado de memoria RAM (requiere winpmem)</td><td><code>MemoryDump/memory.raw</code></td></tr>
+        <tr><td>1.3</td><td>Procesos en ejecucion (PID, ruta, linea de comandos, propietario)</td><td><code>Processes.csv</code></td></tr>
+        <tr><td>1.3b</td><td>Hashes SHA-256 de todos los ejecutables de procesos activos</td><td><code>ProcessHashes.csv</code></td></tr>
+        <tr><td>1.4</td><td>Modulos/DLLs cargados por cada proceso</td><td><code>ProcessModules.csv</code></td></tr>
+        <tr><td>1.5</td><td>Conexiones TCP activas con proceso asociado</td><td><code>NetworkConnections_TCP.csv</code></td></tr>
+        <tr><td>1.6</td><td>Endpoints UDP activos</td><td><code>NetworkConnections_UDP.csv</code></td></tr>
+        <tr><td>1.7</td><td>Usuarios conectados (sesiones de logon, query user)</td><td><code>LoggedOnUsers.csv</code>, <code>QueryUser.txt</code></td></tr>
+        <tr><td>1.8</td><td>Ficheros abiertos SMB y recursos compartidos</td><td><code>OpenFiles.csv</code>, <code>NetFile.txt</code></td></tr>
+        <tr><td>1.9</td><td>Contenido del portapapeles (texto)</td><td><code>Clipboard.txt</code></td></tr>
+        <tr><td>1.10</td><td>Cache DNS del cliente</td><td><code>DnsCache.csv</code></td></tr>
+        <tr><td>1.11</td><td>Cache ARP (tabla de vecinos)</td><td><code>ArpCache.csv</code></td></tr>
+        <tr><td>1.12</td><td>Tabla de rutas de red</td><td><code>RoutingTable.csv</code></td></tr>
+        <tr><td>1.13</td><td>Recursos compartidos y unidades mapeadas (net use)</td><td><code>NetworkShares.csv</code>, <code>MappedDrives.txt</code></td></tr>
+        <tr><td>1.14</td><td>Variables de entorno (Machine, User, Process)</td><td><code>EnvironmentVariables.csv</code></td></tr>
+        <tr><td>1.15</td><td>Tareas programadas activas</td><td><code>ActiveScheduledTasks.csv</code></td></tr>
+        <tr><td>1.16</td><td>Named Pipes activos (indicadores de C2 y comunicacion entre procesos)</td><td><code>NamedPipes.csv</code></td></tr>
+    </table>
+</div>
+
+<!-- FASE 2 -->
+<h3 id="phase2">Fase 2: Informacion del Sistema</h3>
+<div class="card">
+    <div class="card-header"><span class="badge badge-phase">2</span> Informacion del Sistema</div>
+    <p>Inventario completo del hardware, software, configuracion de red, seguridad y politicas del sistema.</p>
+    <table>
+        <tr><th>Paso</th><th>Artefacto</th><th>Fichero de Salida</th></tr>
+        <tr><td>2.1</td><td>Inventario de hardware (CPU, RAM, discos, BIOS, placa base, GPU, NICs)</td><td><code>HardwareInventory.json</code></td></tr>
+        <tr><td>2.2</td><td>Informacion del SO (version, build, fecha instalacion, serial)</td><td><code>OSInfo.json</code></td></tr>
+        <tr><td>2.3</td><td>Volumenes y particiones de disco</td><td><code>Volumes.csv</code>, <code>Partitions.csv</code></td></tr>
+        <tr><td>2.4</td><td>Usuarios y grupos locales con miembros</td><td><code>LocalUsers.csv</code>, <code>LocalGroups.csv</code></td></tr>
+        <tr><td>2.5</td><td>Software instalado (de 3 rutas de Uninstall del registro)</td><td><code>InstalledSoftware.csv</code></td></tr>
+        <tr><td>2.6</td><td>Servicios de Windows con estado de firma digital</td><td><code>Services.csv</code></td></tr>
+        <tr><td>2.7</td><td>Tareas programadas completas (triggers, acciones, RunAs) + exportacion XML crudo</td><td><code>ScheduledTasks.csv</code>, <code>ScheduledTasksXML/</code></td></tr>
+        <tr><td>2.8</td><td>Drivers cargados en el sistema</td><td><code>Drivers.csv</code></td></tr>
+        <tr><td>2.9</td><td>Actualizaciones de Windows instaladas (hotfixes)</td><td><code>WindowsUpdates.csv</code></td></tr>
+        <tr><td>2.10</td><td>Configuracion de red (IPs, perfiles WiFi con claves)</td><td><code>IPAddresses.csv</code>, <code>WiFiProfiles.csv</code></td></tr>
+        <tr><td>2.11</td><td>Reglas de firewall activas con puertos y programas</td><td><code>FirewallRules.csv</code></td></tr>
+        <tr><td>2.12</td><td>Estado de cifrado BitLocker</td><td><code>BitLocker.json</code></td></tr>
+        <tr><td>2.13</td><td>Productos antivirus, estado de Defender y amenazas detectadas</td><td><code>AntivirusStatus.json</code></td></tr>
+        <tr><td>2.14</td><td>Politica de seguridad local (secedit export)</td><td><code>SecurityPolicy.inf</code></td></tr>
+        <tr><td>2.15</td><td>Resultado de politicas de grupo (gpresult)</td><td><code>GPResult.html</code>, <code>GPResult.txt</code></td></tr>
+    </table>
+</div>
+
+<!-- FASE 3 -->
+<h3 id="phase3">Fase 3: Artefactos del Sistema de Ficheros</h3>
+<div class="card">
+    <div class="card-header"><span class="badge badge-phase">3</span> Artefactos del Sistema de Ficheros</div>
+    <p>Extraccion de artefactos NTFS criticos y ficheros con valor probatorio del sistema de ficheros.</p>
+    <table>
+        <tr><th>Paso</th><th>Artefacto</th><th>Fichero de Salida</th></tr>
+        <tr><td>3.1</td><td>MFT (Master File Table) &mdash; extraccion raw via P/Invoke</td><td><code>$MFT</code></td></tr>
+        <tr><td>3.2</td><td>USN Journal (registro de cambios NTFS)</td><td><code>UsnJournal.csv</code></td></tr>
+        <tr><td>3.3</td><td>NTFS $LogFile (transacciones del sistema de ficheros)</td><td><code>$LogFile</code></td></tr>
+        <tr><td>3.4</td><td>Ficheros Prefetch (evidencia de ejecucion de programas)</td><td><code>Prefetch/*.pf</code>, <code>PrefetchSummary.csv</code></td></tr>
+        <tr><td>3.5</td><td>Ficheros recientes / LNK (accesos directos con rutas y timestamps)</td><td><code>RecentFiles/</code>, <code>LNKParsed.csv</code></td></tr>
+        <tr><td>3.6</td><td>Jump Lists (AutomaticDestinations y CustomDestinations)</td><td><code>JumpLists/</code></td></tr>
+        <tr><td>3.7</td><td>Papelera de reciclaje (ficheros $I parseados con nombre original y fecha)</td><td><code>RecycleBin/</code>, <code>RecycleBinSummary.csv</code></td></tr>
+        <tr><td>3.8</td><td>Thumbcache (miniaturas de imagenes visualizadas)</td><td><code>Thumbcache/</code></td></tr>
+        <tr><td>3.9</td><td>SRUM (System Resource Usage Monitor)</td><td><code>SRUM/SRUDB.dat</code></td></tr>
+        <tr><td>3.10</td><td>Amcache.hve (historial de ejecucion de aplicaciones)</td><td><code>Amcache.hve</code></td></tr>
+        <tr><td>3.11</td><td>ActivitiesCache (Windows Timeline)</td><td><code>ActivitiesCache/</code></td></tr>
+        <tr><td>3.12</td><td>BITS Transfer Jobs (transferencias en segundo plano)</td><td><code>BITSJobs.txt</code></td></tr>
+        <tr><td>3.13</td><td>Historial de PowerShell (ConsoleHost_history.txt por usuario)</td><td><code>PowerShellHistory/</code></td></tr>
+        <tr><td>3.14</td><td>Fichero hosts del sistema</td><td><code>hosts</code></td></tr>
+        <tr><td>3.15</td><td>Elementos de inicio (carpetas Startup de todos los usuarios)</td><td><code>StartupItems/</code></td></tr>
+        <tr><td>3.16</td><td>Informacion del volumen NTFS (MFT offset, clusters, serial)</td><td><code>NTFSVolumeInfo.json</code></td></tr>
+    </table>
+</div>
+
+<!-- FASE 4 -->
+<h3 id="phase4">Fase 4: Registro de Windows</h3>
+<div class="card">
+    <div class="card-header"><span class="badge badge-phase">4</span> Registro de Windows</div>
+    <p>Copia binaria de los hives del registro y extraccion de valores forenses clave. <strong>En v1.5, se montan automaticamente los hives NTUSER.DAT de usuarios offline</strong> para que UserAssist, MRU, RDP y MountPoints2 cubran todos los usuarios, no solo los que tienen sesion activa.</p>
+    <table>
+        <tr><th>Paso</th><th>Artefacto</th><th>Fichero de Salida</th></tr>
+        <tr><td>4.0</td><td><span class="badge badge-warning">NUEVO</span> Montaje automatico de hives NTUSER.DAT de usuarios sin sesion activa</td><td>&mdash;</td></tr>
+        <tr><td>4.1</td><td>Hives del sistema: SAM, SYSTEM, SOFTWARE, SECURITY, DEFAULT</td><td><code>Hives/</code></td></tr>
+        <tr><td>4.2</td><td>NTUSER.DAT y UsrClass.dat de cada usuario</td><td><code>Hives/Users/</code></td></tr>
+        <tr><td>4.3</td><td>Hora del ultimo apagado del sistema</td><td><code>LastShutdown.json</code></td></tr>
+        <tr><td>4.4</td><td>Zona horaria del registro</td><td><code>TimeZone.json</code></td></tr>
+        <tr><td>4.5</td><td>Historial de redes conectadas (perfiles, primera/ultima conexion)</td><td><code>NetworkProfiles.csv</code></td></tr>
+        <tr><td>4.6</td><td>Historial de dispositivos USB (USBSTOR con fechas de instalacion)</td><td><code>USBSTORDevices.csv</code></td></tr>
+        <tr><td>4.7</td><td>MountedDevices (volumenes montados)</td><td><code>MountedDevices.csv</code></td></tr>
+        <tr><td>4.8</td><td>UserAssist (programas ejecutados con ROT13 decodificado)</td><td><code>UserAssist.csv</code></td></tr>
+        <tr><td>4.9</td><td>ShimCache / AppCompatCache (historial de ejecucion)</td><td><code>AppCompatCache.bin</code>, <code>ShimCache.csv</code></td></tr>
+        <tr><td>4.10</td><td>BAM/DAM (Background Activity Monitor - ejecuciones recientes)</td><td><code>BAM_DAM.csv</code></td></tr>
+        <tr><td>4.11</td><td>Autoruns del registro (Run, RunOnce, Winlogon Shell/Userinit)</td><td><code>Autoruns.csv</code></td></tr>
+        <tr><td>4.12</td><td>Listas MRU (RunMRU, TypedPaths, TypedURLs)</td><td><code>MRULists.csv</code></td></tr>
+        <tr><td>4.13</td><td>Historial de conexiones RDP (servidores y usuarios)</td><td><code>RDPHistory.csv</code></td></tr>
+        <tr><td>4.14</td><td>Ultimo usuario que inicio sesion</td><td><code>LastLoggedOnUser.json</code></td></tr>
+    </table>
+</div>
+
+<!-- FASE 5 -->
+<h3 id="phase5">Fase 5: Logs de Eventos</h3>
+<div class="card">
+    <div class="card-header"><span class="badge badge-phase">5</span> Logs de Eventos</div>
+    <p>Copia de todos los ficheros <code>.evtx</code> y analisis detallado de los eventos de seguridad mas relevantes.</p>
+    <table>
+        <tr><th>Paso</th><th>Artefacto</th><th>Fichero de Salida</th></tr>
+        <tr><td>5.1</td><td>Copia de todos los ficheros .evtx del sistema</td><td><code>RawLogs/*.evtx</code></td></tr>
+        <tr><td>5.2</td><td>Eventos de logon exitoso (Event ID 4624) con tipo, IP y usuario</td><td><code>SecurityLogon.csv</code></td></tr>
+        <tr><td>5.3</td><td>Intentos de logon fallidos (Event ID 4625) con razon de fallo</td><td><code>SecurityFailedLogon.csv</code></td></tr>
+        <tr><td>5.4</td><td>Gestion de cuentas (creacion, eliminacion, cambios de password, etc.)</td><td><code>SecurityAccountChanges.csv</code></td></tr>
+        <tr><td>5.5</td><td>Eventos de servicios (instalacion, crash, cambios de inicio)</td><td><code>SystemServices.csv</code></td></tr>
+        <tr><td>5.6</td><td>Arranques y apagados (incluyendo apagados inesperados 6008)</td><td><code>SystemShutdowns.csv</code></td></tr>
+        <tr><td>5.7</td><td>PowerShell Script Block Logging (scripts ejecutados, Event ID 4104)</td><td><code>PowerShellScripts.csv</code></td></tr>
+        <tr><td>5.7b</td><td><span class="badge badge-warning">NUEVO</span> PowerShell Module Logging (cmdlets invocados, Event ID 4103)</td><td><code>PowerShellModuleLog.csv</code></td></tr>
+        <tr><td>5.8</td><td>Eventos del Programador de Tareas (registro, eliminacion, ejecucion)</td><td><code>TaskScheduler.csv</code></td></tr>
+        <tr><td>5.9</td><td>Eventos de Windows Defender (detecciones, alertas)</td><td><code>DefenderEvents.csv</code></td></tr>
+        <tr><td>5.10</td><td>Sesiones RDP/Terminal Services (logon, shell, desconexion)</td><td><code>RDPSessions.csv</code></td></tr>
+        <tr><td>5.11</td><td>Eventos Sysmon (si esta instalado: procesos, red, ficheros)</td><td><code>Sysmon.csv</code></td></tr>
+        <tr><td>5.12</td><td>Errores de aplicacion (crashes, WER, hangs)</td><td><code>AppCrashes.csv</code></td></tr>
+    </table>
+</div>
+
+<!-- FASE 6 -->
+<h3 id="phase6">Fase 6: Navegadores Web</h3>
+<div class="card">
+    <div class="card-header"><span class="badge badge-phase">6</span> Navegadores Web</div>
+    <p>Recopilacion de bases de datos y artefactos de todos los navegadores instalados, por cada perfil de usuario.</p>
+    <table>
+        <tr><th>Paso</th><th>Artefacto</th><th>Fichero de Salida</th></tr>
+        <tr><td>6.1</td><td>Google Chrome: History, Cookies, Login Data, Bookmarks, Downloads, extensiones</td><td><code>Chrome/&lt;user&gt;/</code></td></tr>
+        <tr><td>6.2</td><td>Microsoft Edge: mismos artefactos que Chrome (motor Chromium)</td><td><code>Edge/&lt;user&gt;/</code></td></tr>
+        <tr><td>6.3</td><td>Mozilla Firefox: places.sqlite, cookies, logins, formhistory, key4.db</td><td><code>Firefox/&lt;user&gt;/</code></td></tr>
+        <tr><td>6.4</td><td>Internet Explorer: WebCacheV01.dat</td><td><code>InternetExplorer/&lt;user&gt;/</code></td></tr>
+        <tr><td>6.5</td><td>Resumen de navegadores detectados con conteo de ficheros y tamano</td><td><code>BrowserSummary.csv</code></td></tr>
+    </table>
+</div>
+
+<!-- FASE 7 -->
+<h3 id="phase7">Fase 7: Comunicaciones</h3>
+<div class="card">
+    <div class="card-header"><span class="badge badge-phase">7</span> Comunicaciones</div>
+    <p>Artefactos de aplicaciones de correo y mensajeria instantanea.</p>
+    <table>
+        <tr><th>Paso</th><th>Artefacto</th><th>Fichero de Salida</th></tr>
+        <tr><td>7.1</td><td>Microsoft Outlook: ficheros PST y OST (metadatos o copia segun tamano)</td><td><code>Outlook/</code>, <code>OutlookFiles.csv</code></td></tr>
+        <tr><td>7.2</td><td>Microsoft Teams: bases de datos, JSON, logs (New Teams y Classic)</td><td><code>Teams/</code></td></tr>
+        <tr><td>7.3</td><td>Skype: bases de datos SQLite y JSON de conversaciones</td><td><code>Skype/</code></td></tr>
+        <tr><td>7.4</td><td>Discord: Local Storage (leveldb) y deteccion de cache</td><td><code>Discord/</code></td></tr>
+    </table>
+    <div class="alert alert-info">
+        <strong>Ficheros grandes:</strong> Los PST/OST de mas de 500 MB solo se copian si se usa el parametro <code>-CopyLargeFiles</code>. De lo contrario, se registran en <code>OutlookFiles.csv</code> con sus metadatos.
+    </div>
+</div>
+
+<!-- FASE 8 -->
+<h3 id="phase8">Fase 8: Almacenamiento en la Nube</h3>
+<div class="card">
+    <div class="card-header"><span class="badge badge-phase">8</span> Almacenamiento en la Nube</div>
+    <p>Logs y metadatos de sincronizacion de servicios cloud instalados localmente.</p>
+    <table>
+        <tr><th>Paso</th><th>Artefacto</th><th>Fichero de Salida</th></tr>
+        <tr><td>8.1</td><td>Microsoft OneDrive: logs, settings, configuracion del registro</td><td><code>OneDrive/</code></td></tr>
+        <tr><td>8.2</td><td>Google Drive: bases de datos de metadatos y logs de DriveFS</td><td><code>GoogleDrive/</code></td></tr>
+        <tr><td>8.3</td><td>Dropbox: bases de datos, configuracion, info.json</td><td><code>Dropbox/</code></td></tr>
+        <tr><td>8.4</td><td>Resumen con servicios detectados y tamano de datos recopilados</td><td><code>CloudStorageSummary.csv</code></td></tr>
+    </table>
+</div>
+
+<!-- FASE 9 -->
+<h3 id="phase9">Fase 9: Dispositivos USB/Externos</h3>
+<div class="card">
+    <div class="card-header"><span class="badge badge-phase">9</span> Dispositivos USB/Externos</div>
+    <p>Historial completo de dispositivos USB conectados al sistema con timeline de conexiones.</p>
+    <table>
+        <tr><th>Paso</th><th>Artefacto</th><th>Fichero de Salida</th></tr>
+        <tr><td>9.1</td><td>Dispositivos USBSTOR y USB del registro (fabricante, serial, VID/PID)</td><td><code>USBDevices.csv</code></td></tr>
+        <tr><td>9.2</td><td>SetupAPI logs: fechas de instalacion de drivers USB</td><td><code>setupapi.dev.log</code>, <code>SetupAPIUSBEvents.csv</code></td></tr>
+        <tr><td>9.3</td><td>MountPoints2 por usuario (volumenes montados por cada cuenta)</td><td><code>MountPoints2.csv</code></td></tr>
+        <tr><td>9.4</td><td>Discos conectados actualmente (separando discos USB)</td><td><code>CurrentDisks.csv</code>, <code>CurrentUSBDisks.csv</code></td></tr>
+        <tr><td>9.5</td><td>Timeline de conexiones USB (DriverFrameworks + Kernel-PnP)</td><td><code>USBTimeline.csv</code></td></tr>
+    </table>
+</div>
+
+<!-- FASE 10 -->
+<h3 id="phase10">Fase 10: Mecanismos de Persistencia</h3>
+<div class="card">
+    <div class="card-header"><span class="badge badge-phase">10</span> Mecanismos de Persistencia</div>
+    <p>Deteccion de tecnicas de persistencia utilizadas por malware y actores maliciosos.</p>
+    <table>
+        <tr><th>Paso</th><th>Artefacto</th><th>Fichero de Salida</th></tr>
+        <tr><td>10.1</td><td>Autoruns consolidados: 10 claves Run/RunOnce, Winlogon, carpetas Startup, tareas programadas con nivel de riesgo</td><td><code>AutorunsConsolidated.csv</code></td></tr>
+        <tr><td>10.2</td><td>Suscripciones WMI (EventFilter, EventConsumer, Bindings)</td><td><code>WMIPersistence.csv</code></td></tr>
+        <tr><td>10.3</td><td>Alternate Data Streams (ADS) sospechosos en directorios criticos</td><td><code>AlternateDataStreams.csv</code></td></tr>
+        <tr><td>10.4</td><td>Servicios en ejecucion con ejecutables sin firma digital valida</td><td><code>UnsignedServices.csv</code></td></tr>
+        <tr><td>10.5</td><td>Procesos ejecutandose desde ubicaciones inusuales (Temp, Users, Downloads...)</td><td><code>SuspiciousProcesses.csv</code></td></tr>
+        <tr><td>10.6</td><td>Servicios instalados en los ultimos 30 dias (Event ID 7045)</td><td><code>RecentServiceInstalls.csv</code></td></tr>
+        <tr><td>10.7</td><td><span class="badge badge-warning">NUEVO</span> Certificados raiz sospechosos en el almacen de confianza (Cert:\LocalMachine\Root)</td><td><code>SuspiciousRootCerts.csv</code></td></tr>
+        <tr><td>10.8</td><td><span class="badge badge-warning">NUEVO</span> COM Hijacking: objetos CLSID en HKCU que apuntan a ubicaciones de usuario</td><td><code>COMHijacking.csv</code></td></tr>
+    </table>
+</div>
+
+<!-- ================================================================ -->
+<!-- 5. ANALISIS -->
+<!-- ================================================================ -->
+<h2 id="timeline">5. Linea Temporal Unificada</h2>
+
+<div class="card">
+    <p>MaPeriT.SW construye automaticamente una <strong>timeline unificada</strong> que correlaciona eventos de multiples fuentes en orden cronologico. Esto permite reconstruir la secuencia de actividades en el sistema.</p>
+
+    <h4>Fuentes de datos integradas en la Timeline</h4>
+    <table>
+        <tr><th>Fuente</th><th>Tipo de Eventos</th></tr>
+        <tr><td>Security Event Log</td><td>Logons exitosos, logons fallidos</td></tr>
+        <tr><td>System Event Log</td><td>Arranques, apagados, servicios instalados</td></tr>
+        <tr><td>PowerShell Event Log</td><td>Scripts ejecutados (Script Block Logging)</td></tr>
+        <tr><td>RDP/Terminal Services</td><td>Sesiones remotas (logon, shell, disconnect)</td></tr>
+        <tr><td>Task Scheduler</td><td>Tareas registradas, eliminadas</td></tr>
+        <tr><td>USB Events</td><td>Conexiones y desconexiones de dispositivos</td></tr>
+        <tr><td>Registry BAM/DAM</td><td>Ejecucion de programas con timestamp</td></tr>
+        <tr><td>Registry UserAssist</td><td>Programas ejecutados por el usuario (con conteo)</td></tr>
+        <tr><td>Prefetch</td><td>Programas ejecutados (por fecha de modificacion)</td></tr>
+        <tr><td>Papelera de Reciclaje</td><td>Ficheros eliminados con fecha y nombre original</td></tr>
+        <tr><td>Windows Defender</td><td>Detecciones de amenazas (Warning/Error/Critical)</td></tr>
+    </table>
+
+    <h4>Ficheros generados</h4>
+    <ul>
+        <li><code>Analysis/Timeline.csv</code> &mdash; Timeline completa con todos los eventos</li>
+        <li><code>Analysis/Timeline_Last7Days.csv</code> &mdash; Solo eventos de los ultimos 7 dias</li>
+    </ul>
+</div>
+
+<!-- IOCs -->
+<h3 id="iocs">5.2 Extraccion de IOCs (Indicadores de Compromiso)</h3>
+<div class="card">
+    <div class="alert alert-info"><strong>Nuevo en v1.5:</strong> MaPeriT.SW extrae y consolida automaticamente indicadores de compromiso de multiples fuentes en un fichero unificado.</div>
+    <h4>Fuentes de IOCs</h4>
+    <table>
+        <tr><th>Tipo de IOC</th><th>Fuente</th></tr>
+        <tr><td>IPs externas</td><td>Conexiones TCP activas (excluye rangos privados RFC 1918)</td></tr>
+        <tr><td>Dominios</td><td>Cache DNS del cliente</td></tr>
+        <tr><td>Hashes SHA-256</td><td>Ejecutables de procesos activos</td></tr>
+        <tr><td>IPs de ataque</td><td>Logons fallidos (agrupados por IP de origen)</td></tr>
+        <tr><td>Hosts RDP</td><td>Historial de conexiones RDP del registro</td></tr>
+        <tr><td>URLs</td><td>TypedURLs del registro (IE/Explorer)</td></tr>
+    </table>
+    <h4>Ficheros generados</h4>
+    <ul>
+        <li><code>Analysis/IOCs.csv</code> &mdash; IOCs deduplicados en formato CSV</li>
+        <li><code>Analysis/IOCs.json</code> &mdash; IOCs en formato JSON para integracion con SIEM/SOAR</li>
+    </ul>
+</div>
+
+<!-- ANOMALIAS -->
+<h2 id="anomalies">6. Deteccion de Anomalias</h2>
+
+<div class="card">
+    <p>El motor de anomalias analiza automaticamente las evidencias recopiladas para identificar comportamientos sospechosos. Cada anomalia recibe un ID unico, una severidad y una recomendacion.</p>
+
+    <h4>Niveles de Severidad</h4>
+    <table>
+        <tr><th>Severidad</th><th>Descripcion</th></tr>
+        <tr><td><span class="badge" style="background:#e74c3c;color:#fff">CRITICA</span></td><td>Indicadores claros de compromiso o actividad maliciosa confirmada</td></tr>
+        <tr><td><span class="badge" style="background:#e67e22;color:#fff">ALTA</span></td><td>Comportamiento altamente sospechoso que requiere investigacion inmediata</td></tr>
+        <tr><td><span class="badge" style="background:#f39c12;color:#fff">MEDIA</span></td><td>Actividad inusual que puede tener explicacion legitima pero debe verificarse</td></tr>
+        <tr><td><span class="badge" style="background:#3498db;color:#fff">BAJA</span></td><td>Informacion de interes forense con bajo riesgo</td></tr>
+    </table>
+
+    <h4>Tipos de Anomalias Detectadas</h4>
+
+    <div class="anomaly-type anomaly-critical">
+        <strong>A3: Persistencia WMI</strong> &mdash; Suscripciones WMI (EventFilter/EventConsumer/Bindings). Mecanismo avanzado de persistencia frecuente en APTs y malware.
+    </div>
+    <div class="anomaly-type anomaly-critical">
+        <strong>A4: Fuerza bruta</strong> &mdash; Mas de 10 intentos de logon fallidos por usuario o mas de 20 por IP de origen. Puede indicar ataque de fuerza bruta.
+    </div>
+    <div class="anomaly-type anomaly-critical">
+        <strong>A8: Malware detectado</strong> &mdash; Amenazas registradas en Windows Defender. Confirma presencia de software malicioso.
+    </div>
+    <div class="anomaly-type anomaly-high">
+        <strong>A2: Servicios sin firma digital</strong> &mdash; Servicios en ejecucion cuyo ejecutable no tiene firma digital valida.
+    </div>
+    <div class="anomaly-type anomaly-high">
+        <strong>A5: Servicios sospechosos recientes</strong> &mdash; Servicios instalados en los ultimos 30 dias con rutas que apuntan a Users, Temp, o interpretes de comandos.
+    </div>
+    <div class="anomaly-type anomaly-high">
+        <strong>A9: Autoruns de alto riesgo</strong> &mdash; Entradas de autorun con rutas a directorios de usuario o interpretes de comandos.
+    </div>
+    <div class="anomaly-type anomaly-medium">
+        <strong>A1: Procesos sospechosos</strong> &mdash; Procesos ejecutandose desde ubicaciones atipicas (Temp, Downloads, AppData, ProgramData, Public).
+    </div>
+    <div class="anomaly-type anomaly-medium">
+        <strong>A6: Alternate Data Streams</strong> &mdash; ADS no estandar detectados en ficheros del sistema (excluye Zone.Identifier).
+    </div>
+    <div class="anomaly-type anomaly-medium">
+        <strong>A7: Apagados inesperados</strong> &mdash; Eventos Event ID 6008 que pueden indicar desconexiones forzadas.
+    </div>
+    <div class="anomaly-type anomaly-high">
+        <strong>A10: Certificados raiz sospechosos</strong> <span class="badge badge-warning">NUEVO</span> &mdash; Certificados en el almacen raiz de confianza que no pertenecen a CAs reconocidas. Puede indicar MITM, adware o proxies no autorizados.
+    </div>
+    <div class="anomaly-type anomaly-high">
+        <strong>A11: COM Hijacking</strong> <span class="badge badge-warning">NUEVO</span> &mdash; Objetos COM registrados en HKCU con servidores que apuntan a directorios de usuario. Tecnica de persistencia y evasion.
+    </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 6. ESTRUCTURA DE SALIDA -->
+<!-- ================================================================ -->
+<h2 id="output-structure">7. Estructura de Salida</h2>
+
+<div class="dir-tree">
+<span class="folder">MaPeriT_CASO-001_20260602_143022/</span>
+&#9500;&#9472;&#9472; <span class="folder">01_Volatile/</span>             <span class="file">&larr; Fase 1: Datos volatiles</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">SystemTime.json, Processes.csv, NetworkConnections_TCP.csv, NamedPipes.csv ...</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="folder">MemoryDump/</span>           <span class="file">&larr; memory.raw (volcado RAM)</span>
+&#9500;&#9472;&#9472; <span class="folder">02_SystemInfo/</span>            <span class="file">&larr; Fase 2: Informacion del sistema</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="file">HardwareInventory.json, OSInfo.json, Services.csv ...</span>
+&#9500;&#9472;&#9472; <span class="folder">03_Filesystem/</span>            <span class="file">&larr; Fase 3: Artefactos del sistema de ficheros</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">$MFT, UsnJournal.csv, Amcache.hve ...</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="folder">Prefetch/</span>, <span class="folder">RecentFiles/</span>, <span class="folder">JumpLists/</span>, <span class="folder">RecycleBin/</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="folder">PowerShellHistory/</span>, <span class="folder">Thumbcache/</span>, <span class="folder">SRUM/</span>
+&#9500;&#9472;&#9472; <span class="folder">04_Registry/</span>              <span class="file">&larr; Fase 4: Registro de Windows</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="folder">Hives/</span>                <span class="file">&larr; SAM, SYSTEM, SOFTWARE, SECURITY, NTUSER.DAT ...</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="folder">ExtractedValues/</span>      <span class="file">&larr; UserAssist.csv, BAM_DAM.csv, Autoruns.csv ...</span>
+&#9500;&#9472;&#9472; <span class="folder">05_EventLogs/</span>             <span class="file">&larr; Fase 5: Logs de eventos</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="folder">RawLogs/</span>              <span class="file">&larr; Todos los .evtx originales</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="folder">Analysis/</span>             <span class="file">&larr; SecurityLogon.csv, PowerShellScripts.csv ...</span>
+&#9500;&#9472;&#9472; <span class="folder">06_Browsers/</span>              <span class="file">&larr; Fase 6: Navegadores web</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="folder">Chrome/</span>, <span class="folder">Edge/</span>, <span class="folder">Firefox/</span>, <span class="folder">InternetExplorer/</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="file">BrowserSummary.csv</span>
+&#9500;&#9472;&#9472; <span class="folder">07_Communications/</span>        <span class="file">&larr; Fase 7: Comunicaciones</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="folder">Outlook/</span>, <span class="folder">Teams/</span>, <span class="folder">Skype/</span>, <span class="folder">Discord/</span>
+&#9500;&#9472;&#9472; <span class="folder">08_CloudStorage/</span>          <span class="file">&larr; Fase 8: Almacenamiento en la nube</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="folder">OneDrive/</span>, <span class="folder">GoogleDrive/</span>, <span class="folder">Dropbox/</span>
+&#9500;&#9472;&#9472; <span class="folder">09_USB/</span>                   <span class="file">&larr; Fase 9: Dispositivos USB</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="file">USBDevices.csv, USBTimeline.csv, setupapi.dev.log ...</span>
+&#9500;&#9472;&#9472; <span class="folder">10_Persistence/</span>           <span class="file">&larr; Fase 10: Mecanismos de persistencia</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="file">AutorunsConsolidated.csv, WMIPersistence.csv, UnsignedServices.csv, SuspiciousRootCerts.csv, COMHijacking.csv ...</span>
+&#9500;&#9472;&#9472; <span class="folder">Analysis/</span>                 <span class="file">&larr; Analisis automatizado</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">Timeline.csv</span>          <span class="file">&larr; Timeline unificada completa</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">Timeline_Last7Days.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">IOCs.csv</span>              <span class="file">&larr; Indicadores de compromiso</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">IOCs.json</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">Anomalies.csv</span>         <span class="file">&larr; Anomalias detectadas</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="file">Anomalies.json</span>
+&#9500;&#9472;&#9472; <span class="folder">Report/</span>                   <span class="file">&larr; Informes generados</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">InformePericial.html</span>  <span class="file">&larr; Informe pericial completo</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="file">CadenaCustodia.html</span>  <span class="file">&larr; Acta de cadena de custodia</span>
+&#9492;&#9472;&#9472; <span class="folder">Logs/</span>                     <span class="file">&larr; Logs de la herramienta</span>
+    &#9500;&#9472;&#9472; <span class="file">ActionLog.csv</span>         <span class="file">&larr; Registro de todas las acciones</span>
+    &#9500;&#9472;&#9472; <span class="file">ChainOfCustody.csv</span>    <span class="file">&larr; Datos crudos de custodia</span>
+    &#9500;&#9472;&#9472; <span class="file">HashManifest.csv</span>      <span class="file">&larr; Hashes SHA-256 de todos los ficheros</span>
+    &#9492;&#9472;&#9472; <span class="file">ManifestHMAC.txt</span>      <span class="file">&larr; HMAC del manifiesto (si se uso -HMACKey)</span>
+</div>
+
+<!-- INFORMES -->
+<h2 id="reports">8. Informes Generados</h2>
+
+<div class="card">
+    <div class="card-header">InformePericial.html</div>
+    <p>Informe pericial HTML profesional completo que incluye:</p>
+    <ul>
+        <li><strong>Portada</strong> con numero de caso, perito, fecha y hash de la herramienta</li>
+        <li><strong>Indice</strong> con 10 secciones navegables</li>
+        <li><strong>Resumen ejecutivo</strong> con estadisticas clave (evidencias, ficheros, anomalias)</li>
+        <li><strong>Metodologia</strong> con referencia a RFC 3227 y NIST SP 800-86</li>
+        <li><strong>Identificacion del sistema</strong> (hardware, SO, usuarios, red)</li>
+        <li><strong>Evidencias recopiladas</strong> con conteo por directorio</li>
+        <li><strong>Hallazgos</strong> (sesiones, red, software, USB, navegacion, comunicaciones, persistencia)</li>
+        <li><strong>Linea temporal</strong> de los ultimos 7 dias</li>
+        <li><strong>Anomalias</strong> clasificadas por severidad con recomendaciones</li>
+        <li><strong>Conclusiones</strong> con espacio para firma del perito</li>
+        <li><strong>Anexos</strong> colapsables (procesos, servicios, scripts PowerShell)</li>
+    </ul>
+    <p>El informe esta optimizado para impresion en A4 y esta completamente en espanol.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">CadenaCustodia.html</div>
+    <p>Acta de cadena de custodia con formato judicial que documenta:</p>
+    <ul>
+        <li>Datos del caso y del perito</li>
+        <li>Herramienta utilizada y su hash SHA-256</li>
+        <li>Inventario completo de evidencias (ID, timestamp, origen, destino, hash, metodo, tamano)</li>
+        <li>Verificacion de integridad</li>
+        <li>Espacio para firma del perito y testigo</li>
+    </ul>
+</div>
+
+<!-- INTEGRIDAD -->
+<h2 id="integrity">9. Integridad y Cadena de Custodia</h2>
+
+<div class="card">
+    <h4>Mecanismos de Integridad</h4>
+    <table>
+        <tr><th>Mecanismo</th><th>Descripcion</th></tr>
+        <tr>
+            <td><strong>Hash por evidencia</strong></td>
+            <td>Cada fichero se hashea con SHA-256 en el momento exacto de su adquisicion y se registra en <code>ChainOfCustody.csv</code>.</td>
+        </tr>
+        <tr>
+            <td><strong>Manifiesto global</strong></td>
+            <td>Al finalizar, se recalculan los hashes SHA-256 de <strong>todos</strong> los ficheros del directorio de salida y se guardan en <code>HashManifest.csv</code>.</td>
+        </tr>
+        <tr>
+            <td><strong>HMAC-SHA256</strong></td>
+            <td>Si se proporciona <code>-HMACKey</code>, se firma el manifiesto con HMAC-SHA256. El resultado se guarda en <code>ManifestHMAC.txt</code>.</td>
+        </tr>
+        <tr>
+            <td><strong>Auto-hash del script</strong></td>
+            <td>MaPeriT.SW calcula su propio hash SHA-256 al inicio y lo incluye en todos los informes.</td>
+        </tr>
+    </table>
+
+    <h4>Verificacion posterior (modo -VerifyPath)</h4>
+    <div class="alert alert-info"><strong>Nuevo en v1.5:</strong> MaPeriT.SW incluye un modo de verificacion integrado que no requiere scripts externos.</div>
+    <pre><code><span class="comment"># Verificar integridad con el modo integrado</span>
+<span class="cmd">.\MaPeriT.SW.ps1</span> <span class="param">-VerifyPath</span> <span class="string">"E:\Evidencias\MaPeriT_CASO-001_20260602"</span></code></pre>
+    <p>El modo <code>-VerifyPath</code>:</p>
+    <ul>
+        <li>Localiza automaticamente el <code>HashManifest.csv</code> en el directorio</li>
+        <li>Recalcula el SHA-256 de cada fichero y lo compara con el manifiesto</li>
+        <li>Informa de ficheros faltantes y hashes que no coinciden</li>
+        <li>No requiere <code>-CaseNumber</code> ni <code>-ExaminerName</code></li>
+        <li>No modifica ningun fichero</li>
+        <li>Termina con codigo de salida 0 si la integridad es correcta y 1 si hay discrepancias (desde v1.7.5), para poder usarlo en scripts</li>
+        <li>El registro de ejecucion <code>Logs\ActionLog.csv</code> no forma parte del manifiesto (se sigue escribiendo despues de generarlo); cada evidencia conserva ademas su hash en <code>Logs\ChainOfCustody.csv</code></li>
+    </ul>
+</div>
+
+<!-- ================================================================ -->
+<!-- REFERENCIA TECNICA -->
+<!-- ================================================================ -->
+<h2 id="architecture">10. Arquitectura del Codigo</h2>
+
+<div class="card">
+    <p>MaPeriT.SW esta organizado en modulos independientes que se compilan en un unico fichero para facilitar el despliegue.</p>
+    <table>
+        <tr><th>Fichero Fuente</th><th>Funcion</th></tr>
+        <tr><td><code>src/Main-Params.ps1</code></td><td>Definicion de parametros del script (param block)</td></tr>
+        <tr><td><code>src/Config.ps1</code></td><td>Constantes globales, nombres de fase, rutas del registro, textos en espanol</td></tr>
+        <tr><td><code>src/Core/Logging.ps1</code></td><td>Motor de logging, cadena de custodia, exportacion CSV/JSON/TXT</td></tr>
+        <tr><td><code>src/Core/Hashing.ps1</code></td><td>Funciones de hash SHA-256, manifiesto, HMAC, verificacion</td></tr>
+        <tr><td><code>src/Core/CSharpHelpers.ps1</code></td><td>Codigo C# embebido para acceso raw NTFS (P/Invoke) y extraccion MFT</td></tr>
+        <tr><td><code>src/Core/FileAcquisition.ps1</code></td><td>VSS snapshots, copia de ficheros bloqueados, raw stream copy</td></tr>
+        <tr><td><code>src/Core/Initialize.ps1</code></td><td>Verificacion de privilegios, estructura de directorios, sesion forense</td></tr>
+        <tr><td><code>src/Phases/Phase1-Volatile.ps1</code></td><td>Fase 1: Datos volatiles</td></tr>
+        <tr><td><code>src/Phases/Phase2-SystemInfo.ps1</code></td><td>Fase 2: Informacion del sistema</td></tr>
+        <tr><td><code>src/Phases/Phase3-Filesystem.ps1</code></td><td>Fase 3: Artefactos del sistema de ficheros</td></tr>
+        <tr><td><code>src/Phases/Phase4-Registry.ps1</code></td><td>Fase 4: Registro de Windows</td></tr>
+        <tr><td><code>src/Phases/Phase5-EventLogs.ps1</code></td><td>Fase 5: Logs de eventos</td></tr>
+        <tr><td><code>src/Phases/Phase6-Browsers.ps1</code></td><td>Fase 6: Navegadores web</td></tr>
+        <tr><td><code>src/Phases/Phase7-Communications.ps1</code></td><td>Fase 7: Comunicaciones</td></tr>
+        <tr><td><code>src/Phases/Phase8-CloudStorage.ps1</code></td><td>Fase 8: Almacenamiento en la nube</td></tr>
+        <tr><td><code>src/Phases/Phase9-USB.ps1</code></td><td>Fase 9: Dispositivos USB</td></tr>
+        <tr><td><code>src/Phases/Phase10-Persistence.ps1</code></td><td>Fase 10: Mecanismos de persistencia</td></tr>
+        <tr><td><code>src/Analysis/Timeline.ps1</code></td><td>Construccion de la linea temporal unificada</td></tr>
+        <tr><td><code>src/Analysis/IOCExtractor.ps1</code></td><td><span class="badge badge-warning">NUEVO</span> Extraccion y consolidacion de IOCs</td></tr>
+        <tr><td><code>src/Analysis/Anomalies.ps1</code></td><td>Motor de deteccion de anomalias (11 tipos de deteccion)</td></tr>
+        <tr><td><code>src/Report/ChainOfCustody.ps1</code></td><td>Generador del acta de cadena de custodia HTML</td></tr>
+        <tr><td><code>src/Report/ReportTemplates.ps1</code></td><td>Plantillas CSS y JS del informe pericial</td></tr>
+        <tr><td><code>src/Report/ReportGenerator.ps1</code></td><td>Generador del informe pericial HTML</td></tr>
+        <tr><td><code>src/Main.ps1</code></td><td>Punto de entrada: orquesta las fases, analisis e informes</td></tr>
+    </table>
+</div>
+
+<!-- EVENT IDS -->
+<h2 id="event-ids">11. Event IDs Monitorizados</h2>
+
+<div class="card">
+    <h4>Eventos de Seguridad (Security Log)</h4>
+    <table>
+        <tr><th>Event ID</th><th>Descripcion</th></tr>
+        <tr><td>4624</td><td>Inicio de sesion exitoso</td></tr>
+        <tr><td>4625</td><td>Inicio de sesion fallido</td></tr>
+        <tr><td>4634, 4647</td><td>Cierre de sesion</td></tr>
+        <tr><td>4648</td><td>Uso de credenciales explicitas</td></tr>
+        <tr><td>4672</td><td>Privilegios especiales asignados</td></tr>
+        <tr><td>4720</td><td>Cuenta de usuario creada</td></tr>
+        <tr><td>4722, 4725, 4726</td><td>Cuenta habilitada / deshabilitada / eliminada</td></tr>
+        <tr><td>4723, 4724</td><td>Cambio de contrasena</td></tr>
+        <tr><td>4738</td><td>Cuenta modificada</td></tr>
+        <tr><td>4740</td><td>Cuenta bloqueada</td></tr>
+    </table>
+
+    <h4>Eventos de Sistema</h4>
+    <table>
+        <tr><th>Event ID</th><th>Descripcion</th></tr>
+        <tr><td>7034</td><td>Servicio crash</td></tr>
+        <tr><td>7040</td><td>Cambio en tipo de inicio de servicio</td></tr>
+        <tr><td>7045</td><td>Nuevo servicio instalado</td></tr>
+        <tr><td>1074</td><td>Apagado/reinicio iniciado</td></tr>
+        <tr><td>6005</td><td>Servicio de log de eventos iniciado (arranque)</td></tr>
+        <tr><td>6006</td><td>Servicio de log de eventos detenido (apagado limpio)</td></tr>
+        <tr><td>6008</td><td>Apagado inesperado</td></tr>
+        <tr><td>6009</td><td>Arranque del sistema</td></tr>
+    </table>
+
+    <h4>Otros Logs</h4>
+    <table>
+        <tr><th>Log</th><th>Event IDs</th><th>Descripcion</th></tr>
+        <tr><td>PowerShell/Operational</td><td>4103, 4104</td><td>Module Logging (4103) y Script Block Logging (4104)</td></tr>
+        <tr><td>TaskScheduler/Operational</td><td>106, 140, 141, 200, 201</td><td>Registro, actualizacion, eliminacion, inicio y fin de tareas</td></tr>
+        <tr><td>TerminalServices</td><td>21, 22, 23, 24, 25</td><td>Sesiones RDP: logon, shell, logoff, disconnect, reconnect</td></tr>
+        <tr><td>Application</td><td>1000, 1001, 1002</td><td>App crash, WER report, App hang</td></tr>
+        <tr><td>Sysmon/Operational</td><td>1, 3, 5, 7, 8, 11, 12, 13, 22</td><td>Procesos, red, ficheros, registro, DNS (si Sysmon esta instalado)</td></tr>
+    </table>
+</div>
+
+<!-- CLAVES DE REGISTRO -->
+<h2 id="registry-keys">12. Claves de Registro Analizadas</h2>
+
+<div class="card">
+    <table>
+        <tr><th>Clave</th><th>Proposito Forense</th></tr>
+        <tr><td><code>HKLM:\SYSTEM\CurrentControlSet\Enum\USBSTOR</code></td><td>Historial de dispositivos USB de almacenamiento</td></tr>
+        <tr><td><code>HKLM:\SYSTEM\MountedDevices</code></td><td>Volumenes montados historicamente</td></tr>
+        <tr><td><code>HKLM:\SOFTWARE\Microsoft\Windows NT\...\NetworkList</code></td><td>Redes WiFi/LAN conectadas con fechas</td></tr>
+        <tr><td><code>HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run*</code></td><td>Programas que se ejecutan al inicio (HKLM y HKCU)</td></tr>
+        <tr><td><code>HKLM:\...\Winlogon (Shell, Userinit)</code></td><td>Shell y proceso de inicializacion (persistencia)</td></tr>
+        <tr><td><code>HKU:\&lt;SID&gt;\...\UserAssist</code></td><td>Programas ejecutados por el usuario (codificado ROT13)</td></tr>
+        <tr><td><code>HKLM:\SYSTEM\...\AppCompatCache</code></td><td>ShimCache: historial de ejecucion de aplicaciones</td></tr>
+        <tr><td><code>HKLM:\SYSTEM\...\bam\State</code></td><td>BAM: actividad en segundo plano con timestamps</td></tr>
+        <tr><td><code>HKU:\&lt;SID&gt;\...\RunMRU</code></td><td>Comandos ejecutados en el dialogo Ejecutar</td></tr>
+        <tr><td><code>HKU:\&lt;SID&gt;\...\TypedPaths</code></td><td>Rutas escritas manualmente en el Explorador</td></tr>
+        <tr><td><code>HKU:\&lt;SID&gt;\...\Terminal Server Client</code></td><td>Historial de conexiones RDP del usuario</td></tr>
+        <tr><td><code>HKU:\&lt;SID&gt;\...\MountPoints2</code></td><td>Volumenes montados por el usuario (USB, red)</td></tr>
+        <tr><td><code>HKLM:\...\Authentication\LogonUI</code></td><td>Ultimo usuario que inicio sesion</td></tr>
+    </table>
+</div>
+
+<!-- TROUBLESHOOTING -->
+<h2 id="troubleshooting">13. Resolucion de Problemas</h2>
+
+<div class="card">
+    <table>
+        <tr><th>Problema</th><th>Causa</th><th>Solucion</th></tr>
+        <tr>
+            <td>El script no se ejecuta</td>
+            <td>Politica de ejecucion restrictiva</td>
+            <td>Ejecute: <code>Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass</code></td>
+        </tr>
+        <tr>
+            <td>"Se requieren privilegios de Administrador"</td>
+            <td>Terminal no elevada</td>
+            <td>Abra PowerShell como Administrador (clic derecho > Ejecutar como administrador)</td>
+        </tr>
+        <tr>
+            <td>Volcado de RAM no se realiza</td>
+            <td>winpmem no encontrado</td>
+            <td>Coloque <code>winpmem_mini_x64.exe</code> en la carpeta <code>tools\</code> junto al script</td>
+        </tr>
+        <tr>
+            <td>VSS Snapshot falla</td>
+            <td>Servicio VSS detenido o sin espacio</td>
+            <td>La herramienta intenta vssadmin como fallback. Algunos ficheros bloqueados no se copiaran.</td>
+        </tr>
+        <tr>
+            <td>MFT no se extrae</td>
+            <td>Acceso raw denegado o volumen no NTFS</td>
+            <td>Se intenta fallback via VSS. Si ambos fallan, se registra como warning.</td>
+        </tr>
+        <tr>
+            <td>Fase de Event Logs muy lenta</td>
+            <td>Gran volumen de eventos en los logs</td>
+            <td>Se limita a 50.000 eventos por consulta (configurable en <code>$Script:Defaults.MaxEventsPerQuery</code>)</td>
+        </tr>
+        <tr>
+            <td>Ficheros PST/OST no se copian</td>
+            <td>Ficheros mayores de 500 MB</td>
+            <td>Use el parametro <code>-CopyLargeFiles</code> para forzar la copia</td>
+        </tr>
+        <tr>
+            <td>Error "already exists" en C# Helpers</td>
+            <td>Script ejecutado dos veces en la misma sesion</td>
+            <td>Es un warning inofensivo. Los helpers ya estan cargados.</td></tr>
+        <tr>
+            <td>Scan de ADS tarda mucho</td>
+            <td>Muchos ficheros en directorios escaneados</td>
+            <td>Se aplica timeout automatico de 120 segundos (configurable). Nota: el timeout se comprueba entre ficheros/directorios, no interrumpe una enumeracion muy grande ya en curso, asi que en directorios enormes puede tardar algo mas del limite configurado.</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-warning">v1.7.1</span> "[!!!] AVISO CRITICO: EL EQUIPO ANALIZADO HA QUEDADO MODIFICADO" al finalizar</td>
+            <td>Un hive de usuario montado temporalmente en <code>HKEY_USERS\MAPE_&lt;usuario&gt;</code> (Fase 4, para leer NTUSER.DAT/UsrClass.dat de usuarios sin sesion activa) no se pudo desmontar tras 3 intentos &mdash; normalmente porque algun proceso mantiene el hive abierto</td>
+            <td>Ejecute manualmente <code>reg unload HKU\MAPE_&lt;usuario&gt;</code> desde una consola elevada en el equipo analizado antes de devolverlo o reiniciarlo. Mientras la clave siga montada, el perfil de ese usuario no cargara correctamente.</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-warning">v1.7.1</span> Entrada <code>INVALIDO:...</code> en <code>Logs\ChainOfCustody.csv</code></td>
+            <td>El hash SHA-256 de esa evidencia no se pudo calcular tras la copia (p. ej. el fichero se elimino, se puso en cuarentena por un antivirus, o quedo bloqueado justo despues de copiarlo)</td>
+            <td>Revise el log de ejecucion (<code>ERROR HASH_POST_COPIA_NO_VALIDO</code>) para identificar la causa y, si es necesario, repita la adquisicion de ese artefacto concreto</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-warning">v1.7.1</span> "EVENTOS_POSIBLEMENTE_TRUNCADOS" en el log de ejecucion</td>
+            <td>Una consulta de log de eventos alcanzo el limite <code>-MaxEvents</code> configurado; el sistema tenia mas eventos de los consultados</td>
+            <td>Es informativo, no bloquea la adquisicion. Si necesita el historico completo de esa fuente, aumente el limite correspondiente en <code>Config.ps1</code> (<code>$Script:Defaults.MaxEventsPerQuery</code> u otros) y repita la fase, o exporte el <code>.evtx</code> completo (ya copiado integro en Fase 5.1) con otra herramienta.</td>
+        </tr>
+    </table>
+</div>
+
+<!-- AVISO LEGAL -->
+<h2 id="legal">14. Aviso Legal</h2>
+
+<div class="alert alert-danger">
+    <strong>USO AUTORIZADO OBLIGATORIO</strong><br>
+    Esta herramienta realiza una adquisicion forense de evidencias digitales. Su uso debe estar autorizado por el propietario del equipo o por orden judicial. El uso no autorizado puede constituir un delito conforme a la legislacion vigente.
+</div>
+
+<div class="card">
+    <h4>Garantias de la Herramienta</h4>
+    <ul>
+        <li>MaPeriT.SW <strong>no modifica ni borra</strong> ninguno de los ficheros que recoge del sistema analizado; como toda adquisicion en vivo, ejecutar la herramienta deja trazas propias e inevitables en el equipo (registros de eventos, Prefetch de PowerShell y una instantanea VSS temporal que se elimina al finalizar)</li>
+        <li>La unica escritura de datos se realiza en el directorio de salida especificado</li>
+        <li>Se crea un Volume Shadow Copy temporal que se <strong>elimina automaticamente</strong> al finalizar</li>
+        <li>Para leer el registro de usuarios sin sesion activa (Fase 4), la herramienta copia su <code>NTUSER.DAT</code> (con sus ficheros <code>.LOG1</code>/<code>.LOG2</code>) a la carpeta de salida y monta esa <strong>copia de trabajo</strong> bajo <code>HKEY_USERS\MAPE_&lt;usuario&gt;</code>; el fichero original nunca se monta (desde v1.7.5). Al terminar la fase se desmonta y la copia de trabajo se borra. Desde v1.7.1, si el desmontaje llegase a fallar tras 3 reintentos, la herramienta lo señala de forma explicita y visible en consola (ver "Resolucion de Problemas") en vez de dejarlo pasar desapercibido.</li>
+        <li>No se realizan conexiones de red por parte de la herramienta</li>
+        <li>Todas las evidencias se verifican mediante hash SHA-256; desde v1.7.1 un hash que no pueda calcularse queda marcado explicitamente como invalido en la cadena de custodia, en vez de registrarse sin distinguir</li>
+        <li>El script calcula su propio hash para garantizar su integridad</li>
+    </ul>
+</div>
+
+<div class="card">
+    <h4>Alcance de la Evaluacion Automatica</h4>
+    <p>MaPeriT.SW incluye un motor de deteccion automatica de anomalias que categoriza indicadores por severidad (CRITICA, ALTA, MEDIA, BAJA). Dicha evaluacion es de caracter <strong>orientativo y preliminar</strong>. Los indicadores detectados automaticamente:</p>
+    <ul style="margin:10px 0 10px 25px;line-height:2.2">
+        <li>No constituyen por si solos una conclusion pericial</li>
+        <li>Pueden generar falsos positivos en funcion de la configuracion del sistema analizado</li>
+        <li>Deben ser validados, contextualizados e interpretados por el perito firmante</li>
+        <li>No implican la existencia de actividad ilicita; pueden tener explicacion legitima</li>
+    </ul>
+    <p>La responsabilidad sobre las conclusiones del informe recae exclusivamente en el perito informatico que lo suscribe. MaPeriT.SW es una herramienta de apoyo tecnico, no un sustituto del criterio profesional del perito.</p>
+</div>
+
+<div class="card">
+    <h4>Valores Configurables por Defecto</h4>
+    <table>
+        <tr><th>Parametro</th><th>Valor</th><th>Descripcion</th></tr>
+        <tr><td><code>LargeFileThresholdMB</code></td><td>500</td><td>Umbral para considerar un fichero como "grande"</td></tr>
+        <tr><td><code>PhaseTimeoutMinutes</code></td><td>10</td><td>Timeout general por fase</td></tr>
+        <tr><td><code>ADSScanTimeoutSec</code></td><td>120</td><td>Timeout para escaneo de Alternate Data Streams</td></tr>
+        <tr><td><code>SignatureScanTimeout</code></td><td>300</td><td>Timeout para verificacion de firmas digitales</td></tr>
+        <tr><td><code>MaxEventsPerQuery</code></td><td>50.000</td><td>Maximo de eventos por consulta de Event Log</td></tr>
+        <tr><td><code>HashAlgorithm</code></td><td>SHA256</td><td>Algoritmo de hashing para evidencias</td></tr>
+    </table>
+</div>
+
+<!-- FOOTER -->
+<div style="text-align:center; margin-top:60px; padding:30px 0; border-top:2px solid var(--border); color:var(--text-light); font-size:13px;">
+    <p><strong>MaPeriT.SW</strong> &mdash; Herramienta de Peritacion Informatica Forense Profesional v1.7.5</p>
+    <p>26 modulos | Compilado como MaPeriT.SW.ps1</p>
+    <p>Manual actualizado el 12/07/2026</p>
+</div>
+
+</main>
+</body>
+</html>

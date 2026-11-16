@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MaPeriT.OF v1.1.2 &#8212; Manual de Usuario</title>
+<style>
+  html { scroll-behavior: smooth; }
+
+  :root {
+    --primary:       #1a3a5c;
+    --primary-light: #2c5f8a;
+    --accent:        #e74c3c;
+    --bg:            #f7f9fc;
+    --card-bg:       #ffffff;
+    --text:          #1a1a2e;
+    --text-light:    #555;
+    --border:        #dde3ea;
+    --code-bg:       #0d1117;
+    --code-text:     #e6edf3;
+    --success:       #16a34a;
+    --warning:       #ca8a04;
+    --danger:        #dc2626;
+    --info:          #2563eb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0;
+    width: 280px;
+    height: 100vh;
+    background: var(--primary);
+    overflow-y: auto;
+    z-index: 100;
+    padding-bottom: 30px;
+  }
+
+  .nav-header {
+    padding: 28px 22px 16px;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+    margin-bottom: 8px;
+  }
+
+  .nav-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: .5px;
+  }
+
+  .nav-subtitle {
+    font-size: 11px;
+    color: rgba(255,255,255,.55);
+    margin-top: 4px;
+  }
+
+  nav ul { list-style: none; }
+
+  nav ul li.section-title {
+    padding: 14px 22px 4px;
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255,255,255,.4);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  nav ul li a {
+    display: block;
+    padding: 7px 22px;
+    color: rgba(255,255,255,.78);
+    text-decoration: none;
+    font-size: 13px;
+    transition: background .15s, color .15s;
+    border-left: 3px solid transparent;
+  }
+
+  nav ul li a:hover {
+    background: rgba(255,255,255,.1);
+    color: #ffffff;
+    border-left-color: var(--accent);
+  }
+
+  nav ul li a.sub {
+    padding-left: 36px;
+    font-size: 12px;
+    color: rgba(255,255,255,.6);
+  }
+
+  nav ul li a.sub:hover { color: rgba(255,255,255,.9); }
+
+  /* ── MAIN ── */
+  main {
+    margin-left: 280px;
+    padding: 0 48px 60px;
+    max-width: 1200px;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    background: linear-gradient(135deg, #0d1f33 0%, #1a3a5c 60%, #1f4d7a 100%);
+    color: #ffffff;
+    padding: 56px 48px 44px;
+    margin: 0 -48px 40px;
+  }
+
+  .page-header .tool-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 20px;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .page-header h1 {
+    font-size: 40px;
+    font-weight: 300;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+    color: #ffffff;
+  }
+
+  .page-header h1 strong { font-weight: 700; color: var(--accent); }
+
+  .page-header .tagline {
+    font-size: 16px;
+    color: rgba(255,255,255,.7);
+    margin-bottom: 20px;
+  }
+
+  .page-header .version-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .page-header .version-pill {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.2);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,.85);
+  }
+
+  /* ── HEADINGS ── */
+  h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 8px;
+    margin: 44px 0 20px;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary-light);
+    margin: 28px 0 12px;
+  }
+
+  h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 16px 0 8px;
+  }
+
+  p { margin-bottom: 12px; color: var(--text-light); }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    background: var(--primary);
+    color: #ffffff;
+    padding: 13px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .3px;
+  }
+
+  .card-body { padding: 24px; }
+
+  /* ── MODULE GRID ── */
+  .module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+
+  .module-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    border-top: 4px solid var(--accent);
+    padding: 20px;
+  }
+
+  .module-card h4 { color: var(--primary); margin-top: 0; }
+
+  .module-card p { font-size: 13px; margin: 0; }
+
+  /* ── FEATURE LIST ── */
+  .feature-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .feature-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .feature-icon {
+    font-size: 26px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .feature-text h4 { margin: 0 0 4px; font-size: 14px; color: var(--primary); }
+
+  .feature-text p { font-size: 12px; margin: 0; color: var(--text-light); }
+
+  /* ── TABLES ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  th {
+    background: var(--primary);
+    color: #ffffff;
+    padding: 11px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: .3px;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td { background: #f8fafc; }
+  tr:hover td { background: #eef3f9; }
+
+  /* ── PARAM NAME ── */
+  .param-name {
+    font-family: 'Consolas', 'Cascadia Code', monospace;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .badge-required { background: #fef2f2; color: var(--danger);  border: 1px solid #fca5a5; }
+  .badge-optional { background: #f0fdf4; color: var(--success); border: 1px solid #86efac; }
+  .badge-default  { background: #eff6ff; color: var(--info);    border: 1px solid #93c5fd; }
+  .badge-new      { background: #fdf4ff; color: #7c3aed;        border: 1px solid #c4b5fd; }
+
+  /* ── CODE BLOCKS ── */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border-radius: 8px;
+    padding: 20px 24px;
+    font-family: 'Cascadia Code', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    border: 1px solid #30363d;
+  }
+
+  pre .cmd    { color: #79c0ff; }
+  pre .param  { color: #d2a8ff; }
+  pre .string { color: #a5d6ff; }
+  pre .value  { color: #f0883e; }
+  pre .comment{ color: #8b949e; font-style: italic; }
+  pre .op     { color: #ff7b72; }
+
+  code {
+    font-family: 'Cascadia Code', 'Consolas', monospace;
+    background: #f0f3f7;
+    color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12.5px;
+  }
+
+  /* ── ALERTS ── */
+  .alert {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+  .alert-info    { background: #dbeafe; border: 1px solid #93c5fd; color: #1e3a8a; }
+  .alert-warning { background: #fef3c7; border: 1px solid #fbbf24; color: #78350f; }
+  .alert-danger  { background: #fef2f2; border: 1px solid #fca5a5; color: #7f1d1d; }
+  .alert-success { background: #f0fdf4; border: 1px solid #86efac; color: #14532d; }
+
+  /* ── FLOW ── */
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    align-items: stretch;
+    margin-bottom: 24px;
+  }
+
+  .flow-step {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    flex: 1;
+    min-width: 130px;
+    text-align: center;
+    position: relative;
+  }
+
+  .flow-step::after {
+    content: '\25B6';
+    position: absolute;
+    right: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    font-size: 14px;
+    z-index: 1;
+  }
+
+  .flow-step:last-child::after { display: none; }
+
+  .flow-step .step-num {
+    display: inline-block;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 26px;
+    margin-bottom: 8px;
+  }
+
+  .flow-step .step-title { font-size: 12px; font-weight: 600; color: var(--primary); }
+  .flow-step .step-desc  { font-size: 11px; color: var(--text-light); margin-top: 4px; }
+
+  /* ── DIR TREE ── */
+  .dir-tree {
+    font-family: 'Cascadia Code', 'Consolas', monospace;
+    font-size: 13px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+
+  .dir-tree .folder       { color: var(--primary); font-weight: 600; }
+  .dir-tree .file         { color: var(--text-light); }
+  .dir-tree .highlight-file{ color: var(--accent); font-weight: 600; }
+
+  /* ── PHASE TABLE ── */
+  .phase-num {
+    display: inline-block;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 32px;
+    text-align: center;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .tag-ok   { background: #f0fdf4; color: var(--success); }
+  .tag-na   { background: #f8fafc; color: var(--text-light); }
+  .tag-warn { background: #fef3c7; color: var(--warning); }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-left: 280px;
+    text-align: center;
+    padding: 24px 48px;
+    border-top: 1px solid var(--border);
+    color: var(--text-light);
+    font-size: 12px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { display: none; }
+    main { margin-left: 0; padding: 0 20px 40px; }
+    .page-header { margin: 0 -20px 30px; padding: 36px 20px; }
+    footer { margin-left: 0; }
+  }
+
+  @media print {
+    nav { display: none; }
+    main { margin-left: 0; padding: 0 20px; }
+    body { font-size: 10pt; }
+    footer { margin-left: 0; }
+    .page-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    h2 { page-break-before: always; }
+    h2:first-of-type { page-break-before: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ NAV ═══ -->
+<nav>
+  <div class="nav-header">
+    <div class="nav-title">MaPeriT.OF</div>
+    <div class="nav-subtitle">Adquisici&#243;n Forense Offline &mdash; v1.1.2</div>
+  </div>
+  <ul>
+    <li class="section-title">General</li>
+    <li><a href="#intro">Introducci&#243;n</a></li>
+    <li><a href="#caracteristicas">Caracter&#237;sticas</a></li>
+    <li><a href="#requisitos">Requisitos del sistema</a></li>
+
+    <li class="section-title">Uso</li>
+    <li><a href="#preparacion">Preparaci&#243;n del disco</a></li>
+    <li><a href="#flujo">Flujo de trabajo</a></li>
+    <li><a href="#parametros">Referencia de par&#225;metros</a></li>
+    <li><a href="#ejemplos">Ejemplos de ejecuci&#243;n</a></li>
+
+    <li class="section-title">Referencia</li>
+    <li><a href="#fases">Fases de adquisici&#243;n</a></li>
+    <li><a href="#estructura">Estructura de salida</a></li>
+    <li><a href="#registro">Acceso al registro offline</a></li>
+
+    <li class="section-title">Soporte</li>
+    <li><a href="#problemas">Resoluci&#243;n de problemas</a></li>
+    <li><a href="#changelog">Registro de cambios</a></li>
+    <li><a href="#legal">Aviso legal</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════ MAIN ═══ -->
+<main>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="tool-badge">&#9679; Adquisici&#243;n Offline</div>
+    <h1><strong>MaPeriT</strong>.OF</h1>
+    <div class="tagline">Adquisici&#243;n Forense Offline Profesional sobre disco montado o entorno Live</div>
+    <div class="version-row">
+      <span class="version-pill">&#128196; v1.1.2</span>
+      <span class="version-pill">&#128270; RFC 3227 &middot; NIST SP 800-86</span>
+      <span class="version-pill">&#128279; Compatible con MaPeriT.AN</span>
+      <span class="version-pill">&#128274; Sin escritura en el disco objetivo</span>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────── INTRODUCCION ── -->
+  <h2 id="intro">Introducci&#243;n</h2>
+
+  <p>
+    <strong>MaPeriT.OF</strong> es la herramienta de adquisici&#243;n forense offline del ecosistema
+    MaPeriT. Permite recopilar evidencias digitales de un disco duro conectado f&#237;sicamente a un equipo
+    forense o accesible desde un entorno Windows Live, <em>sin necesidad de arrancar el sistema operativo
+    del disco objetivo</em>.
+  </p>
+
+  <div class="alert alert-info">
+    <span class="alert-icon">&#8505;</span>
+    <div>
+      <strong>Posici&#243;n en el ecosistema MaPeriT:</strong><br>
+      MaPeriT.<strong>SW</strong> recopila datos de un equipo <em>encendido</em> (datos vol&#225;tiles incluidos).
+      MaPeriT.<strong>OF</strong> recopila datos de un disco <em>apagado/montado</em> (sin datos vol&#225;tiles).
+      Ambas herramientas organizan la salida en las mismas carpetas por fase, compatible con MaPeriT.<strong>AN</strong>
+      y MaPeriT.<strong>TN</strong>. El contenido no es id&#233;ntico: OF no tiene datos vol&#225;tiles y extrae del
+      registro offline solo una parte de lo que SW obtiene en vivo.
+    </div>
+  </div>
+
+  <div class="module-grid">
+    <div class="module-card">
+      <h4>&#128190; MaPeriT.SW</h4>
+      <p>Adquisici&#243;n en caliente. El sistema objetivo est&#225; encendido y corriendo. Captura datos vol&#225;tiles
+      (RAM, procesos, red) adem&#225;s de datos persistentes. Requiere ejecutarse <em>sobre el propio equipo</em>.</p>
+    </div>
+    <div class="module-card">
+      <h4>&#127381; MaPeriT.OF</h4>
+      <p>Adquisici&#243;n offline. El disco objetivo est&#225; montado en otro equipo o accesible desde Live CD.
+      El SO del disco no est&#225; en ejecuci&#243;n. Recopila datos persistentes (fases 2&#8211;10) sin alterar el disco.</p>
+    </div>
+    <div class="module-card">
+      <h4>&#128202; MaPeriT.AN</h4>
+      <p>An&#225;lisis profundo offline. Procesa la carpeta de evidencias generada por SW o OF. Parsea
+      &#36;MFT, analiza EVTX, extrae SQLite de navegadores y genera informe correlacionado.</p>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────── CARACTERISTICAS ── -->
+  <h2 id="caracteristicas">Caracter&#237;sticas principales</h2>
+
+  <div class="feature-list">
+    <div class="feature-item">
+      <div class="feature-icon">&#128190;</div>
+      <div class="feature-text">
+        <h4>Adquisici&#243;n de &#36;MFT completo</h4>
+        <p>Copia la Master File Table del disco objetivo usando privilegio de backup, preservando
+        metadata NTFS para an&#225;lisis por MaPeriT.AN.</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#128275;</div>
+      <div class="feature-text">
+        <h4>Registro offline v&#237;a <code>reg load</code></h4>
+        <p>Copia los hives SYSTEM, SOFTWARE, SAM, SECURITY, DEFAULT, NTUSER.DAT y UsrClass.dat como evidencia y,
+        para consultar sus valores, monta una <strong>copia de trabajo</strong> (nunca el fichero original del disco
+        objetivo), que se desmonta y se borra al terminar.</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#128196;</div>
+      <div class="feature-text">
+        <h4>Copia de logs de eventos (.evtx)</h4>
+        <p>Copia hasta 200 ficheros .evtx priorizando Security, System, PowerShell y acceso
+        remoto, listos para an&#225;lisis por MaPeriT.AN.</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#127760;</div>
+      <div class="feature-text">
+        <h4>Artefactos de navegadores</h4>
+        <p>Extrae History, Cookies, Login Data y Bookmarks de Chrome, Edge, Brave y Firefox
+        para todos los perfiles de usuario detectados.</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#128101;</div>
+      <div class="feature-text">
+        <h4>Multi-usuario autom&#225;tico</h4>
+        <p>Detecta y procesa todos los perfiles de <code>Users\</code> autom&#225;ticamente,
+        o filtra a un usuario espec&#237;fico con <code>-TargetUser</code>.</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#128279;</div>
+      <div class="feature-text">
+        <h4>Salida 100&#37; compatible con AN</h4>
+        <p>Usa las mismas carpetas por fase que MaPeriT.SW y los ficheros de referencia que leen AN y TN
+        (HashManifest.csv, OSInfo.json, &#36;MFT, Amcache.hve, .evtx, navegadores en &lt;navegador&gt;\&lt;usuario&gt;\&lt;perfil&gt;).</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#128274;</div>
+      <div class="feature-text">
+        <h4>Firma HMAC-SHA256</h4>
+        <p>Firma criptogr&#225;fica opcional del manifiesto de evidencias con clave secreta
+        compartida. Garantiza integridad verificable en sede judicial.</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#128269;</div>
+      <div class="feature-text">
+        <h4>Mecanismos de persistencia</h4>
+        <p>Detecta autoarranque, tareas programadas, IFEO, AppInit_DLLs, BAM/DAM y servicios
+        leyendo directamente del hive del disco objetivo.</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#128200;</div>
+      <div class="feature-text">
+        <h4>Cadena de custodia autom&#225;tica</h4>
+        <p>Cada fichero copiado queda registrado con su hash SHA-256, ruta origen/destino
+        y m&#233;todo de adquisici&#243;n en HashManifest.csv.</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#128221;</div>
+      <div class="feature-text">
+        <h4>Informe HTML judicial</h4>
+        <p>Genera InformePericial.html con identificaci&#243;n del caso, metodolog&#237;a, fases
+        ejecutadas y estadisticas, listo para adjuntar a un informe pericial.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────── REQUISITOS ───── -->
+  <h2 id="requisitos">Requisitos del sistema</h2>
+
+  <div class="card">
+    <div class="card-header">Equipo forense (donde se ejecuta OF)</div>
+    <div class="card-body">
+      <table>
+        <tr><th>Componente</th><th>Requisito</th><th>Notas</th></tr>
+        <tr>
+          <td>Sistema operativo</td>
+          <td>Windows 10 / 11 (64 bits)</td>
+          <td>Entorno Live compatible si incluye PowerShell 5.1+</td>
+        </tr>
+        <tr>
+          <td>PowerShell</td>
+          <td>5.1 o superior</td>
+          <td>PowerShell 7 recomendado para mejor manejo de encoding UTF-8</td>
+        </tr>
+        <tr>
+          <td>Privilegios</td>
+          <td><strong>Administrador</strong></td>
+          <td>Obligatorio para <code>reg load</code> y copia de ficheros de sistema</td>
+        </tr>
+        <tr>
+          <td>Pol&#237;tica de ejecuci&#243;n</td>
+          <td><code>Bypass</code> o <code>RemoteSigned</code></td>
+          <td>Configurar con <code>Set-ExecutionPolicy -Scope Process</code></td>
+        </tr>
+        <tr>
+          <td>Espacio en destino</td>
+          <td>Variable seg&#250;n evidencias</td>
+          <td>Estimar 2&#8211;10 GB dependiendo del tama&#241;o de logs y navegadores</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Disco objetivo (el que se analiza)</div>
+    <div class="card-body">
+      <table>
+        <tr><th>Componente</th><th>Requisito</th><th>Notas</th></tr>
+        <tr>
+          <td>Sistema de ficheros</td>
+          <td>NTFS</td>
+          <td>El disco debe contener una instalaci&#243;n de Windows con estructura <code>Windows\System32</code></td>
+        </tr>
+        <tr>
+          <td>Acceso f&#237;sico</td>
+          <td>Montado como letra de unidad</td>
+          <td>Cualquier letra: D:, E:, F:, G:&#8230; Windows la asigna al conectar</td>
+        </tr>
+        <tr>
+          <td>Estado del SO</td>
+          <td>Apagado / no en ejecuci&#243;n</td>
+          <td>Los hives de registro no deben estar bloqueados por otro sistema</td>
+        </tr>
+        <tr>
+          <td>Protecci&#243;n de escritura</td>
+          <td>Recomendado: bloqueador hardware</td>
+          <td>OF solo realiza lecturas, pero un write blocker garantiza admisibilidad judicial</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────── PREPARACION ─────── -->
+  <h2 id="preparacion">Preparaci&#243;n del disco objetivo</h2>
+
+  <div class="alert alert-warning">
+    <span class="alert-icon">&#9888;</span>
+    <div>
+      <strong>Buenas pr&#225;cticas forenses:</strong> Para garantizar la admisibilidad de las evidencias,
+      conecte el disco mediante un <em>write blocker hardware</em> antes de montarlo en el equipo forense.
+      MaPeriT.OF no escribe en el disco objetivo, pero el SO del equipo forense puede hacerlo si no
+      hay bloqueador.
+    </div>
+  </div>
+
+  <h3>Pasos de preparaci&#243;n</h3>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <div class="step-title">Conectar disco</div>
+      <div class="step-desc">SATA, USB o mediante adaptador con write blocker</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <div class="step-title">Anotar letra</div>
+      <div class="step-desc">Verificar en Administrador de discos la letra asignada (D:, E:&#8230;)</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <div class="step-title">Abrir PowerShell</div>
+      <div class="step-desc">Como Administrador. Configurar pol&#237;tica de ejecuci&#243;n</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">4</div>
+      <div class="step-title">Ejecutar OF</div>
+      <div class="step-desc">Con -TargetDisk y datos del caso</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">5</div>
+      <div class="step-title">Procesar con AN</div>
+      <div class="step-desc">Apuntar AN a la carpeta de salida de OF</div>
+    </div>
+  </div>
+
+  <pre><span class="comment"># 1. Verificar que el disco es accesible y tiene Windows</span>
+<span class="cmd">Test-Path</span> <span class="string">"E:\Windows\System32"</span>   <span class="comment"># Debe devolver True</span>
+
+<span class="comment"># 2. Configurar politica de ejecucion para la sesion actual</span>
+<span class="cmd">Set-ExecutionPolicy</span> <span class="param">-Scope</span> Process <span class="param">-ExecutionPolicy</span> Bypass
+
+<span class="comment"># 3. Navegar a la carpeta de MaPeriT.OF</span>
+<span class="cmd">cd</span> <span class="string">"I:\Herramientas\MAPERIT\MAPERIT_OF"</span></pre>
+
+  <!-- ─────────────────────────────────────────────── FLUJO ─────── -->
+  <h2 id="flujo">Flujo de trabajo completo</h2>
+
+  <p>MaPeriT.OF est&#225; dise&#241;ado para encajar en el flujo forense est&#225;ndar de dos fases:</p>
+
+  <div class="card">
+    <div class="card-header">Fase de adquisici&#243;n &#8594; Fase de an&#225;lisis</div>
+    <div class="card-body">
+      <div class="flow">
+        <div class="flow-step">
+          <div class="step-num">1</div>
+          <div class="step-title">Disco montado</div>
+          <div class="step-desc">Hardware conectado, letra de unidad asignada</div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num">2</div>
+          <div class="step-title">MaPeriT.OF</div>
+          <div class="step-desc">Recoge fases 2&#8211;10 del disco offline</div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num">3</div>
+          <div class="step-title">Carpeta de evidencias</div>
+          <div class="step-desc">Estructura id&#233;ntica a la de MaPeriT.SW</div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num">4</div>
+          <div class="step-title">MaPeriT.AN</div>
+          <div class="step-desc">An&#225;lisis profundo: MFT, EVTX, SQLite, correlaci&#243;n</div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num">5</div>
+          <div class="step-title">Informe AN</div>
+          <div class="step-desc">Informe judicial completo con hallazgos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-success">
+    <span class="alert-icon">&#10003;</span>
+    <div>
+      <strong>MaPeriT.AN trabaja igual con OF que con SW:</strong> la carpeta generada por OF contiene
+      los ficheros que AN analiza (&#36;MFT, .evtx, Amcache.hve, AppCompatCache.bin, navegadores, OSInfo.json,
+      ForensicLog.csv). Los an&#225;lisis que dependen de datos que solo existen en vivo (por ejemplo el USN
+      Journal o la timeline de SW) no se generan.
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────── PARAMETROS ─────── -->
+  <h2 id="parametros">Referencia de par&#225;metros</h2>
+
+  <div class="card">
+    <div class="card-body">
+      <table>
+        <tr>
+          <th style="width:200px">Par&#225;metro</th>
+          <th style="width:100px">Tipo</th>
+          <th style="width:110px">Estado</th>
+          <th>Descripci&#243;n</th>
+        </tr>
+        <tr>
+          <td><span class="param-name">-TargetDisk</span></td>
+          <td><code>String</code></td>
+          <td><span class="badge badge-required">Obligatorio</span></td>
+          <td>
+            Letra de unidad del disco objetivo montado en el equipo forense.<br>
+            <strong>Formato:</strong> <code>D:</code> &nbsp; <code>E:</code> &nbsp; <code>F:</code> &nbsp; <code>G:</code>&#8230;
+            (con o sin barra final, se normaliza internamente)
+          </td>
+        </tr>
+        <tr>
+          <td><span class="param-name">-CaseNumber</span></td>
+          <td><code>String</code></td>
+          <td><span class="badge badge-required">Obligatorio</span></td>
+          <td>
+            N&#250;mero de caso o expediente judicial.<br>
+            Forma parte del nombre del directorio de salida.<br>
+            Ejemplos: <code>"JUD-2026-112"</code> &nbsp; <code>"CASO-0457"</code>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="param-name">-ExaminerName</span></td>
+          <td><code>String</code></td>
+          <td><span class="badge badge-required">Obligatorio</span></td>
+          <td>
+            Nombre completo del perito inform&#225;tico responsable.<br>
+            Aparece en el informe HTML y en la cadena de custodia.
+          </td>
+        </tr>
+        <tr>
+          <td><span class="param-name">-OutputPath</span></td>
+          <td><code>String</code></td>
+          <td><span class="badge badge-optional">Opcional</span></td>
+          <td>
+            Directorio de salida para las evidencias.<br>
+            <span class="badge badge-default">Por defecto</span> <code>.\MaPeriT_OF_&lt;caso&gt;_&lt;timestamp&gt;</code>
+            en la carpeta del script.
+          </td>
+        </tr>
+        <tr>
+          <td><span class="param-name">-EvidenceDescription</span></td>
+          <td><code>String</code></td>
+          <td><span class="badge badge-optional">Opcional</span></td>
+          <td>
+            Descripci&#243;n narrativa del encargo pericial. Aparece en el informe HTML
+            y en el fichero de nota <code>OFFLINE_ACQUISITION.txt</code>.
+          </td>
+        </tr>
+        <tr>
+          <td><span class="param-name">-SkipPhases</span></td>
+          <td><code>String</code></td>
+          <td><span class="badge badge-optional">Opcional</span></td>
+          <td>
+            Fases a omitir, separadas por comas o espacios. Rango v&#225;lido: <strong>2&#8211;10</strong>.<br>
+            Ejemplo: <code>"8,9"</code> omite Cloud Storage y USB. Desde v1.1.2 es texto: <code>@(8,9)</code> fallaba al ejecutar con <code>powershell -File</code>.
+          </td>
+        </tr>
+        <tr>
+          <td><span class="param-name">-CopyLargeFiles</span></td>
+          <td><code>Switch</code></td>
+          <td><span class="badge badge-optional">Opcional</span></td>
+          <td>
+            Si se activa, copia ficheros mayores de 500 MB como PST/OST de Outlook.<br>
+            Sin este flag, los ficheros grandes se registran en el log pero no se copian.
+          </td>
+        </tr>
+        <tr>
+          <td><span class="param-name">-HMACKey</span></td>
+          <td><code>String</code></td>
+          <td><span class="badge badge-optional">Opcional</span></td>
+          <td>
+            Clave secreta para firma HMAC-SHA256 del manifiesto de evidencias.<br>
+            Genera un fichero adicional <code>HashManifest_HMAC.txt</code> con la firma.<br>
+            La parte contraria puede verificar la integridad con la misma clave.
+          </td>
+        </tr>
+        <tr>
+          <td><span class="param-name">-TargetUser</span></td>
+          <td><code>String</code></td>
+          <td><span class="badge badge-optional">Opcional</span> <span class="badge badge-new">Exclusivo OF</span></td>
+          <td>
+            Nombre del perfil de usuario espec&#237;fico a analizar (nombre de carpeta en <code>Users\</code>).<br>
+            Si se omite, se procesan <strong>todos</strong> los perfiles detectados autom&#225;ticamente.
+          </td>
+        </tr>
+        <tr>
+          <td><span class="param-name">-ExcludePaths</span></td>
+          <td><code>String[]</code></td>
+          <td><span class="badge badge-optional">Opcional</span> <span class="badge badge-new">v1.1.0</span></td>
+          <td>
+            Fragmentos de ruta a excluir de la copia (subcadena, sin distinguir mayusculas/minusculas).
+            Minimizacion de datos cuando la orden judicial delimita el alcance.<br>
+            Ejemplo: <code>-ExcludePaths @("\Fotos Familiares\","\Backups Personales\")</code>.
+            Las exclusiones quedan siempre registradas como SKIP en el log.
+          </td>
+        </tr>
+        <tr>
+          <td><span class="param-name">-VerifyPath</span></td>
+          <td><code>String</code></td>
+          <td><span class="badge badge-optional">Opcional</span> <span class="badge badge-new">v1.1.0</span></td>
+          <td>
+            Modo verificacion: comprueba la integridad de una adquisicion OF previa contra su
+            <code>HashManifest.csv</code>. No requiere -TargetDisk/-CaseNumber/-ExaminerName.<br>
+            Funciona aunque la carpeta de evidencias se haya movido o copiado a otra unidad
+            para su presentacion en sede judicial.
+          </td>
+        </tr>
+      </table>
+      <p style="margin-top:10px;font-size:13px;color:#555">
+        <strong>Nota:</strong> -TargetDisk, -CaseNumber y -ExaminerName solo son obligatorios en modo
+        adquisicion. Al usar -VerifyPath se omiten y no se solicitan.
+      </p>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────── EJEMPLOS ─────── -->
+  <h2 id="ejemplos">Ejemplos de ejecuci&#243;n</h2>
+
+  <h3>Adquisici&#243;n b&#225;sica</h3>
+  <p>Disco objetivo montado en <code>E:</code>, procesa todos los usuarios:</p>
+  <pre><span class="cmd">.\MaPeriT.OF.ps1</span> <span class="param">-TargetDisk</span> <span class="string">"E:"</span> <span class="param">-CaseNumber</span> <span class="string">"JUD-2026-112"</span> <span class="param">-ExaminerName</span> <span class="string">"Juan Perez Garcia"</span></pre>
+
+  <h3>Adquisici&#243;n con salida a unidad externa y descripci&#243;n</h3>
+  <pre><span class="cmd">.\MaPeriT.OF.ps1</span> <span class="param">-TargetDisk</span> <span class="string">"F:"</span> <span class="op">`</span>
+    <span class="param">-CaseNumber</span> <span class="string">"CASO-2026-0457"</span> <span class="op">`</span>
+    <span class="param">-ExaminerName</span> <span class="string">"Ana Garcia Lopez"</span> <span class="op">`</span>
+    <span class="param">-OutputPath</span> <span class="string">"G:\Peritajes\CASO-0457"</span> <span class="op">`</span>
+    <span class="param">-EvidenceDescription</span> <span class="string">"Analisis del disco duro del portatil HP del empleado"</span></pre>
+
+  <h3>Solo un usuario, con firma HMAC judicial</h3>
+  <pre><span class="cmd">.\MaPeriT.OF.ps1</span> <span class="param">-TargetDisk</span> <span class="string">"D:"</span> <span class="op">`</span>
+    <span class="param">-CaseNumber</span> <span class="string">"JUD-2026-112"</span> <span class="op">`</span>
+    <span class="param">-ExaminerName</span> <span class="string">"Maria Fernandez Ruiz"</span> <span class="op">`</span>
+    <span class="param">-TargetUser</span> <span class="string">"jsmith"</span> <span class="op">`</span>
+    <span class="param">-HMACKey</span> <span class="string">"clave-judicial-2026"</span></pre>
+
+  <h3>Omitir fases de nube y USB, incluir ficheros grandes</h3>
+  <pre><span class="cmd">.\MaPeriT.OF.ps1</span> <span class="param">-TargetDisk</span> <span class="string">"E:"</span> <span class="op">`</span>
+    <span class="param">-CaseNumber</span> <span class="string">"INC-789"</span> <span class="op">`</span>
+    <span class="param">-ExaminerName</span> <span class="string">"Carlos Martinez"</span> <span class="op">`</span>
+    <span class="param">-SkipPhases</span> <span class="string">"8,9"</span> <span class="op">`</span>
+    <span class="param">-CopyLargeFiles</span></pre>
+
+  <h3>Flujo completo OF &#8594; AN</h3>
+  <pre><span class="comment"># 1. Adquisicion offline</span>
+<span class="cmd">.\MaPeriT.OF.ps1</span> <span class="param">-TargetDisk</span> <span class="string">"E:"</span> <span class="param">-CaseNumber</span> <span class="string">"JUD-112"</span> <span class="param">-ExaminerName</span> <span class="string">"Juan Perez Garcia"</span>
+
+<span class="comment"># 2. Anotar la ruta de salida que muestra OF al finalizar, por ejemplo:</span>
+<span class="comment">#    .\MaPeriT_OF_JUD-112_20260610_103045</span>
+
+<span class="comment"># 3. Analisis profundo con AN</span>
+<span class="cmd">.\MaPeriT.AN.ps1</span> <span class="param">-EvidencePath</span> <span class="string">".\MaPeriT_OF_JUD-112_20260610_103045"</span></pre>
+
+  <!-- ──────────────────────────────────────────── FASES ─────────── -->
+  <h2 id="fases">Fases de adquisici&#243;n</h2>
+
+  <div class="alert alert-info">
+    <span class="alert-icon">&#8505;</span>
+    <div>
+      La <strong>Fase 1 (Datos Vol&#225;tiles)</strong> no es ejecutable en modo offline &#8212; la RAM, los procesos
+      en ejecuci&#243;n, las conexiones de red y la cach&#233; DNS solo existen en un sistema arrancado.
+      OF crea la carpeta <code>01_Volatile\</code> con una nota explicativa para que AN no genere errores.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <table>
+        <tr>
+          <th style="width:70px">Fase</th>
+          <th style="width:200px">Nombre</th>
+          <th>Qu&#233; recopila</th>
+          <th style="width:110px">T&#233;cnica</th>
+          <th style="width:100px">Estado</th>
+        </tr>
+        <tr>
+          <td style="text-align:center"><span class="phase-num">1</span></td>
+          <td>Datos Vol&#225;tiles</td>
+          <td>RAM, procesos, red, DNS, ARP, portapapeles</td>
+          <td>&#8212;</td>
+          <td><span class="tag tag-na">N/A offline</span></td>
+        </tr>
+        <tr>
+          <td style="text-align:center"><span class="phase-num">2</span></td>
+          <td>Informaci&#243;n del Sistema</td>
+          <td>Versi&#243;n SO, nombre equipo, zona horaria, &#250;ltimo apagado, software instalado, historial de redes</td>
+          <td>reg load sobre copia de trabajo (SOFTWARE + SYSTEM)</td>
+          <td><span class="tag tag-ok">&#10003; Ejecuta</span></td>
+        </tr>
+        <tr>
+          <td style="text-align:center"><span class="phase-num">3</span></td>
+          <td>Sistema de Ficheros</td>
+          <td>&#36;MFT completo, directorio ra&#237;z, Prefetch, ejecutables recientes, Amcache.hve, papelera de reciclaje (ficheros &#36;I/&#36;R y resumen), ficheros sospechosos</td>
+          <td>robocopy /B + Copy-Item</td>
+          <td><span class="tag tag-ok">&#10003; Ejecuta</span></td>
+        </tr>
+        <tr>
+          <td style="text-align:center"><span class="phase-num">4</span></td>
+          <td>Registro de Windows</td>
+          <td>Run/RunOnce, Winlogon, servicios, &#250;ltimo usuario, AppCompatCache (ShimCache), NTUSER.DAT (RecentDocs, TypedPaths, RDP)</td>
+          <td>Copia de hives + reg load sobre copia de trabajo (SYSTEM + SOFTWARE + NTUSER)</td>
+          <td><span class="tag tag-ok">&#10003; Ejecuta</span></td>
+        </tr>
+        <tr>
+          <td style="text-align:center"><span class="phase-num">5</span></td>
+          <td>Logs de Eventos</td>
+          <td>Hasta 200 ficheros .evtx priorizando Security, System, PowerShell, TaskScheduler, RDP, Defender y Sysmon</td>
+          <td>Copy-Item directo</td>
+          <td><span class="tag tag-ok">&#10003; Ejecuta</span></td>
+        </tr>
+        <tr>
+          <td style="text-align:center"><span class="phase-num">6</span></td>
+          <td>Navegadores Web</td>
+          <td>History, Cookies, Login Data, Bookmarks de Chrome, Edge, Brave y Firefox (todos los perfiles de usuario)</td>
+          <td>Copy-Item desde AppData</td>
+          <td><span class="tag tag-ok">&#10003; Ejecuta</span></td>
+        </tr>
+        <tr>
+          <td style="text-align:center"><span class="phase-num">7</span></td>
+          <td>Comunicaciones</td>
+          <td>PST/OST de Outlook, Teams (cl&#225;sico y nuevo), Skype, Discord (logs, .db, .json)</td>
+          <td>Copy-Item / robocopy</td>
+          <td><span class="tag tag-ok">&#10003; Ejecuta</span></td>
+        </tr>
+        <tr>
+          <td style="text-align:center"><span class="phase-num">8</span></td>
+          <td>Almacenamiento en la Nube</td>
+          <td>Logs y BD de sincronizaci&#243;n de OneDrive, Google Drive y Dropbox por usuario</td>
+          <td>Copy-Item desde AppData</td>
+          <td><span class="tag tag-ok">&#10003; Ejecuta</span></td>
+        </tr>
+        <tr>
+          <td style="text-align:center"><span class="phase-num">9</span></td>
+          <td>Dispositivos USB</td>
+          <td>USBSTOR (almacenamiento USB), todos los dispositivos USB, MountedDevices (asignaci&#243;n de letras)</td>
+          <td>reg load sobre copia de trabajo (SYSTEM)</td>
+          <td><span class="tag tag-ok">&#10003; Ejecuta</span></td>
+        </tr>
+        <tr>
+          <td style="text-align:center"><span class="phase-num">10</span></td>
+          <td>Mecanismos de Persistencia</td>
+          <td>Tareas programadas (XML), IFEO/Debuggers, AppInit_DLLs, LSA Providers, BAM, Run keys de usuarios</td>
+          <td>reg load + robocopy /B</td>
+          <td><span class="tag tag-ok">&#10003; Ejecuta</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────── ESTRUCTURA ─────── -->
+  <h2 id="estructura">Estructura de salida</h2>
+
+  <p>OF genera una carpeta con nombre <code>MaPeriT_OF_&lt;caso&gt;_&lt;timestamp&gt;</code> con la siguiente estructura,
+  organizada por fases igual que MaPeriT.SW para compatibilidad con MaPeriT.AN y MaPeriT.TN:</p>
+
+  <div class="dir-tree">
+<span class="folder">MaPeriT_OF_JUD-2026-112_20260610_103045\</span>
+&#9500;&#9472;&#9472; <span class="folder">01_Volatile\</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="highlight-file">OFFLINE_ACQUISITION.txt</span>       <span style="color:#aaa">&#8592; Nota: sin datos volatiles</span>
+&#9500;&#9472;&#9472; <span class="folder">02_SystemInfo\</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="highlight-file">OSInfo.json</span>                   <span style="color:#aaa">&#8592; Caption + CSName (leido por AN)</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">ComputerName.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">TimeZone.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">LastShutdown.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">InstalledSoftware.csv</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="file">NetworkHistory.csv</span>
+&#9500;&#9472;&#9472; <span class="folder">03_Filesystem\</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="highlight-file">$MFT</span>                          <span style="color:#aaa">&#8592; Procesado por MaPeriT.AN</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">RootDirectories.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">RecentSystemFiles.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">SuspiciousExecutables.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="highlight-file">Amcache.hve</span>                   <span style="color:#aaa">&#8592; Procesado por MaPeriT.AN</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">RecycleBin.csv</span>                <span style="color:#aaa">&#8592; Ruta original, tama&#241;o y fecha de borrado (UTC)</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="folder">RecycleBin\&lt;SID&gt;\</span>          <span style="color:#aaa">(ficheros &#36;I y &#36;R)</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="folder">Prefetch\</span>
+&#9474;       &#9492;&#9472;&#9472; <span class="file">*.pf</span>
+&#9500;&#9472;&#9472; <span class="folder">04_Registry\</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="folder">Hives\</span>                        <span style="color:#aaa">(SYSTEM, SOFTWARE, SAM, SECURITY, DEFAULT y Users\&lt;usuario&gt;\NTUSER.DAT, UsrClass.dat)</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">Run_SOFTWARE_Run.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">Winlogon.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">Services.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">LastLoggedOn.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">AppCompatCache.bin</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="folder">Users\&lt;usuario&gt;\</span>
+&#9474;       &#9500;&#9472;&#9472; <span class="file">Run_&lt;usuario&gt;.csv</span>
+&#9474;       &#9500;&#9472;&#9472; <span class="file">RecentDocs_&lt;usuario&gt;.csv</span>
+&#9474;       &#9500;&#9472;&#9472; <span class="file">TypedPaths_&lt;usuario&gt;.csv</span>
+&#9474;       &#9492;&#9472;&#9472; <span class="file">RDP_Servers_&lt;usuario&gt;.csv</span>
+&#9500;&#9472;&#9472; <span class="folder">05_EventLogs\</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="highlight-file">Security.evtx</span>                <span style="color:#aaa">&#8592; Procesados por MaPeriT.AN</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">System.evtx</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">Application.evtx</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="file">*.evtx</span>  <span style="color:#aaa">(hasta 200 ficheros)</span>
+&#9500;&#9472;&#9472; <span class="folder">06_Browsers\</span>                  <span style="color:#aaa">(misma organizaci&#243;n que SW, la que lee AN)</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="folder">Chrome\&lt;usuario&gt;\Default\</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="folder">Edge\&lt;usuario&gt;\Default\</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="folder">Brave\&lt;usuario&gt;\Default\</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="folder">Firefox\&lt;usuario&gt;\&lt;perfil&gt;\</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="folder">InternetExplorer\&lt;usuario&gt;\</span>
+&#9500;&#9472;&#9472; <span class="folder">07_Communications\</span>
+&#9500;&#9472;&#9472; <span class="folder">08_CloudStorage\</span>
+&#9500;&#9472;&#9472; <span class="folder">09_USB\</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">USBSTOR.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">USB_Devices.csv</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="file">MountedDevices.csv</span>
+&#9500;&#9472;&#9472; <span class="folder">10_Persistence\</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">ScheduledTasksSummary.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="folder">ScheduledTasks\</span>  <span style="color:#aaa">(XMLs originales)</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">IFEO_Debuggers.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">AppInit_DLLs.csv</span>
+&#9474;   &#9500;&#9472;&#9472; <span class="file">LSA_Providers.csv</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="file">BAM.csv</span>
+&#9500;&#9472;&#9472; <span class="folder">Logs\</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="highlight-file">ForensicLog.csv</span>               <span style="color:#aaa">&#8592; Leido por MaPeriT.AN</span>
+&#9500;&#9472;&#9472; <span class="folder">Report\</span>
+&#9474;   &#9492;&#9472;&#9472; <span class="highlight-file">InformePericial.html</span>          <span style="color:#aaa">&#8592; Leido por MaPeriT.AN</span>
+&#9500;&#9472;&#9472; <span class="highlight-file">HashManifest.csv</span>              <span style="color:#aaa">&#8592; CRITICO: AN lo busca en la raiz</span>
+&#9492;&#9472;&#9472; <span class="file">HashManifest_HMAC.txt</span>          <span style="color:#aaa">&#8592; Solo si se usa -HMACKey</span>
+  </div>
+
+  <!-- ────────────────────────────────────────── REGISTRO OFFLINE ── -->
+  <h2 id="registro">Acceso al registro offline</h2>
+
+  <p>OF accede al registro del disco objetivo sin arrancarlo mediante el mecanismo
+  <strong><code>reg load</code></strong> de Windows:</p>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <div class="step-title">Localiza hive</div>
+      <div class="step-desc">Busca SYSTEM, SOFTWARE o NTUSER.DAT en el disco objetivo</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <div class="step-title">Copia + reg load</div>
+      <div class="step-desc">Copia el hive (y sus .LOG1/.LOG2) a Logs\_hives_trabajo y monta esa copia bajo HKLM\OF_xxx; el original nunca se monta</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <div class="step-title">Consulta</div>
+      <div class="step-desc">Lee claves via Registry:: provider de PowerShell</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">4</div>
+      <div class="step-title">reg unload</div>
+      <div class="step-desc">Libera el hive (GC forzado antes para liberar handles) y borra la copia de trabajo</div>
+    </div>
+  </div>
+
+  <div class="alert alert-warning">
+    <span class="alert-icon">&#9888;</span>
+    <div>
+      <strong>Hive bloqueado:</strong> Si un hive del disco objetivo est&#225; bloqueado por otro proceso
+      (por ejemplo, si el disco se est&#225; usando en modo Live con el SO arrancado),
+      <code>reg load</code> fallar&#225;. OF registrar&#225; el error en el log y continuar&#225; con el resto de fases.
+      Los hives solo se bloquean cuando el SO que los usa est&#225; en ejecuci&#243;n.
+    </div>
+  </div>
+
+  <!-- ───────────────────────────────────────────── PROBLEMAS ─────── -->
+  <h2 id="problemas">Resoluci&#243;n de problemas</h2>
+
+  <div class="card">
+    <div class="card-body">
+      <table>
+        <tr>
+          <th style="width:280px">Problema</th>
+          <th style="width:260px">Causa probable</th>
+          <th>Soluci&#243;n</th>
+        </tr>
+        <tr>
+          <td><code>El disco 'X:' no es accesible</code></td>
+          <td>La letra de disco no existe o el disco no est&#225; montado</td>
+          <td>Abrir Administrador de discos (diskmgmt.msc) y verificar la letra asignada al disco. Asegurarse de que la partici&#243;n NTFS est&#225; inicializada.</td>
+        </tr>
+        <tr>
+          <td><code>No se encontr&#243; una instalaci&#243;n de Windows</code></td>
+          <td>La ruta <code>Windows\System32</code> no existe en el disco objetivo</td>
+          <td>Comprobar que se apunta a la partici&#243;n del SO, no a una partici&#243;n de datos o de recuperaci&#243;n. Verificar con <code>dir E:\</code>.</td>
+        </tr>
+        <tr>
+          <td><code>HIVE_ERROR_CARGA</code> en el log</td>
+          <td>El hive est&#225; bloqueado (SO del disco en ejecuci&#243;n) o da&#241;ado</td>
+          <td>Si el SO est&#225; en ejecuci&#243;n, apagarlo primero. Si el hive est&#225; da&#241;ado, usar <code>chkdsk</code>. OF continuar&#225; con el resto de fases.</td>
+        </tr>
+        <tr>
+          <td><code>MFT_NO_COPIADO</code></td>
+          <td>Robocopy no pudo acceder a <code>&#36;MFT</code> con los privilegios actuales</td>
+          <td>Asegurarse de que PowerShell se ejecuta como Administrador. En algunos entornos Live, el UAC puede estar limitado.</td>
+        </tr>
+        <tr>
+          <td><code>reg unload</code> falla al finalizar</td>
+          <td>Alguna variable de PowerShell retiene un handle al hive</td>
+          <td>OF fuerza <code>[GC]::Collect()</code> antes de desmontar. Si persiste, cerrar PowerShell y ejecutar <code>reg unload HKLM\OF_xxx</code> (la clave exacta figura en <code>Logs\ForensicLog.csv</code>). Un hive montado <strong>no</strong> se desmonta solo al cerrar la sesi&#243;n: permanece hasta <code>reg unload</code> o hasta reiniciar. Es una copia de trabajo, no el hive del disco objetivo.</td>
+        </tr>
+        <tr>
+          <td>OF genera errores en fases 6&#8211;8 pero no falla</td>
+          <td>El usuario objetivo no tiene esas aplicaciones instaladas</td>
+          <td>Comportamiento normal. Los errores de tipo WARNING indican que la ruta no existe. Revisar el log para confirmar.</td>
+        </tr>
+        <tr>
+          <td>AN muestra &#8220;Caso SW: DESCONOCIDO&#8221;</td>
+          <td>Falta <code>Logs\ForensicLog.csv</code> y la carpeta se ha renombrado</td>
+          <td>AN toma el caso de la acci&#243;n <code>SESION_INICIADA</code> de <code>Logs\ForensicLog.csv</code> o, si no est&#225;, del nombre de carpeta <code>MaPeriT_OF_&lt;caso&gt;_&lt;fecha&gt;</code>. Mantener ese fichero y ese nombre. (AN no tiene par&#225;metro <code>-CaseNumber</code>.)</td>
+        </tr>
+        <tr>
+          <td>PST/OST no se copian</td>
+          <td>Ficheros mayores de 500 MB omitidos por defecto</td>
+          <td>Usar el par&#225;metro <code>-CopyLargeFiles</code>. Asegurarse de que hay suficiente espacio en el destino.</td>
+        </tr>
+        <tr>
+          <td>Error de pol&#237;tica de ejecuci&#243;n</td>
+          <td>PowerShell bloquea la ejecuci&#243;n del script</td>
+          <td>Ejecutar <code>Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass</code> antes de lanzar OF. O usar: <code>pwsh -ExecutionPolicy Bypass -File .\MaPeriT.OF.ps1 ...</code></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────── CHANGELOG ─────── -->
+  <h2 id="changelog">Registro de cambios</h2>
+  <div class="alert alert-warning">
+    <strong>Revisi&#243;n completa y pruebas reales (v1.1.2, 16/11/2026):</strong>
+    <ul style="margin:8px 0 0 20px">
+      <li><strong>Registro:</strong> se monta una copia de trabajo de cada hive, nunca el original (antes <code>reg load</code> abr&#237;a el hive del disco objetivo en lectura-escritura y fallaba con bloqueador de escritura). Los hives completos se conservan ahora como evidencia en <code>04_Registry\Hives</code>.</li>
+      <li><strong>Paso 3.5 (ejecutables en ubicaciones sospechosas):</strong> fallaba siempre por un error de sintaxis en la lista de rutas.</li>
+      <li><strong>Papelera:</strong> no se le&#237;a nunca (las carpetas por SID son ocultas y de sistema); ahora se copian los &#36;I/&#36;R y se interpreta la ruta original, el tama&#241;o y la fecha de borrado real.</li>
+      <li><strong>Tareas programadas:</strong> el resumen no se generaba (las tareas son XML sin extensi&#243;n).</li>
+      <li><strong>Navegadores:</strong> misma organizaci&#243;n que SW (<code>&lt;navegador&gt;\&lt;usuario&gt;\&lt;perfil&gt;</code>), la que lee AN; antes AN no analizaba ninguno. Cookies de Chrome/Edge 96+.</li>
+      <li><strong>Amcache.hve</strong> se copia para que AN lo analice. La cuenta <strong>Administrator</strong> ya no se excluye.</li>
+      <li><strong>Informe:</strong> muestra el estado real de cada fase (omitida o con error) y la fecha de adquisici&#243;n real; texto de metodolog&#237;a corregido.</li>
+      <li><strong><code>-SkipPhases</code></strong> pasa a ser texto ("8,9"); <code>-VerifyPath</code> devuelve c&#243;digo 1 si hay discrepancias; la ruta de salida se normaliza (relativa o abreviada 8.3).</li>
+    </ul>
+  </div>
+  <div class="alert alert-warning">
+    <strong>Verificacion end-to-end real y refuerzo de fiabilidad (v1.1.1, 12/07/2026):</strong>
+    tras completar la auditoria de las 5 herramientas, se ejecuto una adquisicion
+    OF -&gt; AN -&gt; TN real (disco sintetico montado con <code>subst</code>) para
+    validar el ecosistema completo. Se encontro un fallo real: OF <strong>nunca
+    llegaba a cargar</strong> <code>System.Web.HttpUtility</code> (a diferencia de
+    SW y AN, que al menos lo intentaban) - el informe pericial se rompia siempre
+    con "No se encuentra el tipo" en cuanto tocaba codificar cualquier campo.
+    Corregido con <code>Common\HtmlEncoding.ps1</code>, compartido con SW y AN,
+    que garantiza el tipo disponible con un reemplazo minimo si el ensamblado
+    real no carga. Ademas: <code>Get-RelativeEvidencePath</code> ahora se
+    comparte con SW en <code>Common\</code> en vez de mantenerse como copias
+    independientes; corregido un conteo vacio en <code>-VerifyPath</code> con
+    manifiestos de un solo fichero (aplanado de array de PowerShell); y cada
+    <code>Build.ps1</code> verifica ahora la sintaxis del compilado antes de
+    darlo por bueno.
+  </div>
+  <div class="alert alert-warning">
+    <strong>Auditoria de seguridad y fiabilidad forense (v1.1.0, 12/07/2026):</strong>
+    revision completa linea a linea de los 20 ficheros fuente. Un bug corregido y tres
+    mejoras implementadas, verificadas con parseo AST + motor real PowerShell 5.1 y
+    prueba funcional real de <code>-VerifyPath</code> contra un manifiesto sintetico.
+  </div>
+  <div class="card">
+    <div class="card-header">Correccion (v1.1.0)</div>
+    <table>
+      <tr><th>Fix</th><th>Descripci&#243;n</th></tr>
+      <tr><td>Hash invalido en cadena de custodia</td><td><code>Add-ChainOfCustodyEntry</code> no validaba el formato del hash antes de escribirlo en <code>HashManifest.csv</code>: si el calculo fallaba, el texto de error ("ERROR_HASH") podia quedar registrado en la columna SHA256 como si fuese un hash real. Corregido con el mismo patron ya aplicado en MaPeriT.SW: se valida el formato (64 hex) y se marca con el prefijo <code>INVALIDO:</code> si no es valido.</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-header">Mejoras (v1.1.0)</div>
+    <table>
+      <tr><th>Mejora</th><th>Descripci&#243;n</th></tr>
+      <tr><td><code>-ExcludePaths</code></td><td>Minimizacion de datos, mismo mecanismo que MaPeriT.SW.</td></tr>
+      <tr><td><code>-VerifyPath</code></td><td>OF no tenia ninguna forma de verificar la integridad de una adquisicion ya completada. Nuevo modo de verificacion portable: usa una nueva columna <code>RelativePath</code> en <code>HashManifest.csv</code> para reconstruir la ubicacion de cada fichero, de forma que la verificacion funcione aunque la carpeta de evidencias se haya movido o copiado a otra unidad.</td></tr>
+      <tr><td>SetupAPI log en Fase 9</td><td>Antes solo se leia el registro (USBSTOR/USB/MountedDevices); ahora tambien se copia y parsea <code>setupapi.dev.log</code> igual que MaPeriT.SW, en streaming linea a linea para no cargar el fichero completo en memoria.</td></tr>
+    </table>
+  </div>
+
+  <!-- ─────────────────────────────────────────────── LEGAL ─────── -->
+  <h2 id="legal">Aviso legal</h2>
+
+  <div class="alert alert-danger">
+    <span class="alert-icon">&#128274;</span>
+    <div>
+      <strong>USO AUTORIZADO EXCLUSIVAMENTE:</strong> MaPeriT.OF debe utilizarse &#250;nicamente con
+      autorizaci&#243;n expresa del propietario del dispositivo o por mandato judicial. El acceso no
+      autorizado a sistemas inform&#225;ticos o soportes de almacenamiento puede constituir un delito
+      tipificado en el C&#243;digo Penal (art. 197 y siguientes, LO 10/1995).
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Condiciones de uso y limitaciones t&#233;cnicas</div>
+    <div class="card-body">
+      <table>
+        <tr><th style="width:220px">Aspecto</th><th>Detalle</th></tr>
+        <tr>
+          <td><strong>Operaciones sobre disco</strong></td>
+          <td>&#10003; OF no escribe en el disco objetivo: los ficheros se copian y los hives se consultan sobre una copia de
+          trabajo, nunca montando el original. La &#250;nica escritura se realiza en el directorio de salida designado por el perito.
+          El sistema operativo del equipo forense s&#237; puede escribir en un disco conectado: use un bloqueador de escritura.</td>
+        </tr>
+        <tr>
+          <td><strong>Integridad de evidencias</strong></td>
+          <td>Cada fichero copiado se verifica con hash SHA-256 y queda registrado en HashManifest.csv.
+          La firma HMAC-SHA256 opcional permite verificaci&#243;n criptogr&#225;fica de la integridad del conjunto.</td>
+        </tr>
+        <tr>
+          <td><strong>Registro de actividad</strong></td>
+          <td>Todas las operaciones quedan registradas en ForensicLog.csv con marca de tiempo, acci&#243;n
+          y resultado. Este log forma parte de la cadena de custodia.</td>
+        </tr>
+        <tr>
+          <td><strong>Datos personales</strong></td>
+          <td>Las evidencias pueden contener datos personales. El tratamiento debe ajustarse al
+          Reglamento General de Protecci&#243;n de Datos (RGPD) y a la LOPDGDD.</td>
+        </tr>
+        <tr>
+          <td><strong>Responsabilidad</strong></td>
+          <td>El perito que ejecuta la herramienta asume la responsabilidad de contar con la
+          autorizaci&#243;n legal pertinente y de custodiar adecuadamente las evidencias obtenidas.</td>
+        </tr>
+        <tr>
+          <td><strong>Write blocker</strong></td>
+          <td>Para uso en procedimientos judiciales, se recomienda encarecidamente el uso de un
+          bloqueador de escritura hardware certificado para garantizar la inalterabilidad del disco
+          objetivo, independientemente del comportamiento del SO anfitrión.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  MaPeriT.OF &mdash; Adquisici&#243;n Forense Offline Profesional &mdash; v1.1.2 &mdash;
+  Actualizado: 2026-07-12
+</footer>
+
+</body>
+</html>

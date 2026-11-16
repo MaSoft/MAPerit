@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MaPeriT.AN &#8212; Ficha de producto</title>
+<style>
+:root { --primary:#1a3a5c; --primary-light:#2c5f8a; --accent:#1d4ed8; --bg:#f7f9fc; --card-bg:#ffffff; --text:#1a1a2e; --text-light:#555; --border:#dde3ea; --success:#16a34a; --warning:#ca8a04; --danger:#dc2626; --info:#2563eb; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Segoe UI',Arial,sans-serif;font-size:14px;line-height:1.7;color:var(--text);background:var(--bg);margin-left:260px;}
+nav{position:fixed;top:0;left:0;width:260px;height:100vh;background:var(--primary);overflow-y:auto;z-index:100;padding-bottom:24px;}
+nav .nav-title{display:block;color:#fff;font-size:17px;font-weight:700;padding:22px 20px 4px;}
+nav .nav-subtitle{display:block;color:#7fb3d3;font-size:11px;padding:0 20px 16px;border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:8px;}
+nav ul{list-style:none;}
+nav ul li a{display:block;color:#c8dff0;text-decoration:none;padding:8px 20px;font-size:13px;transition:background .15s,color .15s;}
+nav ul li a:hover{background:rgba(255,255,255,.1);color:#fff;}
+nav ul li.section-title{color:#7fb3d3;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:16px 20px 4px;}
+main{padding:0 44px 72px;max-width:980px;}
+.page-header{background:linear-gradient(135deg,#0d1b2a 0%,#0f172a 50%,#1e3a8a 100%);color:#fff;padding:56px 44px 44px;margin:0 -44px 52px;position:relative;overflow:hidden;}
+.page-header::before{content:'AN';position:absolute;right:48px;top:16px;font-size:140px;font-weight:900;opacity:.06;line-height:1;letter-spacing:-4px;}
+.page-header h1{font-size:38px;font-weight:300;letter-spacing:-0.5px;margin-bottom:10px;}
+.page-header h1 span{color:#60a5fa;font-weight:800;}
+.page-header .tagline{color:#a8c8e8;font-size:15px;margin-bottom:18px;max-width:520px;}
+.badge-pill{display:inline-block;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;margin-right:6px;}
+.badge-pill.outline{background:transparent;border:1px solid rgba(255,255,255,.35);color:#c8dff0;}
+section{margin-bottom:52px;}
+h2{font-size:20px;font-weight:700;color:var(--primary);border-bottom:2px solid var(--accent);padding-bottom:9px;margin-bottom:24px;}
+h3{font-size:15px;font-weight:700;color:var(--primary-light);margin:26px 0 12px;}
+p{margin-bottom:12px;color:var(--text-light);}
+ul,ol{margin:0 0 12px 22px;color:var(--text-light);}
+li{margin-bottom:5px;}
+strong{color:var(--text);}
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.card-header{font-size:12px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.feature-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:24px;}
+.feature-item{display:flex;align-items:flex-start;gap:12px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
+.feature-item:hover{box-shadow:0 4px 14px rgba(29,78,216,.10);}
+.feature-icon{font-size:22px;flex-shrink:0;margin-top:2px;}
+.feature-text h4{font-size:13px;font-weight:700;color:var(--primary);margin-bottom:3px;}
+.feature-text p{font-size:12px;margin:0;}
+.pipeline{display:flex;align-items:flex-start;margin-bottom:28px;}
+.pipe-step{display:flex;flex-direction:column;align-items:center;flex:1;position:relative;}
+.pipe-step::after{content:'';position:absolute;top:18px;left:50%;width:100%;height:2px;background:var(--border);z-index:0;}
+.pipe-step:last-child::after{display:none;}
+.pipe-circle{width:36px;height:36px;border-radius:50%;background:#dde3ea;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--text-light);z-index:1;position:relative;}
+.pipe-step.active .pipe-circle{background:var(--accent);color:#fff;box-shadow:0 0 0 4px rgba(29,78,216,.15);}
+.pipe-label{font-size:11px;font-weight:600;color:var(--text-light);text-align:center;margin-top:8px;padding:0 4px;}
+.pipe-step.active .pipe-label{color:var(--accent);font-weight:700;}
+.pipe-sub{font-size:10px;color:#999;text-align:center;padding:0 4px;}
+table{width:100%;border-collapse:collapse;margin-bottom:18px;background:var(--card-bg);border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+th{background:var(--primary);color:#fff;text-align:left;padding:10px 14px;font-size:12px;font-weight:600;text-transform:uppercase;}
+td{padding:9px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+tr:nth-child(even) td{background:#f2f6fb;}
+tr:hover td{background:#e8f0f8;}
+.alert{border-radius:8px;padding:13px 16px;margin-bottom:14px;border-left:4px solid;font-size:13px;}
+.alert-info{background:#eff6ff;border-color:#2563eb;color:#1e3a7a;}
+.alert-warning{background:#fffbeb;border-color:#ca8a04;color:#78350f;}
+.alert-danger{background:#fef2f2;border-color:#dc2626;color:#7f1d1d;}
+.alert-success{background:#f0fdf4;border-color:#16a34a;color:#14532d;}
+.alert strong{display:block;margin-bottom:4px;}
+@media(max-width:900px){body{margin-left:0;}nav{display:none;}main{padding:0 20px 48px;}.page-header{margin:0 -20px 36px;padding:40px 20px 32px;}}
+@media print{nav{display:none;}body{margin-left:0;font-size:10pt;}}
+footer{text-align:center;color:var(--text-light);font-size:12px;padding:28px 44px;border-top:1px solid var(--border);margin:0 -44px 0;}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-title">&#128202; MaPeriT.AN</span>
+  <span class="nav-subtitle">Ficha de producto &mdash; v1.2.1</span>
+  <ul>
+    <li class="section-title">La herramienta</li>
+    <li><a href="#que-es">&#128203; Qu&#233; es</a></li>
+    <li><a href="#para-que">&#127919; Para qu&#233; sirve</a></li>
+
+    <li class="section-title">Capacidades</li>
+    <li><a href="#fuentes">&#128269; Fuentes analizadas</a></li>
+    <li><a href="#correlacion">&#128279; Correlaci&#243;n y timeline</a></li>
+    <li><a href="#salida">&#128196; Lo que genera</a></li>
+
+    <li class="section-title">Despliegue</li>
+    <li><a href="#entorno">&#128290; Entorno necesario</a></li>
+    <li><a href="#ecosistema">&#128279; Ecosistema MaPeriT</a></li>
+
+    <li class="section-title">Uso responsable</li>
+    <li><a href="#legal">&#9878; Aviso legal</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<div class="page-header">
+  <h1>MaPeriT<span>.AN</span></h1>
+  <p class="tagline">An&#225;lisis forense offline profundo sobre evidencias recopiladas por MaPeriT.SW o MaPeriT.OF</p>
+  <span class="badge-pill">v1.2.1</span>
+  <span class="badge-pill outline">100% offline</span>
+  <span class="badge-pill outline">Solo lectura</span>
+  <span class="badge-pill outline">Compatible SW / OF</span>
+</div>
+
+
+<section id="que-es">
+  <h2>&#128203; Qu&#233; es MaPeriT.AN</h2>
+  <p><strong>MaPeriT.AN</strong> es el m&#243;dulo de an&#225;lisis profundo del ecosistema MaPeriT. Opera exclusivamente de forma offline sobre las evidencias ya recopiladas por MaPeriT.SW o MaPeriT.OF, <strong>sin tocar en ning&#250;n momento el equipo original analizado</strong>.</p>
+  <p>Donde MaPeriT.SW recoge las evidencias, MaPeriT.AN las interpreta: analiza estructuras binarias complejas, procesa cientos de miles de eventos, reconstruye historiales de navegaci&#243;n, detecta manipulaciones antiforenses y construye una l&#237;nea temporal de alta precisi&#243;n con todo lo encontrado.</p>
+  <div class="alert alert-success">
+    <strong>&#9989; No destructivo por dise&#241;o</strong>
+    MaPeriT.AN nunca escribe en el directorio de evidencias. Su &#250;nica salida es una carpeta separada de resultados del an&#225;lisis.
+  </div>
+</section>
+
+
+<section id="para-que">
+  <h2>&#127919; Para qu&#233; sirve</h2>
+  <div class="feature-list">
+    <div class="feature-item">
+      <div class="feature-icon">&#128196;</div>
+      <div class="feature-text"><h4>An&#225;lisis del sistema de ficheros en profundidad</h4><p>Procesa la estructura completa del disco incluyendo ficheros borrados, reconstruye el &#225;rbol de directorios tal como estaba y detecta manipulaciones de marcas de tiempo.</p></div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#128202;</div>
+      <div class="feature-text"><h4>Procesado masivo de eventos sin l&#237;mite</h4><p>Procesa todos los registros de eventos disponibles, cientos de ficheros de log incluidos, sin truncar ni muestrear. Ideal para investigaciones largas.</p></div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#127760;</div>
+      <div class="feature-text"><h4>Historial completo de navegadores</h4><p>Extrae el historial, las descargas y las b&#250;squedas de Chrome, Edge, Brave y Firefox directamente desde sus bases de datos copiadas.</p></div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#128269;</div>
+      <div class="feature-text"><h4>Programas sin rastro de eventos</h4><p>Muestra programas presentes o ejecutados en el equipo aunque no queden eventos de proceso, usando la cach&#233; de compatibilidad (ShimCache) y el inventario de aplicaciones (Amcache). Son indicios: no fechan la ejecuci&#243;n.</p></div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#128190;</div>
+      <div class="feature-text"><h4>Actividad del sistema de ficheros</h4><p>Analiza el diario de cambios del sistema de ficheros: borrados, renombrados, creaciones y movimientos de ficheros, incluso los que no dejaron otro rastro.</p></div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#9201;</div>
+      <div class="feature-text"><h4>Detecci&#243;n de manipulaci&#243;n de fechas</h4><p>Compara las marcas de tiempo almacenadas en dos ubicaciones diferentes del sistema de ficheros para detectar modificaciones antiforenses intencionadas.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<section id="fuentes">
+  <h2>&#128269; Fuentes que analiza</h2>
+  <table>
+    <thead><tr><th>Fuente</th><th>Qu&#233; aporta al an&#225;lisis</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Sistema de ficheros (MFT)</strong></td><td>&#193;rbol completo de ficheros y directorios incluyendo borrados, tiempos exactos de creaci&#243;n/modificaci&#243;n/acceso y detecci&#243;n de manipulaci&#243;n de fechas.</td></tr>
+      <tr><td><strong>Registros de eventos (EVTX)</strong></td><td>Eventos relevantes (por Event ID) de Seguridad y sus archivos hist&#243;ricos, Sistema, PowerShell, WMI, Programador de tareas y Defender, sin l&#237;mite de volumen.</td></tr>
+      <tr><td><strong>Bases de datos de navegadores</strong></td><td>Historial de navegaci&#243;n, descargas y b&#250;squedas de Chrome, Edge, Brave y Firefox (fechas en UTC).</td></tr>
+      <tr><td><strong>Cach&#233; de ejecuci&#243;n de aplicaciones</strong></td><td>Registro interno del sistema (ShimCache) con los ejecutables que Windows ha examinado o lanzado y la fecha de &#250;ltima modificaci&#243;n de cada fichero, independientemente de si generaron eventos de proceso.</td></tr>
+      <tr><td><strong>Diario del sistema de ficheros</strong></td><td>Historial de operaciones sobre el disco: creaciones, borrados, renombrados y movimientos de cualquier fichero.</td></tr>
+      <tr><td><strong>Inventario de aplicaciones (Amcache)</strong></td><td>Ejecutables registrados con su hash SHA1, editor y versi&#243;n, y su fecha de compilaci&#243;n o de instalaci&#243;n; opcionalmente cruzados con una lista propia de hashes maliciosos.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<section id="correlacion">
+  <h2>&#128279; Correlaci&#243;n y timeline</h2>
+  <p>La capacidad diferencial de MaPeriT.AN frente a analizar cada fuente por separado es la <strong>correlaci&#243;n multi-fuente</strong>: cruza todos los datos anteriores y los presenta en una &#250;nica l&#237;nea temporal ordenada cronol&#243;gicamente, asignando un &#237;ndice de riesgo a cada usuario y proceso detectado.</p>
+  <div class="feature-list">
+    <div class="feature-item">
+      <div class="feature-icon">&#128337;</div>
+      <div class="feature-text"><h4>Timeline unificada</h4><p>Un &#250;nico fichero cronol&#243;gico con eventos de todas las fuentes, eliminando la necesidad de cruzar manualmente m&#250;ltiples registros.</p></div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">&#128683;</div>
+      <div class="feature-text"><h4>Puntuaci&#243;n de riesgo por entidad</h4><p>Cada usuario y proceso identificado recibe una puntuaci&#243;n de riesgo basada en la suma y naturaleza de los eventos que le afectan.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<section id="salida">
+  <h2>&#128196; Lo que genera cada ejecuci&#243;n</h2>
+  <table>
+    <thead><tr><th>Elemento</th><th>Descripci&#243;n</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Carpeta ANALISIS_AN</strong></td><td>Creada dentro del directorio de evidencias (o en la ruta que indique el perito). Contiene todos los resultados del an&#225;lisis.</td></tr>
+      <tr><td><strong>Timeline multi-fuente</strong></td><td>Fichero CSV con todos los eventos de todas las fuentes, ordenados cronol&#243;gicamente.</td></tr>
+      <tr><td><strong>Resultados por fuente</strong></td><td>Un fichero de resultados estructurado por cada fuente analizada: MFT, eventos, navegadores, cach&#233; de ejecuci&#243;n, diario de ficheros.</td></tr>
+      <tr><td><strong>Informe HTML pericial</strong></td><td>Documento autocontenido con el mismo dise&#241;o que el informe SW, incluyendo puntuaciones de riesgo, hallazgos destacados y secci&#243;n de firmas.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<section id="entorno">
+  <h2>&#128290; Entorno necesario</h2>
+  <table>
+    <thead><tr><th>Requisito</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Equipo del analista</strong></td><td>Windows 10/11 o Windows Server 2016+ (64 bits). No es el equipo analizado.</td></tr>
+      <tr><td><strong>Permisos</strong></td><td>Administrador local (necesario para acceder al registro offline del sistema objetivo).</td></tr>
+      <tr><td><strong>RAM recomendada</strong></td><td>8 GB o m&#225;s para sistemas de ficheros con gran n&#250;mero de registros. M&#237;nimo 4 GB.</td></tr>
+      <tr><td><strong>Entrada requerida</strong></td><td>Directorio de evidencias generado por MaPeriT.SW o MaPeriT.OF. Debe contener el manifiesto de integridad.</td></tr>
+      <tr><td><strong>Conexi&#243;n a internet</strong></td><td>No necesaria. La herramienta opera completamente offline.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<section id="ecosistema">
+  <h2>&#128279; Posici&#243;n en el ecosistema MaPeriT</h2>
+  <div class="pipeline">
+    <div class="pipe-step">
+      <div class="pipe-circle">1</div>
+      <div class="pipe-label">MaPeriT.SW / OF</div>
+      <div class="pipe-sub">Adquisici&#243;n</div>
+    </div>
+    <div class="pipe-step active">
+      <div class="pipe-circle">2</div>
+      <div class="pipe-label">MaPeriT.AN</div>
+      <div class="pipe-sub">An&#225;lisis profundo</div>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-circle">3</div>
+      <div class="pipe-label">MaPeriT.TN</div>
+      <div class="pipe-sub">Visor forense</div>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-circle">4</div>
+      <div class="pipe-label">Informe pericial</div>
+      <div class="pipe-sub">Entrega</div>
+    </div>
+  </div>
+  <p>MaPeriT.AN es el segundo paso del flujo forense: recibe las evidencias de SW o OF y las enriquece con el an&#225;lisis profundo. Los resultados de AN se integran autom&#225;ticamente en MaPeriT.TN para su revisi&#243;n visual.</p>
+</section>
+
+
+<section id="legal">
+  <h2>&#9878; Aviso legal y uso autorizado</h2>
+  <div class="alert alert-danger">
+    <strong>&#128683; Uso exclusivamente autorizado</strong>
+    MaPeriT.AN solo debe ejecutarse sobre evidencias obtenidas con autorizaci&#243;n legal. El an&#225;lisis de datos de terceros sin autorizaci&#243;n puede constituir un delito.
+  </div>
+  <div class="card">
+    <div class="card-header">Limitaciones de la herramienta</div>
+    <ul>
+      <li>MaPeriT.AN <strong>no modifica ninguna evidencia</strong>: solo las lee (el Amcache.hve se consulta sobre una copia). Sus resultados van a la carpeta <code>ANALISIS_AN</code>, por defecto dentro del directorio de evidencias.</li>
+      <li>El an&#225;lisis requiere que MaPeriT.SW o MaPeriT.OF <strong>hayan ejecutado previamente</strong> y generado el directorio de evidencias.</li>
+      <li>La precisi&#243;n del an&#225;lisis depende de la integridad y completitud de las evidencias recopiladas en la fase anterior.</li>
+      <li>El informe generado es un documento de trabajo pericial. Su valor probatorio depende de su presentaci&#243;n por un perito habilitado.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+<footer>MaPeriT.AN v1.2.1 &nbsp;&mdash;&nbsp; An&#225;lisis forense offline profundo &nbsp;&mdash;&nbsp; Ecosistema MaPeriT &nbsp;&mdash;&nbsp; Noviembre 2026</footer>
+</body>
+</html>

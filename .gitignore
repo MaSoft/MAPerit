@@ -1,0 +1,15 @@
+# Copias de seguridad y restos de trabajo
+*.bak
+ARCHIVADO/
+_versiones/
+__pycache__/
+
+# Capturas de trabajo con datos de un caso real (no se publican)
+MAPERIT_TN/imagen*.jpg
+
+# Salidas de ejecución: evidencias, informes y registros de casos
+LOGS/
+*.log
+EVIDENCIAS*/
+ANALISIS_AN/
+
